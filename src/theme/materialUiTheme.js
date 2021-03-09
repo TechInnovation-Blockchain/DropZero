@@ -10,6 +10,7 @@ export const darkTheme = createMuiTheme({
       main: '#1F1F1F',
       primary: '#121212',
       secondary: '#292929',
+      input: '#000',
     },
     text: {
       primary: '#fff',
@@ -33,7 +34,8 @@ export const lightTheme = createMuiTheme({
     background: {
       main: '#F5F5F5',
       primary: '#121212',
-      secondary: '#FFFFFF',
+      secondary: '#fff',
+      input: '#F5F5F5',
     },
     text: {
       primary: '#000',
@@ -43,7 +45,7 @@ export const lightTheme = createMuiTheme({
       fontFamily: 'Montserrat',
     },
     border: {
-      lightBorder: '#ccc',
+      lightBorder: '#E7E8EA',
     },
   },
 });

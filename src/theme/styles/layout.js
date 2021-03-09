@@ -15,12 +15,18 @@ export const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-around',
+    '@media(550px)': {
+      padding: '0',
+    },
   },
   container: {
     background: theme.palette.background.secondary,
     margin: theme.spacing(0, 0.5),
     borderRadius: 30,
     border: `3px solid ${theme.palette.primary.main}`,
-    minHeight: '400px',
+    width: '450px',
+    '@media(max-width:550px)': {
+      width: '100%',
+    },
   },
 }));
