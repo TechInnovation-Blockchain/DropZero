@@ -11,17 +11,18 @@ export const darkTheme = createMuiTheme({
       primary: '#121212',
       secondary: '#292929',
       input: '#000',
+      dialog: '#0A0A0A',
     },
     text: {
       primary: '#fff',
       secondary: '#C5C5C5',
     },
-    typography: {
-      fontFamily: 'Montserrat',
-    },
     border: {
       lightBorder: '#333',
     },
+  },
+  typography: {
+    fontFamily: 'Montserrat',
   },
 });
 
@@ -36,16 +37,17 @@ export const lightTheme = createMuiTheme({
       primary: '#121212',
       secondary: '#fff',
       input: '#F5F5F5',
+      dialog: '#fff',
     },
     text: {
       primary: '#000',
       secondary: '#666',
     },
-    typography: {
-      fontFamily: 'Montserrat',
-    },
     border: {
       lightBorder: '#E7E8EA',
     },
+  },
+  typography: {
+    fontFamily: 'Montserrat',
   },
 });

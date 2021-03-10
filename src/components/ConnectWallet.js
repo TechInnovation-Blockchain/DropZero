@@ -1,12 +1,13 @@
-import { Button } from '@material-ui/core';
 import { useStyles } from '../theme/styles/components/connectWalletStyles';
+
+import Button from './Button';
 
 const ConnectWallet = () => {
   const classes = useStyles();
 
   return (
-    <Button className={classes.connectBtn} variant='contained' color='primary'>
-      Connect Wallet
+    <Button className={classes.connectBtn}>
+      <span>Connect Wallet</span>
     </Button>
   );
 };

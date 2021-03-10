@@ -4,20 +4,12 @@ export const useStyles = makeStyles(theme => ({
   mainContainer: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     background: theme.palette.background.main,
     color: theme.palette.text.primary,
-    height: '100vh',
-  },
-  innerContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    '@media(550px)': {
-      padding: '0',
-    },
+    padding: theme.spacing(4, 0),
+    minHeight: '90vh',
   },
   container: {
     background: theme.palette.background.secondary,
@@ -25,8 +17,9 @@ export const useStyles = makeStyles(theme => ({
     borderRadius: 30,
     border: `3px solid ${theme.palette.primary.main}`,
     width: '450px',
+    overflow: 'hidden',
     '@media(max-width:550px)': {
-      width: '100%',
+      width: '95%',
     },
   },
 }));

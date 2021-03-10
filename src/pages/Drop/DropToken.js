@@ -14,7 +14,10 @@ const DropToken = ({ setContent }) => {
       </Typography>
       <InputField placeholder='Enter Token' />
       <Box>
-        <Button text='Next' rightIcon={<ArrowForwardIcon />} onClick={() => setContent('amount')} />
+        <Button onClick={() => setContent('amount')}>
+          <span>Next</span>
+          <ArrowForwardIcon />
+        </Button>
       </Box>
     </Box>
   );
