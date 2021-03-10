@@ -18,6 +18,7 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
+    position: 'relative',
     '& p': {
       fontWeight: 'bold',
       fontSize: '16px',
@@ -28,6 +29,16 @@ export const useStyles = makeStyles(theme => ({
       '@media(max-width:330px)': {
         width: '100%',
         fontSize: '14px',
+      },
+    },
+    '& svg': {
+      position: 'absolute',
+      right: 12,
+      top: 12,
+      color: theme.palette.text.secondary,
+      cursor: 'pointer',
+      '&:hover': {
+        color: theme.palette.text.primary,
       },
     },
   },
