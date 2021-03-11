@@ -7,12 +7,14 @@ export const darkTheme = createMuiTheme({
       main: '#65C988',
     },
     background: {
-      main: '#121212',
+      // main: '#121212',
+      main: '#000',
       primary: '#121212',
       secondary: '#292929',
       input: '#000',
       dialog: '#0A0A0A',
       accordion: '#424242',
+      secondary2: '#000',
     },
     text: {
       primary: '#fff',
@@ -35,11 +37,14 @@ export const lightTheme = createMuiTheme({
     },
     background: {
       main: '#F5F5F5',
-      primary: '#121212',
-      secondary: '#fff',
+      // primary: '#121212',
+      primary: '#fff',
+      // secondary: '#fff',
+      secondary: '#F5F5F5',
       input: '#F5F5F5',
       dialog: '#fff',
       accordion: '#F5F5F5',
+      secondary2: '#fff',
     },
     text: {
       primary: '#000',

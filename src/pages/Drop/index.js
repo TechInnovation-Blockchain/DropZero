@@ -20,7 +20,10 @@ const Drop = () => {
       <Collapse in={expand}>
         <DropMain />
       </Collapse>
-      <Box className={classes.collapse} onClick={handleToggle}>
+      <Box
+        className={`${classes.collapse} ${!expand ? classes.hideBorder : ''}`}
+        onClick={handleToggle}
+      >
         {expand ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         <Typography variant='body2' className={classes.triggerText}>
           Drop Dashboard

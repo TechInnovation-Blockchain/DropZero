@@ -22,7 +22,7 @@ const Navbar = () => {
         </Typography>
       </NavLink>
       <Box className={classes.logo} onClick={handleThemeToggle}>
-        <img src={BlockZeroLogo} alt='blockzero logo' width='50px' />
+        <img src={BlockZeroLogo} alt='blockzero logo' width='40px' />
       </Box>
       <NavLink
         to='/claim'

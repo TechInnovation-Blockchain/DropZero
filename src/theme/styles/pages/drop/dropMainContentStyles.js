@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles(theme => ({
   mainContainer: {
-    height: '300px',
+    height: '350px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -20,6 +20,9 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     width: '90%',
+    '@media(max-width:330px)': {
+      width: '95%',
+    },
   },
   fileUploader: {
     width: '100%',

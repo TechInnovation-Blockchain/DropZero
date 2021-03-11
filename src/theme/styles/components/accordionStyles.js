@@ -8,7 +8,8 @@ export const useStyles = makeStyles(theme => ({
       right: 10,
       color: theme.palette.text.primary,
     },
-    background: theme.palette.background.accordion,
+    // background: theme.palette.background.accordion,
+    background: theme.palette.background.secondary,
   },
   accordianHeader: {
     display: 'flex',

@@ -6,7 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useStyles } from '../theme/styles/components/dropDialogStyles';
 import Button from './Button';
 
-const DroppedDialog = ({}) => {
+const DroppedDialog = () => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 

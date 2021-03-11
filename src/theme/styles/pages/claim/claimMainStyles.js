@@ -3,9 +3,10 @@ import { makeStyles } from '@material-ui/styles';
 export const useStyles = makeStyles(theme => ({
   mainContainer: {
     textAlign: 'center',
-    height: '300px',
+    minHeight: '350px',
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
     '& button[disabled]': {
       color: theme.palette.text.secondary,

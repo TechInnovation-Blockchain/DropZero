@@ -2,8 +2,8 @@ import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles(theme => ({
   collapse: {
-    background: theme.palette.background.secondary,
-    // background: theme.palette.background.primary,
+    // background: theme.palette.background.secondary,
+    background: theme.palette.background.primary,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -15,6 +15,9 @@ export const useStyles = makeStyles(theme => ({
     '& svg': {
       color: '#7AE668',
     },
+  },
+  hideBorder: {
+    border: 'none',
   },
   triggerText: {
     color: theme.palette.text.secondary,

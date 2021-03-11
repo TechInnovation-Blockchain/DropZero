@@ -20,7 +20,10 @@ const Claim = () => {
       <Collapse in={expand}>
         <ClaimMain />
       </Collapse>
-      <Box className={classes.collapse} onClick={handleToggle}>
+      <Box
+        className={`${classes.collapse} ${!expand ? classes.hideBorder : ''}`}
+        onClick={handleToggle}
+      >
         {expand ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         <Typography variant='body2' className={classes.triggerText}>
           Claim Dashboard
