@@ -7,11 +7,12 @@ export const darkTheme = createMuiTheme({
       main: '#65C988',
     },
     background: {
-      main: '#1F1F1F',
+      main: '#121212',
       primary: '#121212',
       secondary: '#292929',
       input: '#000',
       dialog: '#0A0A0A',
+      accordion: '#424242',
     },
     text: {
       primary: '#fff',
@@ -38,6 +39,7 @@ export const lightTheme = createMuiTheme({
       secondary: '#fff',
       input: '#F5F5F5',
       dialog: '#fff',
+      accordion: '#F5F5F5',
     },
     text: {
       primary: '#000',

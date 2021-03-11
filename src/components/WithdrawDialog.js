@@ -1,12 +1,11 @@
 import { useState, Fragment } from 'react';
 import { Dialog, Typography, DialogContent } from '@material-ui/core';
-import PublishIcon from '@material-ui/icons/Publish';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { useStyles } from '../theme/styles/components/dropDialogStyles';
 import Button from './Button';
 
-const DroppedDialog = ({}) => {
+const WithdrawDialog = () => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 
@@ -20,9 +19,8 @@ const DroppedDialog = ({}) => {
 
   return (
     <Fragment>
-      <Button onClick={handleClickOpen}>
-        <span>Upload</span>
-        <PublishIcon />
+      <Button onClick={handleClickOpen} className={classes.accordionBtn}>
+        <span>Withdraw</span>
       </Button>
       <Dialog
         PaperProps={{ className: classes.mainContainer }}
@@ -32,12 +30,9 @@ const DroppedDialog = ({}) => {
       >
         <DialogContent className={classes.innerContainer}>
           <CloseIcon onClick={handleClose} />
-          <Typography variant='body2'>
-            You are about to deposite 100.00 tokens that will be claimable by 153 different
-            addresses
-          </Typography>
+          <Typography variant='body2'>Are you sure you want to withdraw token</Typography>
           <Button onClick={handleClose}>
-            <span>Drop</span>
+            <span>Confirm</span>
           </Button>
         </DialogContent>
       </Dialog>
@@ -45,4 +40,4 @@ const DroppedDialog = ({}) => {
   );
 };
 
-export default DroppedDialog;
+export default WithdrawDialog;

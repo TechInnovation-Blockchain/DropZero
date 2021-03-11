@@ -3,9 +3,9 @@ import { makeStyles } from '@material-ui/styles';
 export const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(1, 0),
-    fontWeight: '800',
+    fontWeight: '600',
     fontSize: '16px',
-    color: '#000',
+    color: '#fff',
     borderRadius: 2,
     width: '150px',
     '& svg': {

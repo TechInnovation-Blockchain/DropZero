@@ -42,4 +42,10 @@ export const useStyles = makeStyles(theme => ({
       },
     },
   },
+  accordionBtn: {
+    fontSize: '14px',
+    width: '150px',
+    margin: '8px auto',
+    display: 'flex',
+  },
 }));

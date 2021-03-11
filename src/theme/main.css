@@ -30,3 +30,8 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
+.MuiAccordion-rounded {
+  border-radius: 8px !important;
+  overflow: hidden;
+}

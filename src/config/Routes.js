@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+// import { Container } from '@material-ui/core';
 
 import { Claim, Drop } from '../pages';
 import { Navbar } from '../components';
@@ -20,12 +21,14 @@ const Routes = () => {
   return (
     <BrowserRouter>
       <Navbar />
+      {/* <Container maxWidth='xs'> */}
       <Switch>
         {routes.map(_route => (
           <Route exact {..._route} key={_route.path} />
         ))}
         <Route exact component={() => <Redirect to={redirectRoute} />} />
       </Switch>
+      {/* </Container> */}
     </BrowserRouter>
   );
 };

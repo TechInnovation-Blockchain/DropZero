@@ -1,19 +1,29 @@
-import { Box, Typography, Grid } from '@material-ui/core';
+import { useState } from 'react';
+import { Box } from '@material-ui/core';
+import { Accordion } from '../../components';
 
-import { useStyles } from '../../theme/styles/pages/claim/claimDashboardStyles';
+import Aqua from '../../assets/Aqua.png';
+import Flash from '../../assets/FLASH.png';
+
+const tokens = [
+  {
+    name: 'Aqua',
+    img: Aqua,
+  },
+  {
+    name: 'Flash',
+    img: Flash,
+  },
+];
 
 const DropDashboard = () => {
-  const classes = useStyles();
+  const [expanded, setExpanded] = useState(false);
 
   return (
-    <Box>
-      <Grid container>
-        <Grid item xs={12} className={classes.gridItem}>
-          <Typography variant='body2' className={classes.lightText}>
-            Coming Soon
-          </Typography>
-        </Grid>
-      </Grid>
+    <Box style={{ paddingBottom: '40px' }}>
+      {tokens.map(token => (
+        <Accordion key={token.name} data={token} expanded={expanded} setExpanded={setExpanded} />
+      ))}
     </Box>
   );
 };

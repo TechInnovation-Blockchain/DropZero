@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 export const useStyles = makeStyles(theme => ({
   collapse: {
     background: theme.palette.background.secondary,
+    // background: theme.palette.background.primary,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

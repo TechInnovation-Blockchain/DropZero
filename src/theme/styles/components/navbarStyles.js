@@ -6,6 +6,7 @@ export const useStyles = makeStyles(theme => ({
     justifyContent: 'space-around',
     alignItems: 'center',
     padding: theme.spacing(2, 1),
+    background: theme.palette.background.secondary,
   },
   navlink: {
     textDecoration: 'none',

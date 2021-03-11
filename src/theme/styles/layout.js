@@ -13,11 +13,14 @@ export const useStyles = makeStyles(theme => ({
   },
   container: {
     background: theme.palette.background.secondary,
+    // background: theme.palette.background.primary,
     margin: theme.spacing(0, 0.5),
     borderRadius: 30,
     border: `3px solid ${theme.palette.primary.main}`,
     width: '450px',
-    overflow: 'hidden',
+    marginBottom: '20px',
+    // padding: 0,
+    overflowX: 'hidden',
     '@media(max-width:550px)': {
       width: '95%',
     },
