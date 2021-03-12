@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, Grid } from '@material-ui/core';
 
 import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
 import { Button, PageAnimation } from '../../components';
@@ -21,7 +21,7 @@ const tokens = [
   {
     name: 'XIO',
     img: XIO,
-    width: '50px',
+    width: '40px',
   },
 ];
 
@@ -49,10 +49,14 @@ const DropMain = () => {
             className={`${classes.token} ${selected === token.name ? classes.selected : ''}`}
             onClick={() => handleSelect(token.name)}
           >
-            <Box className={classes.logo}>
-              <img src={token.img} alt={token.name} width={token.width} />
-            </Box>
-            <Typography variant='body2'>{token.name}</Typography>
+            <Grid container alignItems='center' spacing={1}>
+              <Grid item xs={6} style={{ textAlign: 'right' }}>
+                <img src={token.img} alt={token.name} width={token.width} />
+              </Grid>
+              <Grid item xs={6} style={{ textAlign: 'left' }}>
+                <Typography variant='body2'>{token.name}</Typography>
+              </Grid>
+            </Grid>
           </Box>
         ))}
         <Button disabled={!selected}>

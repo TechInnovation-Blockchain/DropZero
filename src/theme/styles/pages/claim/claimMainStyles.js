@@ -13,6 +13,9 @@ export const useStyles = makeStyles(theme => ({
     },
   },
   logo: {
+    // width: '50%',
+    // display: 'flex',
+    // justifyContent: 'flex-end',
     width: '60px',
   },
   heading: {
@@ -30,6 +33,7 @@ export const useStyles = makeStyles(theme => ({
     borderRadius: 10,
     '& p': {
       fontWeight: 'bolder',
+      // width: '50%',
     },
     cursor: 'pointer',
   },

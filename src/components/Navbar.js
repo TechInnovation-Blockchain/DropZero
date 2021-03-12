@@ -16,7 +16,7 @@ const Navbar = () => {
 
   return (
     <Box className={classes.mainContainer}>
-      <NavLink to='/path' className={classes.navlink} activeClassName={classes.activeNavlink} exact>
+      <NavLink to='/drop' className={classes.navlink} activeClassName={classes.activeNavlink} exact>
         <Typography variant='body2' className={classes.navTypography}>
           Drop
         </Typography>
