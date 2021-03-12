@@ -4,6 +4,13 @@ import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import { PortisConnector } from '@web3-react/portis-connector';
 
+import coinbaseLogo from '../assets/wallets/coinbase.png';
+import fortmaticLogo from '../assets/wallets/fortmatic.png';
+import injectedLogo from '../assets/wallets/injected.png';
+import metamaskLogo from '../assets/wallets/metamask.png';
+import portisLogo from '../assets/wallets/portis.png';
+import walletconnectLogo from '../assets/wallets/walletconnect.png';
+
 const REACT_APP_NETWORK_URL1 = `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
 // const REACT_APP_NETWORK_URL3 = `https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_KEY1}`;
 const REACT_APP_NETWORK_URL4 = `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
@@ -47,26 +54,31 @@ export const walletList = [
     name: 'METAMASK',
     connector: injected,
     connectorType: InjectedConnector,
+    logo: metamaskLogo,
   },
   {
     name: 'WALLETCONNECT',
     connector: walletconnect,
     connectorType: WalletConnectConnector,
+    logo: walletconnectLogo,
   },
   {
     name: 'COINBASE',
     connector: walletlink,
     connectorType: WalletLinkConnector,
+    logo: coinbaseLogo,
   },
   {
     name: 'FORTMATIC',
     connector: fortmatic,
     connectorType: FortmaticConnector,
+    logo: fortmaticLogo,
   },
   {
     name: 'PORTIS',
     connector: portis,
     connectorType: PortisConnector,
+    logo: portisLogo,
   },
 ];
 
@@ -75,16 +87,19 @@ export const mobileWalletList = [
     name: 'WALLETCONNECT',
     connector: walletconnect,
     connectorType: WalletConnectConnector,
+    logo: walletconnectLogo,
   },
 
   {
     name: 'FORTMATIC',
     connector: fortmatic,
     connectorType: FortmaticConnector,
+    logo: fortmaticLogo,
   },
   {
     name: 'PORTIS',
     connector: portis,
     connectorType: PortisConnector,
+    logo: portisLogo,
   },
 ];

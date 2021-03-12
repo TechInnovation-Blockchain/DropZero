@@ -2,6 +2,7 @@
 
 body {
   margin: 0;
+  background: var(--mainBackground);
 }
 
 ::-webkit-scrollbar {
@@ -10,7 +11,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #121212;
+  background: var(--mainBackground);
 }
 
 ::-webkit-scrollbar-thumb {
