@@ -4,23 +4,30 @@ export const useStyles = makeStyles(theme => ({
   mainContainer: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     background: theme.palette.background.main,
     color: theme.palette.text.primary,
-    height: '100vh',
-  },
-  innerContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    padding: theme.spacing(4, 0),
+    minHeight: '90vh',
   },
   container: {
-    background: theme.palette.background.secondary,
+    // background: theme.palette.background.secondary,
+    background: theme.palette.background.primary,
     margin: theme.spacing(0, 0.5),
     borderRadius: 30,
     border: `3px solid ${theme.palette.primary.main}`,
-    minHeight: '400px',
+    width: '450px',
+    marginBottom: '20px',
+    padding: 0,
+    overflowX: 'hidden',
+    '@media(max-width:550px)': {
+      width: '95%',
+    },
+  },
+  innerContainer: {
+    '@media(max-width:330px)': {
+      padding: '5px',
+    },
   },
 }));

@@ -9,12 +9,10 @@ const Layout = () => {
 
   return (
     <Box className={classes.mainContainer}>
-      <Box className={classes.innerContainer}>
-        <Container className={classes.container} maxWidth='xs'>
-          <Routes />
-        </Container>
-        <ConnectWallet />
-      </Box>
+      <Container className={classes.container} maxWidth='xs'>
+        <Routes />
+      </Container>
+      <ConnectWallet />
     </Box>
   );
 };

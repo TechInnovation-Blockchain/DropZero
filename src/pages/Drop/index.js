@@ -1,8 +1,11 @@
 import { Fragment, useState } from 'react';
 import { Box, Typography, Collapse } from '@material-ui/core';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { useStyles } from '../../theme/styles/pages/drop/dropStyles';
+import DropMain from './DropMain';
+import DropDashboard from './DropDashboard';
 
 const Drop = () => {
   const classes = useStyles();
@@ -15,16 +18,19 @@ const Drop = () => {
   return (
     <Fragment>
       <Collapse in={expand}>
-        <h5>Drop</h5>
+        <DropMain />
       </Collapse>
-      <Box className={classes.collapse} onClick={handleToggle}>
-        <ExpandLessIcon />
+      <Box
+        className={`${classes.collapse} ${!expand ? classes.hideBorder : ''}`}
+        onClick={handleToggle}
+      >
+        {expand ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         <Typography variant='body2' className={classes.triggerText}>
           Drop Dashboard
         </Typography>
       </Box>
       <Collapse in={!expand}>
-        <h5>Drop Dashboard</h5>
+        <DropDashboard />
       </Collapse>
     </Fragment>
   );

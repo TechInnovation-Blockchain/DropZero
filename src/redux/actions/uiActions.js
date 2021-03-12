@@ -5,3 +5,9 @@ export const toggleTheme = () => {
     dispatch({ type: uiTypes.TOGGLE_THEME });
   };
 };
+
+export const setLoading = data => {
+  return dispatch => {
+    dispatch({ type: uiTypes.LOADING, data });
+  };
+};
