@@ -9,6 +9,11 @@ export const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     width: '95%',
     margin: '0 auto',
+    '& a': {
+      color: theme.palette.primary.main,
+      position: 'absolute',
+      bottom: 30,
+    },
   },
   para: {
     fontWeight: 'bolder',

@@ -80,13 +80,11 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     color: theme.palette.text.secondary,
-    filter: 'grayscale(1)',
+    filter: 'grayscale(100%)',
     '&:hover': {
-      backgroundColor: theme.palette.background.main,
+      backgroundColor: theme.palette.background.hover,
       color: theme.palette.text.primary,
-      '& img': {
-        filter: 'grayscale(0%)',
-      },
+      filter: 'grayscale(0%) !important',
       '& p': {
         color: theme.palette.text.primary,
       },
@@ -97,32 +95,37 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     color: theme.palette.text.primary,
-    '&:hover': {
-      backgroundColor: theme.palette.background.main,
+    backgroundColor: theme.palette.background.hover,
+    '& p': {
       color: theme.palette.text.primary,
-      '& img': {
-        filter: 'grayscale(0%)',
-      },
+    },
+    '&:hover': {
+      backgroundColor: theme.palette.background.hover,
+      color: theme.palette.text.primary,
+      filter: 'grayscale(0%) !important',
       '& p': {
         color: theme.palette.text.primary,
       },
     },
   },
+
   listItemText: {
     fontWeight: 700,
     display: 'flex',
     alignItems: 'center',
     color: theme.palette.text.secondary,
     fontSize: '14px',
-    '& img': {
-      filter: 'grayscale(100%)',
-    },
+    textTransform: 'uppercase',
   },
   loadingIcon: {
     marginRight: 5,
   },
   secondaryText: {
     color: theme.palette.text.secondary,
+    fontWeight: 700,
+  },
+  secondaryHeading: {
+    color: theme.palette.text.disabled,
     fontWeight: 700,
   },
 }));

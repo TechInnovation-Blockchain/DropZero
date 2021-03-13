@@ -10,6 +10,10 @@ export const useStyles = makeStyles(theme => ({
     },
     // background: theme.palette.background.accordion,
     background: theme.palette.background.secondary,
+    boxShadow: 'none',
+    '& svg': {
+      color: theme.palette.text.secondary,
+    },
   },
   accordianHeader: {
     display: 'flex',
@@ -34,5 +38,11 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     margin: theme.spacing(1, 0),
+  },
+  accordionBtn: {
+    fontSize: '14px',
+    width: '150px',
+    margin: '8px auto',
+    display: 'flex',
   },
 }));

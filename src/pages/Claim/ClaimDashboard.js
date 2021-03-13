@@ -22,7 +22,13 @@ const DropDashboard = () => {
   return (
     <Box style={{ paddingBottom: '40px' }}>
       {tokens.map(token => (
-        <Accordion key={token.name} data={token} expanded={expanded} setExpanded={setExpanded} />
+        <Accordion
+          key={token.name}
+          data={token}
+          expanded={expanded}
+          setExpanded={setExpanded}
+          claim
+        />
       ))}
     </Box>
   );

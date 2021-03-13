@@ -3,6 +3,7 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import { PortisConnector } from '@web3-react/portis-connector';
+import { isMobile } from 'react-device-detect';
 
 import coinbaseLogo from '../assets/wallets/coinbase.png';
 import fortmaticLogo from '../assets/wallets/fortmatic.png';
@@ -12,12 +13,10 @@ import portisLogo from '../assets/wallets/portis.png';
 import walletconnectLogo from '../assets/wallets/walletconnect.png';
 
 const REACT_APP_NETWORK_URL1 = `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
-// const REACT_APP_NETWORK_URL3 = `https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_KEY1}`;
 const REACT_APP_NETWORK_URL4 = `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
-// const REACT_APP_NETWORK_URL5 = `https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_KEY1}`;
-// const REACT_APP_NETWORK_URL42 = `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_KEY1}`;
 
 const POLLING_INTERVAL = 12000;
+
 const RPC_URLS = {
   1: REACT_APP_NETWORK_URL1,
   4: REACT_APP_NETWORK_URL4,
@@ -35,47 +34,67 @@ export const walletconnect = new WalletConnectConnector({
 });
 
 export const walletlink = new WalletLinkConnector({
-  url: RPC_URLS[1],
+  url: RPC_URLS[4],
   appName: 'XIOClaim',
 });
 
+const fortmaticKey =
+  process.env.REACT_APP_ENVIRONMENT === 'PRODUCTION'
+    ? process.env.REACT_APP_FORTMATIC_PRODUCTION_KEY
+    : process.env.REACT_APP_FORTMATIC_DEVELOPMENT_KEY;
+
 export const fortmatic = new FortmaticConnector({
-  apiKey: process.env.REACT_APP_FORTMATIC_KEY,
-  chainId: 1,
+  apiKey: fortmaticKey,
+  chainId: 4,
 });
 
 export const portis = new PortisConnector({
   dAppId: process.env.REACT_APP_PORTIS_ID,
-  networks: [1],
+  networks: [4],
 });
 
-export const walletList = [
+export const injectedConnectorList = [
   {
-    name: 'METAMASK',
+    name: 'Metamask',
     connector: injected,
     connectorType: InjectedConnector,
     logo: metamaskLogo,
   },
   {
-    name: 'WALLETCONNECT',
+    name: 'Injected',
+    connector: injected,
+    connectorType: InjectedConnector,
+    logo: injectedLogo,
+  },
+];
+
+export const desktopWalletList = [
+  {
+    name: 'Metamask',
+    connector: injected,
+    connectorType: InjectedConnector,
+    logo: metamaskLogo,
+  },
+  {
+    name: 'WalletConnect',
     connector: walletconnect,
     connectorType: WalletConnectConnector,
     logo: walletconnectLogo,
   },
   {
-    name: 'COINBASE',
+    name: 'Coinbase',
     connector: walletlink,
     connectorType: WalletLinkConnector,
     logo: coinbaseLogo,
   },
   {
-    name: 'FORTMATIC',
+    name: 'Fortmatic',
     connector: fortmatic,
     connectorType: FortmaticConnector,
     logo: fortmaticLogo,
   },
   {
-    name: 'PORTIS',
+    name: 'Portis',
     connector: portis,
     connectorType: PortisConnector,
     logo: portisLogo,
@@ -84,22 +103,28 @@ export const walletList = [
 
 export const mobileWalletList = [
   {
-    name: 'WALLETCONNECT',
+    name: 'WalletConnect',
     connector: walletconnect,
     connectorType: WalletConnectConnector,
     logo: walletconnectLogo,
   },
 
   {
-    name: 'FORTMATIC',
+    name: 'Fortmatic',
     connector: fortmatic,
     connectorType: FortmaticConnector,
     logo: fortmaticLogo,
   },
   {
-    name: 'PORTIS',
+    name: 'Portis',
     connector: portis,
     connectorType: PortisConnector,
     logo: portisLogo,
   },
 ];
+
+export const walletList = isMobile
+  ? window?.ethereum
+    ? [window?.ethereum?.isMetaMask ? injectedConnectorList[0] : injectedConnectorList[1]]
+    : mobileWalletList
+  : desktopWalletList;

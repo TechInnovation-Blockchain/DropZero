@@ -1,3 +1,4 @@
+import { useState, Fragment } from 'react';
 import {
   Accordion as MUIAccordion,
   AccordionSummary,
@@ -9,9 +10,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useStyles } from '../theme/styles/components/accordionStyles';
 
 import WithdrawDialog from './WithdrawDialog';
+import Button from './Button';
 
-const Accordion = ({ data: { name, img }, expanded, setExpanded }) => {
+const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -44,19 +47,30 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded }) => {
             <Typography variant='body2'>Token</Typography>
             <Typography variant='body2'>Aqua</Typography>
           </Box>
-          <Box className={classes.accordianContent}>
-            <Typography variant='body2'>Total Claim</Typography>
-            <Typography variant='body2'>4,000</Typography>
-          </Box>
-          <Box className={classes.accordianContent}>
-            <Typography variant='body2'>Available Amount</Typography>
-            <Typography variant='body2'>Aqua</Typography>
-          </Box>
-          <Box className={classes.accordianContent}>
-            <Typography variant='body2'>Expiry</Typography>
-            <Typography variant='body2'>25/03/21</Typography>
-          </Box>
-          <WithdrawDialog />
+          {!claim ? (
+            <Fragment>
+              <Box className={classes.accordianContent}>
+                <Typography variant='body2'>Total Claim</Typography>
+                <Typography variant='body2'>4,000</Typography>
+              </Box>
+              <Box className={classes.accordianContent}>
+                <Typography variant='body2'>Available Amount</Typography>
+                <Typography variant='body2'>Aqua</Typography>
+              </Box>
+              <Box className={classes.accordianContent}>
+                <Typography variant='body2'>Expiry</Typography>
+                <Typography variant='body2'>25/03/21</Typography>
+              </Box>
+              <Button onClick={() => setOpen(true)} className={classes.accordionBtn}>
+                <span>Withdraw</span>
+              </Button>
+            </Fragment>
+          ) : null}
+          <WithdrawDialog
+            open={open}
+            setOpen={setOpen}
+            text='Are you sure you want to withdraw token'
+          />
         </Box>
       </AccordionDetails>
     </MUIAccordion>

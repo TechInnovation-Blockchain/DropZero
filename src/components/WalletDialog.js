@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import {
   Dialog as MuiDialog,
   IconButton,
@@ -14,21 +14,20 @@ import { ClearOutlined } from '@material-ui/icons';
 import { useSelector } from 'react-redux';
 
 import { useStyles } from '../theme/styles/components/walletDialogStyles';
-import { setLoading } from '../redux';
-import { walletList } from '../utils/web3Connectors';
 
-const WalletDialog = ({ open, setOpen, heading }) => {
+const WalletDialog = ({ open, setOpen, address, heading, items = [], activate = () => {} }) => {
   const classes = useStyles();
   const [search, setSearch] = useState('');
   const loading = useSelector(state => state.ui.loading);
+  const web3context = useSelector(state => state.web3.context);
 
   const onChangeSearch = ({ target: { value } }) => {
     setSearch(value.toUpperCase());
   };
 
   const filteredData = useCallback(() => {
-    return walletList.filter(({ name }) => name.toUpperCase().includes(search));
-  }, [search, walletList]);
+    return items.filter(({ name }) => name.toUpperCase().includes(search));
+  }, [search, items]);
 
   const onClose = useCallback(() => {
     setOpen(false);
@@ -39,14 +38,12 @@ const WalletDialog = ({ open, setOpen, heading }) => {
       <Container maxWidth='xs' className={classes.dialog}>
         <Box className={classes.closeBtnContainer}>
           <Typography variant='body1' className={classes.dialogHeading}>
-            {heading}
+            {web3context && web3context.active ? 'CHANGE WALLET' : 'CONNECT TO A WALLET'}
 
             <br />
-            {/* {web3context ? (
-              <span className={classes.secondaryHeading}>{`CONNECTED TO ${addressShorten(
-                web3context.account
-              )}`}</span>
-            ) : null} */}
+            {web3context && web3context.active ? (
+              <span className={classes.secondaryHeading}>{`CONNECTED TO ${address}`}</span>
+            ) : null}
           </Typography>
           <IconButton size='small' onClick={onClose} className={classes.closeIcon}>
             <ClearOutlined />
@@ -77,14 +74,13 @@ const WalletDialog = ({ open, setOpen, heading }) => {
               <ListItem
                 button
                 key={name}
-                // onClick={() => {
-                //   activate(connector, onClose);
-                // }}
+                onClick={() => {
+                  activate(connector, onClose);
+                }}
                 className={
-                  // !(web3context?.connector instanceof connectorType)
-                  //   ? classes.listItem
-                  //   :
-                  classes.selectedListItem
+                  !(web3context?.connector instanceof connectorType)
+                    ? classes.listItem
+                    : classes.selectedListItem
                 }
               >
                 <Typography variant='body1' className={classes.listItemText}>

@@ -3,6 +3,7 @@ import * as uiTypes from '../types/uiTypes';
 const initialState = {
   theme: localStorage.getItem('theme') || 'dark',
   loading: { walletConnection: false },
+  snackbar: { open: false },
 };
 
 const uiReducer = (state = initialState, action) => {
@@ -14,6 +15,10 @@ const uiReducer = (state = initialState, action) => {
       return { ...state, theme };
     case uiTypes.LOADING:
       return { ...state, loading: { ...state.loading, ...payload } };
+    case uiTypes.SHOW_SNACKBAR:
+      return { ...state, snackbar: { open: true, ...payload } };
+    case uiTypes.HIDE_SNACKBAR:
+      return { ...state, snackbar: { open: false } };
     default:
       return state;
   }

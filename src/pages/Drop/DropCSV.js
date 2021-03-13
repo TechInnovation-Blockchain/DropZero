@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import PublishIcon from '@material-ui/icons/Publish';
 
 import { Button, DroppedDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
@@ -8,9 +9,12 @@ import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
 const DropCSV = ({ setContent }) => {
   const classes = useStyles();
   const [fileName, setFileName] = useState('');
+  const [open, setOpen] = useState(false);
 
   const uploadCSV = e => {
-    setFileName(e.target.files[0].name);
+    if (e.target.files[0]) {
+      setFileName(e.target.files[0].name);
+    }
   };
 
   return (
@@ -29,8 +33,15 @@ const DropCSV = ({ setContent }) => {
           <ArrowBackIcon />
           <span>Back</span>
         </Button>
-        <DroppedDialog />
+        <Button disabled={fileName ? false : true} onClick={() => setOpen(true)}>
+          <span>Upload</span>
+          <PublishIcon />
+        </Button>
+        <DroppedDialog open={open} setOpen={setOpen} />
       </Box>
+      <Typography component='a' href='!#' variant='body2'>
+        Download Sample CSV
+      </Typography>
     </Box>
   );
 };

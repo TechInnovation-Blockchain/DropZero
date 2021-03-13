@@ -9,17 +9,28 @@ export const useStyles = makeStyles(theme => ({
     borderRadius: 2,
     width: '150px',
     '& svg': {
-      color: '#fff',
+      color: theme.palette.text.primary,
       width: '20px',
     },
     '& span': {
       margin: '0 10px',
+      color: theme.palette.text.primary,
     },
     '@media(max-width:550px)': {
       width: '120px',
       '& span': {
         margin: '0 5px',
       },
+    },
+  },
+  disabled: {
+    background: `${theme.palette.background.disabled} !important`,
+    '& span': {
+      margin: '0 10px',
+      color: `${theme.palette.text.disabled} !important`,
+    },
+    '& svg': {
+      color: `${theme.palette.text.disabled} !important`,
     },
   },
 }));

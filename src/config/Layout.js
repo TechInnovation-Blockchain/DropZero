@@ -2,7 +2,7 @@ import { Box, Container } from '@material-ui/core';
 
 import Routes from './Routes';
 import { useStyles } from '../theme/styles/layout';
-import { ConnectWallet } from '../components';
+import { ConnectWallet, Snackbar } from '../components';
 
 const Layout = () => {
   const classes = useStyles();
@@ -13,6 +13,7 @@ const Layout = () => {
         <Routes />
       </Container>
       <ConnectWallet />
+      <Snackbar />
     </Box>
   );
 };

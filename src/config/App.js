@@ -18,15 +18,11 @@ const App = () => {
         ? lightTheme.palette.background.primary
         : darkTheme.palette.background.primary
     );
-    // document.body.style.setProperty(
-    //   'background-color',
-    //   theme === 'light' ? lightTheme.palette.background.main : darkTheme.palette.background.main
-    // );
   }, [theme]);
 
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+      <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
         <Layout />
       </ThemeProvider>
     </Web3ReactProvider>
