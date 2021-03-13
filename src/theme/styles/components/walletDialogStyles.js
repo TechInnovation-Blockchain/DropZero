@@ -72,7 +72,7 @@ export const useStyles = makeStyles(theme => ({
   },
   list: {
     maxHeight: 500,
-    overflowY: 'scroll',
+    overflowY: 'hidden',
     padding: 0,
   },
   listItem: {
@@ -82,9 +82,14 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
     filter: 'grayscale(1)',
     '&:hover': {
-      filter: 'none',
-      color: theme.palette.text.primary,
       backgroundColor: theme.palette.background.main,
+      color: theme.palette.text.primary,
+      '& img': {
+        filter: 'grayscale(0%)',
+      },
+      '& p': {
+        color: theme.palette.text.primary,
+      },
     },
   },
   selectedListItem: {
@@ -94,6 +99,13 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.text.primary,
     '&:hover': {
       backgroundColor: theme.palette.background.main,
+      color: theme.palette.text.primary,
+      '& img': {
+        filter: 'grayscale(0%)',
+      },
+      '& p': {
+        color: theme.palette.text.primary,
+      },
     },
   },
   listItemText: {
@@ -102,6 +114,9 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     color: theme.palette.text.secondary,
     fontSize: '14px',
+    '& img': {
+      filter: 'grayscale(100%)',
+    },
   },
   loadingIcon: {
     marginRight: 5,
