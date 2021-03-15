@@ -13,13 +13,18 @@ export const useStyles = makeStyles(theme => ({
       color: theme.palette.primary.main,
       position: 'absolute',
       bottom: 30,
+      fontSize: '14px',
+      letterSpacing: '1.5px',
     },
   },
   para: {
     fontWeight: 'bolder',
-    width: '85%',
+    width: '90%',
     margin: '8px auto',
-    wordSpacing: '3px',
+    // wordSpacing: '3px',
+    '@media(max-width:550px)': {
+      width: '100%',
+    },
   },
   btnContainer: {
     display: 'flex',

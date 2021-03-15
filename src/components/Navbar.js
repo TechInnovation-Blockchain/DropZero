@@ -1,18 +1,13 @@
 import { Box, Typography } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import BlockZeroLogo from '../assets/blockzerologo.png';
 import { useStyles } from '../theme/styles/components/navbarStyles';
-import { toggleTheme } from '../redux';
+import { useTheme } from '../hooks';
 
 const Navbar = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-
-  const handleThemeToggle = () => {
-    dispatch(toggleTheme());
-  };
+  const { toggleThemeF } = useTheme();
 
   return (
     <Box className={classes.mainContainer}>
@@ -21,7 +16,7 @@ const Navbar = () => {
           Drop
         </Typography>
       </NavLink>
-      <Box className={classes.logo} onClick={handleThemeToggle}>
+      <Box className={classes.logo} onClick={toggleThemeF}>
         <img src={BlockZeroLogo} alt='blockzero logo' width='40px' />
       </Box>
       <NavLink

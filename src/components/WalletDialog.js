@@ -11,15 +11,15 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import { ClearOutlined } from '@material-ui/icons';
-import { useSelector } from 'react-redux';
 
 import { useStyles } from '../theme/styles/components/walletDialogStyles';
+import { useLoading, useWeb3 } from '../hooks';
 
-const WalletDialog = ({ open, setOpen, address, heading, items = [], activate = () => {} }) => {
+const WalletDialog = ({ open, setOpen, address, items = [], activate = () => {} }) => {
   const classes = useStyles();
   const [search, setSearch] = useState('');
-  const loading = useSelector(state => state.ui.loading);
-  const web3context = useSelector(state => state.web3.context);
+  const { loading } = useLoading();
+  const { web3context } = useWeb3();
 
   const onChangeSearch = ({ target: { value } }) => {
     setSearch(value.toUpperCase());

@@ -9,12 +9,14 @@ export const useStyles = makeStyles(theme => ({
     borderRadius: 2,
     width: '150px',
     '& svg': {
-      color: theme.palette.text.primary,
+      color: '#fff',
       width: '20px',
     },
     '& span': {
       margin: '0 10px',
-      color: theme.palette.text.primary,
+      color: '#fff',
+      fontSize: '14px',
+      letterSpacing: '1.5px',
     },
     '@media(max-width:550px)': {
       width: '120px',
@@ -22,12 +24,15 @@ export const useStyles = makeStyles(theme => ({
         margin: '0 5px',
       },
     },
+    boxShadow: 'none',
   },
   disabled: {
     background: `${theme.palette.background.disabled} !important`,
     '& span': {
       margin: '0 10px',
       color: `${theme.palette.text.disabled} !important`,
+      fontSize: '14px',
+      letterSpacing: '1.5px',
     },
     '& svg': {
       color: `${theme.palette.text.disabled} !important`,

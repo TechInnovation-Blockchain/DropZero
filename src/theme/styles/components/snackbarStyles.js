@@ -12,6 +12,10 @@ export const useStyles = makeStyles(theme => ({
     '& .MuiAlert-icon': {
       color: theme.palette.primary.main,
     },
+    '& .MuiAlert-message': {
+      fontSize: '12px',
+      letterSpacing: 2,
+    },
   },
   // link: {
   //   textDecoration: 'none',

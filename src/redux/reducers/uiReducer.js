@@ -3,7 +3,7 @@ import * as uiTypes from '../types/uiTypes';
 const initialState = {
   theme: localStorage.getItem('theme') || 'dark',
   loading: { walletConnection: false },
-  snackbar: { open: false },
+  snackbar: { open: false, severity: 'success', message: '' },
 };
 
 const uiReducer = (state = initialState, action) => {

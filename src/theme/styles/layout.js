@@ -9,7 +9,8 @@ export const useStyles = makeStyles(theme => ({
     background: theme.palette.background.main,
     color: theme.palette.text.primary,
     padding: theme.spacing(4, 0),
-    minHeight: '90vh',
+    minHeight: '100vh',
+    boxSizing: 'border-box',
   },
   container: {
     // background: theme.palette.background.secondary,

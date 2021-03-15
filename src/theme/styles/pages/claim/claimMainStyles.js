@@ -23,7 +23,7 @@ export const useStyles = makeStyles(theme => ({
   tokenContainer: {
     width: '100%',
     height: '200px',
-    overflowY: 'scroll',
+    overflowY: 'auto',
   },
   token: {
     backgroundColor: theme.palette.background.input,

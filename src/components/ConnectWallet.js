@@ -7,19 +7,21 @@ import {
 } from '@web3-react/injected-connector';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
-import { useDispatch } from 'react-redux';
+import { isMobile } from 'react-device-detect';
 
 import { useStyles } from '../theme/styles/components/connectWalletStyles';
 import Button from './Button';
 import WalletDialog from './WalletDialog';
 import { walletList } from '../utils/web3Connectors';
-import { setLoading, showSnackbar, storeWeb3Context } from '../redux';
+import { useSnackbar, useLoading, useWeb3 } from '../hooks';
 
 const ConnectWallet = () => {
   const classes = useStyles();
   const web3context = useWeb3React();
-  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const { showSnackbarF } = useSnackbar();
+  const { setLoadingF } = useLoading();
+  const { storeWeb3ContextF } = useWeb3();
 
   const getErrorMessage = e => {
     if (e instanceof UnsupportedChainIdError) {
@@ -37,17 +39,15 @@ const ConnectWallet = () => {
 
   const activateWallet = useCallback(
     (connector, onClose = () => {}) => {
-      dispatch(
-        setLoading({
-          walletConnection: true,
-          connector: connector ? connector : InjectedConnector,
-        })
-      );
+      setLoadingF({
+        walletConnection: true,
+        connector: connector ? connector : InjectedConnector,
+      });
 
       if (connector instanceof WalletConnectConnector && connector.walletConnectProvider?.wc?.uri) {
         connector.walletConnectProvider = undefined;
       } else if (connector instanceof FortmaticConnector) {
-        setLoading({ walletConnection: false });
+        setLoadingF({ walletConnection: false });
         onClose();
       }
 
@@ -62,13 +62,13 @@ const ConnectWallet = () => {
           true
         )
         .then(() => {
-          dispatch(setLoading({ walletConnection: false }));
+          setLoadingF({ walletConnection: false });
         })
         .catch(e => {
           const err = getErrorMessage(e);
-          dispatch(showSnackbar({ message: err, type: 'error' }));
+          showSnackbarF({ message: err, severity: 'error' });
           console.error('ERROR activateWallet -> ', e);
-          dispatch(setLoading({ walletConnection: false }));
+          setLoadingF({ walletConnection: false });
         });
     },
     [web3context]
@@ -81,11 +81,13 @@ const ConnectWallet = () => {
   };
 
   useEffect(() => {
-    activateWallet();
+    if (!isMobile) {
+      activateWallet();
+    }
   }, []);
 
   useEffect(() => {
-    dispatch(storeWeb3Context(web3context));
+    storeWeb3ContextF(web3context);
     // if (web3context?.library?.provider) {
     //   dispatch(setWeb3Provider(web3context.library.provider));
     // }
@@ -95,7 +97,7 @@ const ConnectWallet = () => {
     if (web3context.active || web3context.account) {
       setOpen(false);
     }
-  }, [web3context, storeWeb3Context]);
+  }, [web3context]);
 
   return (
     <Fragment>
