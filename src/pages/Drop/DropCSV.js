@@ -2,19 +2,56 @@ import { useState } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PublishIcon from '@material-ui/icons/Publish';
+import CSVReader from 'react-csv-reader';
 
 import { Button, DroppedDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
 
 const DropCSV = ({ setContent }) => {
   const classes = useStyles();
-  const [fileName, setFileName] = useState('');
-  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    file: null,
+    error: '',
+    open: false,
+  });
+  const { file, error, open } = formData;
 
-  const uploadCSV = e => {
-    if (e.target.files[0]) {
-      setFileName(e.target.files[0].name);
+  // const uploadCSV = e => {
+  //   if (e.target.files[0]) {
+  //     setFormData({...formData, file:e.target.files[0]});
+  //     console.log(e.target.files[0]);
+  //   }
+  // };
+
+  const handleForce = (data, file) => {
+    if (data && data[0].hasOwnProperty('address') && data[0].hasOwnProperty('tokens')) {
+      setFormData({
+        ...formData,
+        file,
+        error: '',
+      });
+    } else {
+      setFormData({
+        ...formData,
+        file,
+        error: 'Invalid CSV',
+      });
     }
+  };
+
+  const papaparseOptions = {
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+    transformHeader: header => header.toLowerCase().replace(/\W/g, '_'),
+  };
+
+  const handleClose = () => {
+    setFormData({ ...formData, open: false });
+  };
+
+  const handleUpload = () => {
+    setFormData({ ...formData, open: true });
   };
 
   return (
@@ -23,24 +60,39 @@ const DropCSV = ({ setContent }) => {
         Who would you like to drop these tokens to ?
       </Typography>
       <label className={classes.fileUploader}>
+        <CSVReader
+          cssClass='csv-reader-input'
+          onFileLoaded={handleForce}
+          parserOptions={papaparseOptions}
+          inputId='ObiWan'
+          inputName='ObiWan'
+        />
+        <Box>
+          <Typography variant='body2'>{file ? file.name : 'Select File'}</Typography>
+        </Box>
+      </label>
+      <Typography variant='body2' className={classes.error} style={{ top: '57%' }}>
+        {error}
+      </Typography>
+      {/* <label className={classes.fileUploader}>
         <input type='file' accept='.csv' onChange={uploadCSV} />
         <Box>
           <Typography variant='body2'>{fileName ? fileName : 'Select File'}</Typography>
         </Box>
-      </label>
+      </label> */}
       <Box className={classes.btnContainer}>
-        <Button onClick={() => setContent('amount')}>
+        <Button onClick={() => setContent('token')}>
           <ArrowBackIcon />
           <span>Back</span>
         </Button>
-        <Button disabled={fileName ? false : true} onClick={() => setOpen(true)}>
+        <Button disabled={file && error === '' ? false : true} onClick={handleUpload}>
           <span>Upload</span>
           <PublishIcon />
         </Button>
-        <DroppedDialog open={open} setOpen={setOpen} />
+        <DroppedDialog open={open} handleClose={handleClose} setContent={setContent} />
       </Box>
       <Typography component='a' href='!#' variant='body2'>
-        Download Sample CSV
+        Download sample CSV
       </Typography>
     </Box>
   );

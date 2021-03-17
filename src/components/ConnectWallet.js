@@ -13,6 +13,7 @@ import { useStyles } from '../theme/styles/components/connectWalletStyles';
 import Button from './Button';
 import WalletDialog from './WalletDialog';
 import { walletList } from '../utils/web3Connectors';
+import { conciseAddress } from '../utils/formattingFunctions';
 import { useSnackbar, useLoading, useWeb3 } from '../hooks';
 
 const ConnectWallet = () => {
@@ -74,12 +75,6 @@ const ConnectWallet = () => {
     [web3context]
   );
 
-  const addressShorten = address => {
-    if (address) {
-      return `${address.slice(0, 6)}...${address.slice(address.length - 4, address.length)}`;
-    }
-  };
-
   useEffect(() => {
     if (!isMobile) {
       activateWallet();
@@ -102,7 +97,7 @@ const ConnectWallet = () => {
   return (
     <Fragment>
       <Button onClick={() => setOpen(true)} className={classes.connectBtn}>
-        <span>{web3context.active ? addressShorten(web3context.account) : 'CONNECT WALLET'}</span>
+        <span>{web3context.active ? conciseAddress(web3context.account) : 'CONNECT WALLET'}</span>
       </Button>
 
       <WalletDialog
@@ -111,7 +106,7 @@ const ConnectWallet = () => {
         setOpen={setOpen}
         items={walletList}
         activate={activateWallet}
-        address={addressShorten(web3context.account)}
+        address={conciseAddress(web3context.account)}
       />
     </Fragment>
   );

@@ -5,12 +5,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useStyles } from '../theme/styles/components/dropDialogStyles';
 import Button from './Button';
 
-const DroppedDialog = ({ open, setOpen }) => {
+const DroppedDialog = ({ open, handleClose, setContent }) => {
   const classes = useStyles();
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <Fragment>
@@ -28,7 +24,7 @@ const DroppedDialog = ({ open, setOpen }) => {
             You are about to deposite 100.00 tokens that will be claimable by 153 different
             addresses
           </Typography>
-          <Button onClick={handleClose}>
+          <Button onClick={() => setContent('token')}>
             <span>Drop</span>
           </Button>
         </DialogContent>

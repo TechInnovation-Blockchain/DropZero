@@ -6,6 +6,9 @@ export const darkTheme = createMuiTheme({
     primary: {
       main: '#65C988',
     },
+    error: {
+      main: '#c66065',
+    },
     background: {
       main: '#000',
       primary: '#121212',
@@ -20,6 +23,7 @@ export const darkTheme = createMuiTheme({
       primary: '#fff',
       secondary: '#C5C5C5',
       disabled: '#C5C5C5',
+      placeholder: '#606060',
     },
     border: {
       lightBorder: '#333',
@@ -36,6 +40,9 @@ export const lightTheme = createMuiTheme({
     primary: {
       main: '#65C988',
     },
+    error: {
+      main: '#c66065',
+    },
     background: {
       main: '#F5F5F5',
       primary: '#fff',
@@ -50,6 +57,7 @@ export const lightTheme = createMuiTheme({
       primary: '#000',
       secondary: '#666',
       disabled: '#B2B2B2',
+      placeholder: '#B8B8B8',
     },
     border: {
       lightBorder: '#E7E8EA',
