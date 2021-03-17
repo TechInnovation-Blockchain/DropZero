@@ -27,7 +27,7 @@ export const injected = new InjectedConnector({
 });
 
 export const walletconnect = new WalletConnectConnector({
-  rpc: { 1: RPC_URLS[1] },
+  rpc: { 4: RPC_URLS[4] },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: POLLING_INTERVAL,
@@ -35,13 +35,18 @@ export const walletconnect = new WalletConnectConnector({
 
 export const walletlink = new WalletLinkConnector({
   url: RPC_URLS[4],
-  appName: 'XIOClaim',
+  appName: 'Dropzero',
 });
 
 const fortmaticKey =
   process.env.REACT_APP_ENVIRONMENT === 'PRODUCTION'
-    ? process.env.REACT_APP_FORTMATIC_PRODUCTION_KEY
-    : process.env.REACT_APP_FORTMATIC_DEVELOPMENT_KEY;
+    ? process.env.REACT_APP_PRODUCTION_FORTMATIC_KEY
+    : process.env.REACT_APP_DEVELOPMENT_FORTMATIC_KEY;
+
+const portisKey =
+  process.env.REACT_APP_ENVIRONMENT === 'PRODUCTION'
+    ? process.env.REACT_APP_PRODUCTION_PORTIS_ID
+    : process.env.REACT_APP_DEVELOPMENT_PORTIS_ID;
 
 export const fortmatic = new FortmaticConnector({
   apiKey: fortmaticKey,
@@ -49,7 +54,7 @@ export const fortmatic = new FortmaticConnector({
 });
 
 export const portis = new PortisConnector({
-  dAppId: process.env.REACT_APP_PORTIS_ID,
+  dAppId: portisKey,
   networks: [4],
 });
 

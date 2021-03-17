@@ -47,7 +47,7 @@ const ConnectWallet = () => {
       if (connector instanceof WalletConnectConnector && connector.walletConnectProvider?.wc?.uri) {
         connector.walletConnectProvider = undefined;
       } else if (connector instanceof FortmaticConnector) {
-        setLoadingF({ walletConnection: false });
+        // setLoadingF({ walletConnection: false });
         onClose();
       }
 

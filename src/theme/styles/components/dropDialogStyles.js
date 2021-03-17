@@ -31,15 +31,12 @@ export const useStyles = makeStyles(theme => ({
         fontSize: '14px',
       },
     },
-    '& svg': {
-      position: 'absolute',
-      right: 12,
-      top: 12,
-      color: theme.palette.text.secondary,
-      cursor: 'pointer',
-      '&:hover': {
-        color: theme.palette.text.primary,
-      },
-    },
+  },
+  closeBtn: {
+    position: 'absolute',
+    right: 12,
+    top: 12,
+    color: theme.palette.text.secondary,
+    cursor: 'pointer',
   },
 }));

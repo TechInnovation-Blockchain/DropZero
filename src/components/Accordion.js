@@ -47,6 +47,12 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
             <Typography variant='body2'>Token</Typography>
             <Typography variant='body2'>Aqua</Typography>
           </Box>
+          {claim && (
+            <Box className={classes.accordianContent}>
+              <Typography variant='body2'>Claimed On</Typography>
+              <Typography variant='body2'>25/03/21</Typography>
+            </Box>
+          )}
           {!claim ? (
             <Fragment>
               <Box className={classes.accordianContent}>
@@ -55,7 +61,7 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
               </Box>
               <Box className={classes.accordianContent}>
                 <Typography variant='body2'>Available Amount</Typography>
-                <Typography variant='body2'>Aqua</Typography>
+                <Typography variant='body2'>8,000</Typography>
               </Box>
               <Box className={classes.accordianContent}>
                 <Typography variant='body2'>Expiry</Typography>

@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Dialog, Typography, DialogContent } from '@material-ui/core';
+import { Dialog, Typography, DialogContent, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { useStyles } from '../theme/styles/components/dropDialogStyles';
@@ -21,7 +21,9 @@ const WithdrawDialog = ({ open, setOpen, text }) => {
         aria-labelledby='form-dialog-title'
       >
         <DialogContent className={classes.innerContainer}>
-          <CloseIcon onClick={handleClose} />
+          <IconButton size='small' onClick={handleClose} className={classes.closeBtn}>
+            <CloseIcon />
+          </IconButton>
           <Typography variant='body2'>{text}</Typography>
           <Button onClick={handleClose}>
             <span>Confirm</span>

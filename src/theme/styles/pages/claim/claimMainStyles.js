@@ -8,6 +8,7 @@ export const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    // background: 'red',
     '& button[disabled]': {
       color: theme.palette.text.secondary,
     },
@@ -17,8 +18,8 @@ export const useStyles = makeStyles(theme => ({
   },
   heading: {
     fontWeight: 'bolder',
-    position: 'absolute',
-    top: 20,
+    // position: 'absolute',
+    // top: 20,
   },
   tokenContainer: {
     width: '100%',
