@@ -107,4 +107,16 @@ export const useStyles = makeStyles(theme => ({
       margin: '0 10px',
     },
   },
+  tokenInfo: {
+    width: 250,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: theme.spacing(1, 0),
+    height: '40px',
+    '& p': {
+      fontWeight: 700,
+      marginLeft: 10,
+    },
+  },
 }));

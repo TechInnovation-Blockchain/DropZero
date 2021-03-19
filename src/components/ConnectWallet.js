@@ -8,6 +8,7 @@ import {
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import { isMobile } from 'react-device-detect';
+import { Typography } from '@material-ui/core';
 
 import { useStyles } from '../theme/styles/components/connectWalletStyles';
 import Button from './Button';
@@ -96,6 +97,11 @@ const ConnectWallet = () => {
 
   return (
     <Fragment>
+      {web3context.active && (
+        <Typography variant='body2' className={classes.bottomError}>
+          {web3context.chainId !== 1 && 'CHANGE NETWORK TO MAINNET'}
+        </Typography>
+      )}
       <Button onClick={() => setOpen(true)} className={classes.connectBtn}>
         <span>{web3context.active ? conciseAddress(web3context.account) : 'CONNECT WALLET'}</span>
       </Button>

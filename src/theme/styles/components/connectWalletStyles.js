@@ -5,4 +5,9 @@ export const useStyles = makeStyles(theme => ({
     width: 'auto !important',
     fontSize: '14px !important',
   },
+  bottomError: {
+    color: theme.palette.error.main,
+    fontWeight: 700,
+    fontSize: '12px',
+  },
 }));

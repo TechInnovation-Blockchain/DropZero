@@ -58,16 +58,12 @@ export const trunc = (val, test) => {
   }
 };
 
-export const debounce = (func, wait) => {
-  let timeout;
+// export const debounce = (callback, wait) => {
+//   let timeout = null;
 
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-};
+//   return (...args) => {
+//     const next = () => callback(...args);
+//     clearTimeout(timeout);
+//     timeout = setTimeout(next, wait);
+//   };
+// };

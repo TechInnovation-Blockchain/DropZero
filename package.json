@@ -23,6 +23,7 @@
     "@web3-react/trezor-connector": "^6.1.6",
     "@web3-react/walletconnect-connector": "^6.1.6",
     "@web3-react/walletlink-connector": "^6.1.6",
+    "axios": "^0.21.1",
     "date-fns": "^2.19.0",
     "react": "^17.0.1",
     "react-csv-reader": "^3.3.0",

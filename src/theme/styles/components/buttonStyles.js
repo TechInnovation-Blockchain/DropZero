@@ -9,12 +9,14 @@ export const useStyles = makeStyles(theme => ({
     borderRadius: 2,
     width: '150px',
     '& svg': {
-      color: '#fff',
+      // color: '#fff',
+      color: `${theme.palette.text.primary}`,
       width: '20px',
     },
     '& span': {
       margin: '0 10px',
-      color: '#fff',
+      // color: '#fff',
+      color: `${theme.palette.text.primary}`,
       fontSize: '14px',
       letterSpacing: '1.5px',
     },

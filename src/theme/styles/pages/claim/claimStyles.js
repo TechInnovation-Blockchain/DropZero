@@ -23,4 +23,15 @@ export const useStyles = makeStyles(theme => ({
     textTransform: 'uppercase',
     letterSpacing: 5,
   },
+  noWallet: {
+    height: 80,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '& p': {
+      color: theme.palette.error.main,
+      fontWeight: 700,
+      fontSize: '14px',
+    },
+  },
 }));

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -7,63 +7,85 @@ import web3 from 'web3';
 
 import { InputField, Button } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
-import { debounce } from '../../utils/formattingFunctions';
+import { name } from '../../contracts/functions/erc20Functions';
+import { useDropInputs } from '../../hooks';
 
 const DropToken = ({ setContent }) => {
   const classes = useStyles();
-  const ref = useRef();
-  const [formData, setFormData] = useState({ date: null, token: '', error: '' });
-  const { token, date, error } = formData;
+  const { token, date, saveFieldsF } = useDropInputs();
+  const [formData, setFormData] = useState({
+    tokenName: 'Unknown',
+    validated: token ? true : false,
+    error: '',
+  });
+  const [dateError, setDateError] = useState(false);
+  const { validated, tokenName, error } = formData;
 
   const handleChange = e => {
     if (e?.target) {
-      setFormData({ ...formData, [e.target.name]: e.target.value, error: '' });
+      saveFieldsF({ token: e.target.value });
+      setFormData({ ...formData, error: '' });
     } else {
-      setFormData({ ...formData, date: e });
+      saveFieldsF({ date: e });
+      if (e == 'Invalid Date') {
+        setDateError(true);
+      } else {
+        setDateError(false);
+      }
     }
   };
 
-  const handleClick = () => {
-    if (token && web3.utils.isAddress(token)) {
-      setContent('uploadCSV');
-    } else {
-      setFormData({ ...formData, error: 'Invalid Token' });
-    }
-  };
-
-  const temp = () => {
-    console.log('hello');
+  const handleClick = async () => {
+    setContent('uploadCSV');
   };
 
   const validateAddress = () => {
-    debounce(temp, 10);
+    setTimeout(async () => {
+      if (token) {
+        const _tokenName = await name(token);
+        if (web3.utils.isAddress(token) && _tokenName) {
+          setFormData({ ...formData, validated: true, tokenName: _tokenName });
+        } else {
+          setFormData({
+            ...formData,
+            validated: false,
+            tokenName: 'Unknown',
+            error: 'Invalid Token',
+          });
+        }
+      } else {
+        setFormData({ ...formData, validated: false, error: '' });
+      }
+    }, 500);
   };
-
-  // document.getElementById('abx').addEventListener('keyup', () => {
-  //   let typingTimer;
-  //   clearTimeout(typingTimer);
-  //   if (token) {
-  //     typingTimer = setTimeout(doneTyping, 5000);
-  //   }
-  // });
-
-  // const doneTyping = () => {
-  //   console.log('Hello');
-  // };
 
   return (
     <Box className={classes.mainContainer}>
-      <Typography variant='body2' className={classes.para}>
-        Enter the token address of the asset you would like to drop
-      </Typography>
+      {validated && web3.utils.isAddress(token) ? (
+        <Box className={classes.tokenInfo}>
+          <img
+            src={`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${web3.utils.toChecksumAddress(
+              token
+            )}/logo.png`}
+            alt='logo'
+            width='30px'
+          />
+          <Typography variant='body2'>{tokenName}</Typography>
+        </Box>
+      ) : (
+        <Typography variant='body2' className={classes.para}>
+          Enter the token address of the asset you would like to drop
+        </Typography>
+      )}
 
       <InputField
         placeholder='Token Address*'
         name='token'
+        value={token}
         onChange={handleChange}
         autoComplete='off'
         onKeyUp={validateAddress}
-        id={'abx'}
+        id='abx'
       />
       <Typography variant='body2' className={classes.error}>
         {error}
@@ -82,11 +104,12 @@ const DropToken = ({ setContent }) => {
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}
+          disablePast
           autoComplete='off'
         />
       </MuiPickersUtilsProvider>
       <Box>
-        <Button disabled={token ? false : true} onClick={handleClick}>
+        <Button disabled={!validated || dateError} onClick={handleClick}>
           <span>Next</span>
           <ArrowForwardIcon />
         </Button>

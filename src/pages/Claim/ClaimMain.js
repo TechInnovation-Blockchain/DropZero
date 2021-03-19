@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Typography, Grid } from '@material-ui/core';
+import { Box, Typography, Grid, Tooltip } from '@material-ui/core';
 
 import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
 import { Button, PageAnimation } from '../../components';
@@ -56,9 +56,11 @@ const DropMain = () => {
                   className={`${classes.token} ${selected === token.name ? classes.selected : ''}`}
                   onClick={() => handleSelect(token.name)}
                 >
-                  <Grid container alignItems='center' spacing={1}>
+                  <Grid container alignItems='center' spacing={1} className={classes.grid}>
                     <Grid item xs={5} style={{ textAlign: 'right' }}>
-                      <Typography variant='body2'>{trunc(token.amount)}</Typography>
+                      <Tooltip title={token.amount}>
+                        <Typography variant='body2'>{trunc(token.amount)}</Typography>
+                      </Tooltip>
                     </Grid>
                     <Grid item xs={2} style={{ textAlign: 'center' }}>
                       <img src={token.img} alt={token.name} width={token.width} />
