@@ -44,3 +44,7 @@ a {
 p {
   letter-spacing: 2px;
 }
+
+.walletconnect-modal__base {
+  max-width: 420px !important;
+}

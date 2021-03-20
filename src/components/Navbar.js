@@ -1,4 +1,4 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, Grid } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 
 import BlockZeroLogo from '../assets/blockzerologo.png';
@@ -11,24 +11,35 @@ const Navbar = () => {
 
   return (
     <Box className={classes.mainContainer}>
-      <NavLink to='/drop' className={classes.navlink} activeClassName={classes.activeNavlink} exact>
-        <Typography variant='body2' className={classes.navTypography}>
-          Drop
-        </Typography>
-      </NavLink>
-      <Box className={classes.logo} onClick={toggleThemeF}>
-        <img src={BlockZeroLogo} alt='blockzero logo' width='40px' />
-      </Box>
-      <NavLink
-        to='/claim'
-        className={classes.navlink}
-        activeClassName={classes.activeNavlink}
-        exact
-      >
-        <Typography variant='body2' className={classes.navTypography}>
-          Claim
-        </Typography>
-      </NavLink>
+      <Grid xs={4} style={{ textAlign: 'center' }}>
+        <NavLink
+          to='/drop'
+          className={classes.navlink}
+          activeClassName={classes.activeNavlink}
+          exact
+        >
+          <Typography variant='body2' className={classes.navTypography}>
+            Drop
+          </Typography>
+        </NavLink>
+      </Grid>
+      <Grid xs={2} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+        <Box className={classes.logo} onClick={toggleThemeF}>
+          <img src={BlockZeroLogo} alt='blockzero logo' />
+        </Box>
+      </Grid>
+      <Grid xs={4} style={{ textAlign: 'center' }}>
+        <NavLink
+          to='/claim'
+          className={classes.navlink}
+          activeClassName={classes.activeNavlink}
+          exact
+        >
+          <Typography variant='body2' className={classes.navTypography}>
+            Claim
+          </Typography>
+        </NavLink>
+      </Grid>
     </Box>
   );
 };

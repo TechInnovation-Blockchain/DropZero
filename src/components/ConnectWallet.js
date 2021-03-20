@@ -8,7 +8,7 @@ import {
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import { isMobile } from 'react-device-detect';
-import { Typography } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 
 import { useStyles } from '../theme/styles/components/connectWalletStyles';
 import Button from './Button';
@@ -95,16 +95,49 @@ const ConnectWallet = () => {
     }
   }, [web3context]);
 
+  // useEffect(() => {
+  //   // let msg = 'Network changes to ';
+  //   // if (web3context.chainId) {
+  //   //   if (web3context.chainId === 1) {
+  //   //     msg += 'mainnet';
+  //   //   } else if (web3context.chainId === 4) {
+  //   //     msg += 'rinkeby';
+  //   //   }
+  //   //   showSnackbarF({ message: msg, severity: 'error' });
+  //   // }
+  //   console.log(window.lastNetwork);
+  // }, [web3context.chainId]);
+
+  window.ethereum.on('networkChanged', function (networkId) {
+    if (networkId) {
+      let msg = 'Network changed to ';
+      if (networkId === '1') {
+        msg += 'mainnet';
+      } else if (networkId === '3') {
+        msg += 'ropsten';
+      } else if (networkId === '4') {
+        msg += 'rinkeby';
+      } else if (networkId === '5') {
+        msg += 'goerli';
+      } else if (networkId === '42') {
+        msg += 'kovan';
+      }
+      showSnackbarF({ message: msg, severity: 'info' });
+    }
+  });
+
   return (
     <Fragment>
-      {web3context.active && (
-        <Typography variant='body2' className={classes.bottomError}>
-          {web3context.chainId !== 1 && 'CHANGE NETWORK TO MAINNET'}
-        </Typography>
-      )}
-      <Button onClick={() => setOpen(true)} className={classes.connectBtn}>
-        <span>{web3context.active ? conciseAddress(web3context.account) : 'CONNECT WALLET'}</span>
-      </Button>
+      <Box className={classes.connectWrapper}>
+        {web3context.active && (
+          <Typography variant='body2' className={classes.bottomError}>
+            {web3context.chainId !== 1 && 'CHANGE NETWORK TO MAINNET'}
+          </Typography>
+        )}
+        <Button onClick={() => setOpen(true)} className={classes.connectBtn}>
+          <span>{web3context.active ? conciseAddress(web3context.account) : 'CONNECT WALLET'}</span>
+        </Button>
+      </Box>
 
       <WalletDialog
         className={classes.connectWalletButton}
