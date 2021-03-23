@@ -69,6 +69,9 @@ export const useStyles = makeStyles(theme => ({
     position: 'absolute',
     left: 15,
     fontSize: '12px',
+    '@media(max-width:330px)': {
+      top: '50%',
+    },
   },
   fileUploader: {
     width: '100%',
@@ -117,6 +120,17 @@ export const useStyles = makeStyles(theme => ({
     '& p': {
       fontWeight: 700,
       marginLeft: 10,
+    },
+  },
+  loading: {
+    display: 'flex',
+    alignItems: 'center',
+    color: theme.palette.text.secondary,
+    position: 'absolute',
+    left: 15,
+    '& p': {
+      marginLeft: 5,
+      fontSize: '12px',
     },
   },
 }));

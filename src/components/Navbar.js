@@ -11,7 +11,7 @@ const Navbar = () => {
 
   return (
     <Box className={classes.mainContainer}>
-      <Grid xs={4} style={{ textAlign: 'center' }}>
+      <Grid item xs={4} style={{ textAlign: 'center' }}>
         <NavLink
           to='/drop'
           className={classes.navlink}
@@ -23,12 +23,12 @@ const Navbar = () => {
           </Typography>
         </NavLink>
       </Grid>
-      <Grid xs={2} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+      <Grid item xs={2} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
         <Box className={classes.logo} onClick={toggleThemeF}>
           <img src={BlockZeroLogo} alt='blockzero logo' />
         </Box>
       </Grid>
-      <Grid xs={4} style={{ textAlign: 'center' }}>
+      <Grid item xs={4} style={{ textAlign: 'center' }}>
         <NavLink
           to='/claim'
           className={classes.navlink}

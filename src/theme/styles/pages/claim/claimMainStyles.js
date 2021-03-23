@@ -18,8 +18,6 @@ export const useStyles = makeStyles(theme => ({
   },
   heading: {
     fontWeight: 'bolder',
-    // position: 'absolute',
-    // top: 20,
   },
 
   tokenContainer: {

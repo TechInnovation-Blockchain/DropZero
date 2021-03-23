@@ -95,20 +95,7 @@ const ConnectWallet = () => {
     }
   }, [web3context]);
 
-  // useEffect(() => {
-  //   // let msg = 'Network changes to ';
-  //   // if (web3context.chainId) {
-  //   //   if (web3context.chainId === 1) {
-  //   //     msg += 'mainnet';
-  //   //   } else if (web3context.chainId === 4) {
-  //   //     msg += 'rinkeby';
-  //   //   }
-  //   //   showSnackbarF({ message: msg, severity: 'error' });
-  //   // }
-  //   console.log(window.lastNetwork);
-  // }, [web3context.chainId]);
-
-  window.ethereum.on('networkChanged', function (networkId) {
+  window.ethereum?.on('networkChanged', function (networkId) {
     if (networkId) {
       let msg = 'Network changed to ';
       if (networkId === '1') {
@@ -134,9 +121,13 @@ const ConnectWallet = () => {
             {web3context.chainId !== 1 && 'CHANGE NETWORK TO MAINNET'}
           </Typography>
         )}
-        <Button onClick={() => setOpen(true)} className={classes.connectBtn}>
-          <span>{web3context.active ? conciseAddress(web3context.account) : 'CONNECT WALLET'}</span>
-        </Button>
+        <Box className={classes.btnWrapper}>
+          <Button onClick={() => setOpen(true)} className={classes.connectBtn}>
+            <span>
+              {web3context.active ? conciseAddress(web3context.account) : 'CONNECT WALLET'}
+            </span>
+          </Button>
+        </Box>
       </Box>
 
       <WalletDialog

@@ -1,20 +1,16 @@
 import { Fragment } from 'react';
-import { Dialog, Typography, DialogContent, IconButton } from '@material-ui/core';
+import { Dialog as DialogMui, Typography, DialogContent, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { useStyles } from '../theme/styles/components/dropDialogStyles';
+import { useStyles } from '../theme/styles/components/dialogStyles';
 import Button from './Button';
 
-const WithdrawDialog = ({ open, setOpen, text }) => {
+const Dialog = ({ open, handleClose, text, btnText, btnOnClick }) => {
   const classes = useStyles();
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <Fragment>
-      <Dialog
+      <DialogMui
         PaperProps={{ className: classes.mainContainer }}
         open={open}
         onClose={handleClose}
@@ -25,13 +21,13 @@ const WithdrawDialog = ({ open, setOpen, text }) => {
             <CloseIcon />
           </IconButton>
           <Typography variant='body2'>{text}</Typography>
-          <Button onClick={handleClose}>
-            <span>Confirm</span>
+          <Button onClick={btnOnClick}>
+            <span>{btnText}</span>
           </Button>
         </DialogContent>
-      </Dialog>
+      </DialogMui>
     </Fragment>
   );
 };
 
-export default WithdrawDialog;
+export default Dialog;

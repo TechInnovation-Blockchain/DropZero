@@ -14,6 +14,9 @@ export const useStyles = makeStyles(theme => ({
     '& svg': {
       color: theme.palette.primary.main,
     },
+    '&:hover p': {
+      color: theme.palette.primary.main,
+    },
   },
   hideBorder: {
     border: 'none',

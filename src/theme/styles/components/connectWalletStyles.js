@@ -9,10 +9,14 @@ export const useStyles = makeStyles(theme => ({
   connectBtn: {
     width: 'auto !important',
     fontSize: '14px !important',
+    margin: '8px auto !important',
   },
   bottomError: {
     color: theme.palette.error.main,
     fontWeight: 700,
     fontSize: '12px',
+  },
+  btnWrapper: {
+    display: 'flex',
   },
 }));

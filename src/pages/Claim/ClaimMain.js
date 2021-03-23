@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Box, Typography, Grid, Tooltip } from '@material-ui/core';
 
 import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
-import { Button, PageAnimation } from '../../components';
+import { Button, PageAnimation, Dialog } from '../../components';
 import FLASH from '../../assets/FLASH.png';
 import DAI from '../../assets/DAI.png';
 import XIO from '../../assets/blockzerologo.png';
@@ -32,6 +32,7 @@ const tokens = [
 const DropMain = () => {
   const classes = useStyles();
   const [selected, setSelected] = useState(null);
+  const [open, setOpen] = useState(false);
 
   const handleSelect = value => {
     if (selected !== value) {
@@ -41,8 +42,19 @@ const DropMain = () => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <PageAnimation in={true} reverse={0}>
+      <Dialog
+        open={open}
+        handleClose={handleClose}
+        text='You will claim 100.00 Flash tokens to your connected wallet'
+        btnText='Claim'
+        btnOnClick={handleClose}
+      />
       <Box className={classes.mainContainer}>
         {tokens.length > 0 ? (
           <>
@@ -78,8 +90,9 @@ const DropMain = () => {
             No Tokens Available
           </Typography>
         )}
+
         {tokens.length > 0 ? (
-          <Button disabled={!selected}>
+          <Button disabled={!selected} onClick={() => setOpen(true)}>
             <span>Claim</span>
           </Button>
         ) : null}

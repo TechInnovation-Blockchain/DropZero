@@ -4,8 +4,10 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PublishIcon from '@material-ui/icons/Publish';
 import CSVReader from 'react-csv-reader';
 
-import { Button, DroppedDialog } from '../../components';
+import { Button, Dialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
+import { useDropInputs } from '../../hooks';
+import TempCSV from '../../assets/temp.csv';
 
 const DropCSV = ({ setContent }) => {
   const classes = useStyles();
@@ -14,6 +16,7 @@ const DropCSV = ({ setContent }) => {
     error: '',
     open: false,
   });
+  const { clearFieldsF } = useDropInputs();
   const { file, error, open } = formData;
 
   // const uploadCSV = e => {
@@ -24,7 +27,7 @@ const DropCSV = ({ setContent }) => {
   // };
 
   const handleForce = (data, file) => {
-    if (data && data[0].hasOwnProperty('address') && data[0].hasOwnProperty('tokens')) {
+    if (data && data[0].hasOwnProperty('account') && data[0].hasOwnProperty('amount')) {
       setFormData({
         ...formData,
         file,
@@ -54,8 +57,22 @@ const DropCSV = ({ setContent }) => {
     setFormData({ ...formData, open: true });
   };
 
+  const handleClick = () => {
+    clearFieldsF();
+    setContent('token');
+    handleClose();
+  };
+
   return (
     <Box className={classes.mainContainer}>
+      <Dialog
+        open={open}
+        handleClose={handleClose}
+        text='You are about to deposite 100.00 tokens that will be claimable by 153 different
+        addresses'
+        btnText='Drop'
+        btnOnClick={handleClick}
+      />
       <Typography variant='body2' className={classes.para}>
         Who would you like to drop these tokens to ?
       </Typography>
@@ -89,9 +106,8 @@ const DropCSV = ({ setContent }) => {
           <span>Upload</span>
           <PublishIcon />
         </Button>
-        <DroppedDialog open={open} handleClose={handleClose} setContent={setContent} />
       </Box>
-      <Typography component='a' href='!#' variant='body2'>
+      <Typography component='a' href={TempCSV} download variant='body2'>
         Download sample CSV
       </Typography>
     </Box>

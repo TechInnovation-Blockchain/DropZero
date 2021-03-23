@@ -3,7 +3,6 @@ import { Box } from '@material-ui/core';
 
 import { PageAnimation } from '../../components';
 import DropToken from './DropToken';
-// import DropAmount from './DropAmount';
 import DropCSV from './DropCSV';
 
 const DropMain = () => {
@@ -14,10 +13,7 @@ const DropMain = () => {
       <Box style={{ textAlign: 'center' }}>
         {content === 'token' ? (
           <DropToken setContent={setContent} />
-        ) : // : content === 'amount' ? (
-        //   <DropAmount setContent={setContent} />
-        // )
-        content === 'uploadCSV' ? (
+        ) : content === 'uploadCSV' ? (
           <DropCSV setContent={setContent} />
         ) : null}
       </Box>

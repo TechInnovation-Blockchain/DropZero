@@ -9,8 +9,8 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useStyles } from '../theme/styles/components/accordionStyles';
 
-import WithdrawDialog from './WithdrawDialog';
 import Button from './Button';
+import Dialog from './Dialog';
 
 const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
   const classes = useStyles();
@@ -18,6 +18,10 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -40,7 +44,7 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
       <AccordionDetails>
         <Box className={classes.accordianContentWrapper}>
           <Box className={classes.accordianContent}>
-            <Typography variant='body2'>Total Amount</Typography>
+            <Typography variant='body2'>Total amount</Typography>
             <Typography variant='body2'>12,000</Typography>
           </Box>
           <Box className={classes.accordianContent}>
@@ -49,34 +53,36 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
           </Box>
           {claim && (
             <Box className={classes.accordianContent}>
-              <Typography variant='body2'>Claimed On</Typography>
+              <Typography variant='body2'>Claimed on</Typography>
               <Typography variant='body2'>25/03/21</Typography>
             </Box>
           )}
           {!claim ? (
             <Fragment>
+              <Dialog
+                open={open}
+                handleClose={handleClose}
+                text='Please confirm you are withdrawing 100.00 tokens from Dropzero to be returned to your connected wallet'
+                btnText='Confirm'
+                btnOnClick={handleClose}
+              />
               <Box className={classes.accordianContent}>
-                <Typography variant='body2'>Total Claim</Typography>
+                <Typography variant='body2'>Total claim</Typography>
                 <Typography variant='body2'>4,000</Typography>
               </Box>
               <Box className={classes.accordianContent}>
-                <Typography variant='body2'>Available Amount</Typography>
+                <Typography variant='body2'>Available amount</Typography>
                 <Typography variant='body2'>8,000</Typography>
               </Box>
               <Box className={classes.accordianContent}>
                 <Typography variant='body2'>Expiry</Typography>
-                <Typography variant='body2'>25/03/21</Typography>
+                <Typography variant='body2'>25th Mar 2021</Typography>
               </Box>
               <Button onClick={() => setOpen(true)} className={classes.accordionBtn}>
                 <span>Withdraw</span>
               </Button>
             </Fragment>
           ) : null}
-          <WithdrawDialog
-            open={open}
-            setOpen={setOpen}
-            text='Are you sure you want to withdraw token'
-          />
         </Box>
       </AccordionDetails>
     </MUIAccordion>
