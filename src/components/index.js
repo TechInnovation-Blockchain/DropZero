@@ -6,5 +6,18 @@ import Accordion from './Accordion';
 import PageAnimation from './PageAnimation';
 import Snackbar from './Snackbar';
 import Dialog from './Dialog';
+import Footer from './Footer';
+import LoadingDialog from './LoadingDialog';
 
-export { Navbar, ConnectWallet, InputField, Button, Accordion, PageAnimation, Snackbar, Dialog };
+export {
+  Navbar,
+  ConnectWallet,
+  InputField,
+  Button,
+  Accordion,
+  PageAnimation,
+  Snackbar,
+  Dialog,
+  Footer,
+  LoadingDialog,
+};

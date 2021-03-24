@@ -11,9 +11,26 @@ export const useStyles = makeStyles(theme => ({
     padding: theme.spacing(4, 0),
     minHeight: '100vh',
     boxSizing: 'border-box',
+    position: 'relative',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundImage:
+      'radial-gradient(50% 50% at 50% 50%, rgba(149, 255, 133, 0.1) 0%, rgba(255, 255, 255, 0) 100%)',
   },
+  lightMainBox: {
+    backgroundImage:
+      'radial-gradient(50% 50% at 50% 50%, rgba(149, 255, 133, 0.5) 0%, rgba(255, 255, 255, 0) 100%)',
+  },
+  // mainBox: {
+  //   backgroundPosition: 'center',
+  //   backgroundRepeat: 'no-repeat',
+  //   backgroundImage:
+  //     'radial-gradient(50% 50% at 50% 50%, rgba(149, 255, 133, 0.1) 0%, rgba(255, 255, 255, 0) 100%)',
+  //   width: '100%',
+  //   display: 'flex',
+  //   justifyContent: 'center',
+  // },
   container: {
-    // background: theme.palette.background.secondary,
     background: theme.palette.background.primary,
     margin: theme.spacing(0, 0.5),
     borderRadius: 30,

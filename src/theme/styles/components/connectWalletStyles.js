@@ -15,8 +15,23 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.error.main,
     fontWeight: 700,
     fontSize: '12px',
+    textAlign: 'center',
   },
   btnWrapper: {
     display: 'flex',
+    flexDirection: 'column',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+  },
+  bottomPara: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '& p': {
+      letterSpacing: '3px',
+      '@media (max-width:330px)': {
+        fontSize: '12px',
+      },
+    },
   },
 }));

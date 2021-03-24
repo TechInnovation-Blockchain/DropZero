@@ -16,6 +16,7 @@ import WalletDialog from './WalletDialog';
 import { walletList } from '../utils/web3Connectors';
 import { conciseAddress } from '../utils/formattingFunctions';
 import { useSnackbar, useLoading, useWeb3 } from '../hooks';
+import Blockzero from '../assets/blockzerologo.png';
 
 const ConnectWallet = () => {
   const classes = useStyles();
@@ -124,9 +125,18 @@ const ConnectWallet = () => {
         <Box className={classes.btnWrapper}>
           <Button onClick={() => setOpen(true)} className={classes.connectBtn}>
             <span>
-              {web3context.active ? conciseAddress(web3context.account) : 'CONNECT WALLET'}
+              {web3context.active && web3context.account
+                ? conciseAddress(web3context.account)
+                : 'CONNECT WALLET'}
             </span>
           </Button>
+          <Box className={classes.bottomPara}>
+            <Typography variant='body2'>Brought By </Typography>
+            <a href='https://blockzerolabs.io/' target='_blank'>
+              <img src={Blockzero} alt='logo' width='40px' />
+            </a>
+            <Typography variant='body2'>Blockzero Labs</Typography>
+          </Box>
         </Box>
       </Box>
 

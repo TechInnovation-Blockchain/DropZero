@@ -68,17 +68,31 @@ const DropMain = () => {
                   className={`${classes.token} ${selected === token.name ? classes.selected : ''}`}
                   onClick={() => handleSelect(token.name)}
                 >
-                  <Grid container alignItems='center' spacing={1} className={classes.grid}>
-                    <Grid item xs={5} style={{ textAlign: 'right' }}>
+                  {/* <Grid container alignItems='center' spacing={1} className={classes.grid}>
+                    <Grid item xs={4} style={{ textAlign: 'right' }}>
                       <Tooltip title={token.amount}>
                         <Typography variant='body2'>{trunc(token.amount)}</Typography>
                       </Tooltip>
                     </Grid>
-                    <Grid item xs={2} style={{ textAlign: 'center' }}>
+                    <Grid item xs={4} style={{ textAlign: 'center' }}>
                       <img src={token.img} alt={token.name} width={token.width} />
                     </Grid>
-                    <Grid item xs={5} style={{ textAlign: 'left' }}>
+                    <Grid item xs={4} style={{ textAlign: 'left' }}>
                       <Typography variant='body2'>{token.name}</Typography>
+                    </Grid>
+                  </Grid> */}
+
+                  <Grid container alignItems='center' spacing={1} className={classes.grid}>
+                    <Grid item xs={6} style={{ textAlign: 'left' }}>
+                      <img src={token.img} alt={token.name} />
+                    </Grid>
+
+                    <Grid item xs={6} style={{ textAlign: 'right' }}>
+                      <Tooltip title={token.amount}>
+                        <Typography variant='body2'>{trunc(token.amount)}</Typography>
+                      </Tooltip>
+                      <Typography variant='body2'>{token.name}</Typography>
+                      <Typography variant='body2'>21 Mar 2021</Typography>
                     </Grid>
                   </Grid>
                 </Box>
