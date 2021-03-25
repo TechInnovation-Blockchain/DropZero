@@ -7,10 +7,11 @@ import {
   Box,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { useStyles } from '../theme/styles/components/accordionStyles';
 
+import { useStyles } from '../theme/styles/components/accordionStyles';
 import Button from './Button';
 import Dialog from './Dialog';
+import TempCSV from '../assets/temp.csv';
 
 const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
   const classes = useStyles();
@@ -81,6 +82,15 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
               <Button onClick={() => setOpen(true)} className={classes.accordionBtn}>
                 <span>Withdraw</span>
               </Button>
+              <Typography
+                className={classes.accordionLink}
+                href={TempCSV}
+                download
+                variant='body2'
+                component='a'
+              >
+                Claimed Status
+              </Typography>
             </Fragment>
           ) : null}
         </Box>

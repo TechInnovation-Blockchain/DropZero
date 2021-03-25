@@ -45,4 +45,10 @@ export const useStyles = makeStyles(theme => ({
     margin: '8px auto',
     display: 'flex',
   },
+  accordionLink: {
+    color: theme.palette.primary.main,
+    display: 'inline-block',
+    width: '100%',
+    textAlign: 'center',
+  },
 }));
