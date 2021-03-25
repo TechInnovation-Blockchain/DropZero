@@ -27,6 +27,7 @@ export const useStyles = makeStyles(theme => ({
       },
     },
     boxShadow: 'none',
+    // background: 'linear-gradient(-200deg, #65c988 0%, #83eea8 100%)',
   },
   disabled: {
     background: `${theme.palette.background.disabled} !important`,

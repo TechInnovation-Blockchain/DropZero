@@ -22,19 +22,19 @@ export const useStyles = makeStyles(theme => ({
 
   tokenContainer: {
     width: '100%',
-    height: '200px',
-    overflowY: 'auto',
+    height: '180px',
+    // overflowY: 'auto',
   },
   token: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    margin: '15px auto',
+    margin: '10px auto',
     width: '95%',
     // height: '50px',
     height: '80px',
     backgroundColor: theme.palette.background.input,
-    border: `1px solid ${theme.palette.primary.main}`,
+    border: `1px solid ${theme.palette.background.input}`,
     borderRadius: 10,
     padding: '0 10px',
     boxSizing: 'border-box',
@@ -54,7 +54,7 @@ export const useStyles = makeStyles(theme => ({
   selected: {
     backgroundColor: theme.palette.background.dialog,
     borderRadius: 10,
-    border: `5px solid ${theme.palette.primary.main}}`,
+    border: `1px solid ${theme.palette.primary.main}}`,
   },
 
   secondaryText: {

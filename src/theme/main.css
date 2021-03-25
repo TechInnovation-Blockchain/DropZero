@@ -39,6 +39,8 @@ input[type='number'] {
 
 a {
   text-decoration: none;
+  /* background-image: linear-gradient(-225deg, #65c988 0%, #83eea8 100%); */
+  /* background-image: linear-gradient(to top, #65C988 0%, #9deeb9 100%); */
 }
 
 p {

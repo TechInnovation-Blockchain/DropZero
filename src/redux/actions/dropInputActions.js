@@ -39,6 +39,7 @@ export const uploadCSV = file => {
       const formData = new FormData();
       formData.append('file', file);
       const res = await axios.post(`${BASE_URL}/upload_csv/merkle_root`, formData, formDataConfig);
+      console.log(res);
       if (res?.data?.responseCode === 200) {
         dispatch({
           type: dropInputTypes.UPLOAD_CSV,

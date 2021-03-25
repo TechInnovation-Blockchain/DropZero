@@ -6,6 +6,8 @@ const initialState = {
     tokenLogo: '',
     token: '',
     date: null,
+    startDate: null,
+    endDate: null,
   },
   csv: {
     result: null,

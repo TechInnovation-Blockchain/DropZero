@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Web3ReactProvider } from '@web3-react/core';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 import '../theme/main.css';
 import Layout from './Layout';
@@ -21,7 +23,9 @@ const App = () => {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
-        <Layout />
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <Layout />
+        </MuiPickersUtilsProvider>
       </ThemeProvider>
     </Web3ReactProvider>
   );

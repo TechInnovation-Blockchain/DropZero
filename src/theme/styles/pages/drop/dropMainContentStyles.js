@@ -45,6 +45,7 @@ export const useStyles = makeStyles(theme => ({
       fontWeight: 'bolder',
       color: theme.palette.text.secondary,
       letterSpacing: '1.5px',
+      // fontSize: '14px',
     },
     '& svg': {
       color: theme.palette.text.placeholder,
@@ -63,11 +64,20 @@ export const useStyles = makeStyles(theme => ({
       fontWeight: 700,
     },
   },
+  timePicker: {
+    width: 'auto',
+    '& .MuiInputBase-input': {
+      textAlign: 'start',
+      fontSize: '13px',
+      height: '20px',
+    },
+  },
   error: {
     color: theme.palette.error.main,
     fontWeight: 700,
     position: 'absolute',
     left: 15,
+    top: '57%',
     fontSize: '12px',
     '@media(max-width:330px)': {
       top: '50%',
@@ -84,7 +94,7 @@ export const useStyles = makeStyles(theme => ({
       backgroundColor: theme.palette.background.input,
       border: `1px solid ${theme.palette.primary.main}`,
       borderRadius: 10,
-      padding: theme.spacing(1.1, 1),
+      padding: theme.spacing(1, 1),
       margin: theme.spacing(1.8, 0),
       width: '100%',
       cursor: 'pointer',
@@ -128,6 +138,7 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
     position: 'absolute',
     left: 15,
+    top: '57%',
     '& p': {
       marginLeft: 5,
       fontSize: '12px',

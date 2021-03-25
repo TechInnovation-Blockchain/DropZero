@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, Grid } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PublishIcon from '@material-ui/icons/Publish';
 import web3 from 'web3';
+import { KeyboardDateTimePicker } from '@material-ui/pickers';
 
 import { Button, Dialog, LoadingDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
 import { useDropInputs } from '../../hooks';
 import TempCSV from '../../assets/temp.csv';
-// import { uploadCSV } from '../../redux';
 
 const DropCSV = ({ setContent }) => {
   const classes = useStyles();
@@ -18,9 +18,12 @@ const DropCSV = ({ setContent }) => {
     open: false,
     loading: false,
     loadingContent: '',
+    section: 'startDate',
   });
-  const { csv, clearFieldsF, uploadCSVF } = useDropInputs();
-  const { file, error, open, loading, loadingContent } = formData;
+  const { startDate, endDate, csv, saveFieldsF, clearFieldsF, uploadCSVF } = useDropInputs();
+  const { file, error, open, loading, section, loadingContent } = formData;
+
+  // const [date, setDate] = useState(null);
 
   const _uploadCSV = async e => {
     const _file = e?.target?.files[0];
@@ -33,7 +36,6 @@ const DropCSV = ({ setContent }) => {
       const fileReader = new FileReader();
       fileReader.onloadend = e => {
         const content = e.target.result;
-        // const columns = content.split('\n')[0].split(',');
         const validated = validateCSV(content.split('\n'));
         if (validated) {
           setFormData({
@@ -50,19 +52,6 @@ const DropCSV = ({ setContent }) => {
             loading: false,
           });
         }
-        // if (columns[0] === 'address' && columns[1] === 'amount') {
-        //   setFormData({
-        //     ...formData,
-        //     file: _file,
-        //     error: '',
-        //   });
-        // } else {
-        //   setFormData({
-        //     ...formData,
-        //     file: _file,
-        //     error: 'Invalid CSV',
-        //   });
-        // }
       };
       fileReader.readAsText(_file);
     }
@@ -101,6 +90,14 @@ const DropCSV = ({ setContent }) => {
     handleClose();
   };
 
+  // const handleDateTimeChange = (date, key, nextSection) => {
+  //   console.log(date);
+  //   if (date != null) {
+  //     saveFieldsF({ [key]: date });
+  //     setFormData({ ...formData, section: nextSection });
+  //   }
+  // };
+
   return (
     <Box className={classes.mainContainer}>
       <Dialog
@@ -121,6 +118,38 @@ const DropCSV = ({ setContent }) => {
       <Typography variant='body2' className={classes.error} style={{ top: '57%' }}>
         {error}
       </Typography>
+
+      {/* {section === 'startDate' ? (
+        <KeyboardDateTimePicker
+          className={classes.datePicker}
+          placeholder='Start Date'
+          value={startDate}
+          format='MM/dd/yyyy hh:mm'
+          onChange={date => handleDateTimeChange(date, 'startDate', 'endDate')}
+          InputProps={{ disableUnderline: true }}
+          disablePast
+          autoComplete='off'
+        />
+      ) : section === 'endDate' ? (
+        <KeyboardDateTimePicker
+          className={classes.datePicker}
+          placeholder='End Date'
+          value={endDate}
+          format='MM/dd/yyyy hh:mm'
+          onChange={date => handleDateTimeChange(date, 'endDate', 'uploadCSV')}
+          InputProps={{ disableUnderline: true }}
+          disablePast
+          autoComplete='off'
+        />
+      ) : (
+        <label className={classes.fileUploader}>
+          <input type='file' accept='.csv' onChange={_uploadCSV} />
+          <Box>
+            <Typography variant='body2'>{file ? file.name : 'Select File'}</Typography>
+          </Box>
+        </label>
+      )} */}
+
       <label className={classes.fileUploader}>
         <input type='file' accept='.csv' onChange={_uploadCSV} />
         <Box>
@@ -128,7 +157,7 @@ const DropCSV = ({ setContent }) => {
         </Box>
       </label>
       <Box className={classes.btnContainer}>
-        <Button onClick={() => setContent('token')}>
+        <Button onClick={() => setContent('dates')}>
           <ArrowBackIcon />
           <span>Back</span>
         </Button>

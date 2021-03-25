@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Box, Typography, CircularProgress } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import web3 from 'web3';
 
 import { InputField, Button } from '../../components';
@@ -38,7 +37,7 @@ const DropToken = ({ setContent }) => {
 
   const handleClick = async () => {
     saveFieldsF({ token: web3.utils.toChecksumAddress(token) });
-    setContent('uploadCSV');
+    setContent('dates');
   };
 
   const validateAddress = () => {
@@ -103,23 +102,22 @@ const DropToken = ({ setContent }) => {
         {error}
       </Typography>
 
-      <MuiPickersUtilsProvider value={token} utils={DateFnsUtils}>
-        <KeyboardDatePicker
-          className={classes.datePicker}
-          margin='normal'
-          id='date-picker-dialog'
-          placeholder='MM/dd/yyyy'
-          InputProps={{ disableUnderline: true }}
-          format='MM/dd/yyyy'
-          value={date}
-          onChange={handleChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-          disablePast
-          autoComplete='off'
-        />
-      </MuiPickersUtilsProvider>
+      {/* <KeyboardDatePicker
+        className={classes.datePicker}
+        margin='normal'
+        id='date-picker-dialog'
+        placeholder='MM/dd/yyyy'
+        InputProps={{ disableUnderline: true }}
+        format='MM/dd/yyyy'
+        value={date}
+        onChange={handleChange}
+        KeyboardButtonProps={{
+          'aria-label': 'change date',
+        }}
+        disablePast
+        autoComplete='off'
+      /> */}
+
       <Box>
         <Button disabled={!validated || dateError} onClick={handleClick}>
           <span>Next</span>
