@@ -6,19 +6,25 @@ export const darkTheme = createMuiTheme({
     primary: {
       main: '#65C988',
     },
+    error: {
+      main: '#c66065',
+    },
     background: {
-      // main: '#121212',
       main: '#000',
       primary: '#121212',
       secondary: '#292929',
-      input: '#000',
-      dialog: '#0A0A0A',
-      accordion: '#424242',
       secondary2: '#000',
+      input: '#000',
+      // dialog: '#0A0A0A',
+      dialog: '#1A1A1A',
+      disabled: '#2F2F2F',
+      hover: '#000',
     },
     text: {
       primary: '#fff',
       secondary: '#C5C5C5',
+      disabled: '#C5C5C5',
+      placeholder: '#606060',
     },
     border: {
       lightBorder: '#333',
@@ -35,20 +41,24 @@ export const lightTheme = createMuiTheme({
     primary: {
       main: '#65C988',
     },
+    error: {
+      main: '#c66065',
+    },
     background: {
       main: '#F5F5F5',
-      // primary: '#121212',
       primary: '#fff',
-      // secondary: '#fff',
       secondary: '#F5F5F5',
       input: '#F5F5F5',
       dialog: '#fff',
-      accordion: '#F5F5F5',
       secondary2: '#fff',
+      disabled: '#E2E2E2',
+      hover: '#E5E5E5',
     },
     text: {
       primary: '#000',
       secondary: '#666',
+      disabled: '#B2B2B2',
+      placeholder: '#B8B8B8',
     },
     border: {
       lightBorder: '#E7E8EA',

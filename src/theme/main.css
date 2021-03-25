@@ -36,3 +36,15 @@ input[type='number'] {
   border-radius: 8px !important;
   overflow: hidden;
 }
+
+a {
+  text-decoration: none;
+}
+
+p {
+  letter-spacing: 2px;
+}
+
+.walletconnect-modal__base {
+  max-width: 420px !important;
+}

@@ -1,3 +1,4 @@
+import { useState, Fragment } from 'react';
 import {
   Accordion as MUIAccordion,
   AccordionSummary,
@@ -6,15 +7,22 @@ import {
   Box,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import { useStyles } from '../theme/styles/components/accordionStyles';
+import Button from './Button';
+import Dialog from './Dialog';
+import TempCSV from '../assets/temp.csv';
 
-import WithdrawDialog from './WithdrawDialog';
-
-const Accordion = ({ data: { name, img }, expanded, setExpanded }) => {
+const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -37,26 +45,54 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded }) => {
       <AccordionDetails>
         <Box className={classes.accordianContentWrapper}>
           <Box className={classes.accordianContent}>
-            <Typography variant='body2'>Total Amount</Typography>
+            <Typography variant='body2'>Total amount</Typography>
             <Typography variant='body2'>12,000</Typography>
           </Box>
           <Box className={classes.accordianContent}>
             <Typography variant='body2'>Token</Typography>
             <Typography variant='body2'>Aqua</Typography>
           </Box>
-          <Box className={classes.accordianContent}>
-            <Typography variant='body2'>Total Claim</Typography>
-            <Typography variant='body2'>4,000</Typography>
-          </Box>
-          <Box className={classes.accordianContent}>
-            <Typography variant='body2'>Available Amount</Typography>
-            <Typography variant='body2'>Aqua</Typography>
-          </Box>
-          <Box className={classes.accordianContent}>
-            <Typography variant='body2'>Expiry</Typography>
-            <Typography variant='body2'>25/03/21</Typography>
-          </Box>
-          <WithdrawDialog />
+          {claim && (
+            <Box className={classes.accordianContent}>
+              <Typography variant='body2'>Claimed on</Typography>
+              <Typography variant='body2'>25/03/21</Typography>
+            </Box>
+          )}
+          {!claim ? (
+            <Fragment>
+              <Dialog
+                open={open}
+                handleClose={handleClose}
+                text='Please confirm you are withdrawing 100.00 tokens from Dropzero to be returned to your connected wallet'
+                btnText='Confirm'
+                btnOnClick={handleClose}
+              />
+              <Box className={classes.accordianContent}>
+                <Typography variant='body2'>Total claim</Typography>
+                <Typography variant='body2'>4,000</Typography>
+              </Box>
+              <Box className={classes.accordianContent}>
+                <Typography variant='body2'>Available amount</Typography>
+                <Typography variant='body2'>8,000</Typography>
+              </Box>
+              <Box className={classes.accordianContent}>
+                <Typography variant='body2'>Expiry</Typography>
+                <Typography variant='body2'>25th Mar 2021</Typography>
+              </Box>
+              <Button onClick={() => setOpen(true)} className={classes.accordionBtn}>
+                <span>Withdraw</span>
+              </Button>
+              <Typography
+                className={classes.accordionLink}
+                href={TempCSV}
+                download
+                variant='body2'
+                component='a'
+              >
+                Claimed Status
+              </Typography>
+            </Fragment>
+          ) : null}
         </Box>
       </AccordionDetails>
     </MUIAccordion>

@@ -72,7 +72,7 @@ export const useStyles = makeStyles(theme => ({
   },
   list: {
     maxHeight: 500,
-    overflowY: 'scroll',
+    overflowY: 'hidden',
     padding: 0,
   },
   listItem: {
@@ -80,11 +80,14 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     color: theme.palette.text.secondary,
-    filter: 'grayscale(1)',
+    filter: 'grayscale(100%)',
     '&:hover': {
-      filter: 'none',
+      backgroundColor: theme.palette.background.hover,
       color: theme.palette.text.primary,
-      backgroundColor: theme.palette.background.main,
+      filter: 'grayscale(0%) !important',
+      '& p': {
+        color: theme.palette.text.primary,
+      },
     },
   },
   selectedListItem: {
@@ -92,22 +95,37 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     color: theme.palette.text.primary,
+    backgroundColor: theme.palette.background.hover,
+    '& p': {
+      color: theme.palette.text.primary,
+    },
     '&:hover': {
-      backgroundColor: theme.palette.background.main,
+      backgroundColor: theme.palette.background.hover,
+      color: theme.palette.text.primary,
+      filter: 'grayscale(0%) !important',
+      '& p': {
+        color: theme.palette.text.primary,
+      },
     },
   },
+
   listItemText: {
     fontWeight: 700,
     display: 'flex',
     alignItems: 'center',
     color: theme.palette.text.secondary,
     fontSize: '14px',
+    textTransform: 'uppercase',
   },
   loadingIcon: {
     marginRight: 5,
   },
   secondaryText: {
     color: theme.palette.text.secondary,
+    fontWeight: 700,
+  },
+  secondaryHeading: {
+    color: theme.palette.text.disabled,
     fontWeight: 700,
   },
 }));

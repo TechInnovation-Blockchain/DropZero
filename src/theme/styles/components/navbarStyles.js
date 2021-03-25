@@ -33,5 +33,8 @@ export const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: '50%',
+    '& img': {
+      width: '100%',
+    },
   },
 }));

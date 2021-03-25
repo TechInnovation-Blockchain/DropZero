@@ -8,36 +8,56 @@ export const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    // background: 'red',
     '& button[disabled]': {
       color: theme.palette.text.secondary,
     },
   },
   logo: {
-    // width: '50%',
-    // display: 'flex',
-    // justifyContent: 'flex-end',
     width: '60px',
   },
   heading: {
     fontWeight: 'bolder',
   },
+
+  tokenContainer: {
+    width: '100%',
+    height: '200px',
+    overflowY: 'auto',
+  },
   token: {
-    backgroundColor: theme.palette.background.input,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    margin: theme.spacing(1, 0),
-    width: '80%',
-    height: '50px',
+    margin: '15px auto',
+    width: '95%',
+    // height: '50px',
+    height: '80px',
+    backgroundColor: theme.palette.background.input,
     border: `1px solid ${theme.palette.primary.main}`,
     borderRadius: 10,
+    padding: '0 10px',
+    boxSizing: 'border-box',
     '& p': {
+      fontSize: '12px',
       fontWeight: 'bolder',
-      // width: '50%',
+      margin: '3px 0',
+    },
+    '& img': {
+      width: '30px',
+      height: '30px',
+      objectFit: 'contain',
     },
     cursor: 'pointer',
   },
+
   selected: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.background.dialog,
+    borderRadius: 10,
+    border: `5px solid ${theme.palette.primary.main}}`,
+  },
+
+  secondaryText: {
+    color: theme.palette.text.secondary,
   },
 }));
