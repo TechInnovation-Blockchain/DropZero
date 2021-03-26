@@ -96,8 +96,6 @@ const ConnectWallet = () => {
     }
   }, [web3context]);
 
-  console.log(web3context.active);
-
   window.ethereum?.on('networkChanged', function (networkId) {
     if (networkId) {
       let msg = 'Network changed to ';

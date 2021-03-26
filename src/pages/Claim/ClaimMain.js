@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Box, Typography, Grid, Tooltip, TablePagination } from '@material-ui/core';
 
 import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
-import { Button, PageAnimation, Dialog } from '../../components';
+import { Button, PageAnimation, Dialog, DisclaimerDialog } from '../../components';
 import FLASH from '../../assets/FLASH.png';
 import DAI from '../../assets/DAI.png';
 import XIO from '../../assets/blockzerologo.png';
 import { trunc } from '../../utils/formattingFunctions';
+import { useWeb3React } from '@web3-react/core';
 
 const tokens = [
   {
@@ -34,11 +35,13 @@ const ClaimMain = () => {
   const [selected, setSelected] = useState(null);
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
+    openDis: false,
     page: 0,
     rowsPerPage: 2,
     reverse: false,
   });
-  const { page, rowsPerPage, reverse } = formData;
+  const { account } = useWeb3React();
+  const { page, rowsPerPage, reverse, openDis } = formData;
 
   const handleSelect = value => {
     if (selected !== value) {
@@ -65,6 +68,20 @@ const ClaimMain = () => {
     setFormData({ ...formData, page: 0, rowsPerPage: +event.target.value });
   };
 
+  const handleConfirm = () => {
+    setSelected(null);
+    handleClose();
+    const walletAddress = localStorage.getItem('userClaim');
+    if (!(walletAddress && walletAddress === account)) {
+      setFormData({ ...formData, openDis: true });
+    }
+  };
+
+  const handleDisclaimerClose = () => {
+    setFormData({ ...formData, openDis: false });
+    localStorage.setItem('userClaim', account);
+  };
+
   return (
     <PageAnimation in={true} reverse={0}>
       <Dialog
@@ -72,7 +89,12 @@ const ClaimMain = () => {
         handleClose={handleClose}
         text='You will claim 100.00 Flash tokens to your connected wallet'
         btnText='Claim'
-        btnOnClick={handleClose}
+        btnOnClick={handleConfirm}
+      />
+      <DisclaimerDialog
+        open={openDis}
+        handleClose={() => setFormData({ ...formData, openDis: false })}
+        btnOnClick={handleDisclaimerClose}
       />
       <Box className={classes.mainContainer}>
         {tokens.length > 0 ? (
@@ -90,30 +112,16 @@ const ClaimMain = () => {
                     }`}
                     onClick={() => handleSelect(token.name)}
                   >
-                    {/* <Grid container alignItems='center' spacing={1} className={classes.grid}>
-                    <Grid item xs={4} style={{ textAlign: 'right' }}>
-                      <Tooltip title={token.amount}>
-                        <Typography variant='body2'>{trunc(token.amount)}</Typography>
-                      </Tooltip>
-                    </Grid>
-                    <Grid item xs={4} style={{ textAlign: 'center' }}>
-                      <img src={token.img} alt={token.name} width={token.width} />
-                    </Grid>
-                    <Grid item xs={4} style={{ textAlign: 'left' }}>
-                      <Typography variant='body2'>{token.name}</Typography>
-                    </Grid>
-                  </Grid> */}
-
                     <Grid container alignItems='center' spacing={1} className={classes.grid}>
-                      <Grid item xs={6} style={{ textAlign: 'left' }}>
+                      <Grid item xs={6} className={classes.tokenInfo}>
                         <img src={token.img} alt={token.name} />
+                        <Typography variant='body2'>{token.name}</Typography>
                       </Grid>
 
-                      <Grid item xs={6} style={{ textAlign: 'right' }}>
+                      <Grid item xs={6} className={classes.tokenDetail}>
                         <Tooltip title={token.amount}>
                           <Typography variant='body2'>{trunc(token.amount)}</Typography>
                         </Tooltip>
-                        <Typography variant='body2'>{token.name}</Typography>
                         <Typography variant='body2'>21 Mar 2021</Typography>
                       </Grid>
                     </Grid>

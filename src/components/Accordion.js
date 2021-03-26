@@ -16,6 +16,7 @@ import TempCSV from '../assets/temp.csv';
 const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [openStop, setOpenStop] = useState(false);
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -23,6 +24,10 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleStopClose = () => {
+    setOpenStop(false);
   };
 
   return (
@@ -67,6 +72,13 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
                 btnText='Confirm'
                 btnOnClick={handleClose}
               />
+              <Dialog
+                open={openStop}
+                handleClose={handleStopClose}
+                text='Please confirm you want to stop all the claims '
+                btnText='Confirm'
+                btnOnClick={handleStopClose}
+              />
               <Box className={classes.accordianContent}>
                 <Typography variant='body2'>Total claim</Typography>
                 <Typography variant='body2'>4,000</Typography>
@@ -79,9 +91,14 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
                 <Typography variant='body2'>Expiry</Typography>
                 <Typography variant='body2'>25th Mar 2021</Typography>
               </Box>
-              <Button onClick={() => setOpen(true)} className={classes.accordionBtn}>
-                <span>Withdraw</span>
-              </Button>
+              <Box className={classes.btnWrapper}>
+                <Button onClick={() => setOpen(true)} className={classes.accordionBtn}>
+                  <span>Withdraw</span>
+                </Button>
+                <Button onClick={() => setOpenStop(true)} className={classes.accordionBtn}>
+                  <span>Stop</span>
+                </Button>
+              </Box>
               <Typography
                 className={classes.accordionLink}
                 href={TempCSV}

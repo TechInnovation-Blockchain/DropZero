@@ -70,6 +70,11 @@ const DropToken = ({ setContent }) => {
     }, 500);
   };
 
+  const handleKeyDown = e => {
+    const regex = /^[a-zA-Z0-9]*$/;
+    !regex.test(e.key) && e.preventDefault();
+  };
+
   return (
     <Box className={classes.mainContainer}>
       {validated && web3.utils.isAddress(token) ? (
@@ -90,7 +95,8 @@ const DropToken = ({ setContent }) => {
         onChange={handleChange}
         autoComplete='off'
         onKeyUp={validateAddress}
-        id='abx'
+        inputProps={{ maxLength: 42 }}
+        onKeyDown={handleKeyDown}
       />
       {loading && (
         <Box className={classes.loading}>

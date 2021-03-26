@@ -25,6 +25,6 @@ export const name = async tokenAddress => {
     const decimals = await contract.methods.name().call();
     return decimals;
   } catch (e) {
-    logError('erc20TokenContract', e);
+    // logError('erc20TokenContract', e);
   }
 };

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import * as dropInputTypes from '../types/dropInputTypes';
-import { logError } from '../../utils/log';
+import { logError, logMessage } from '../../utils/log';
 import { BASE_URL, formDataConfig } from '../../config/constants';
 
 export const saveFields = data => {
@@ -33,13 +33,15 @@ export const clearFields = () => {
   };
 };
 
-export const uploadCSV = file => {
+export const uploadCSV = (file, account, token) => {
   return async dispatch => {
     try {
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('walletAddress', account);
+      formData.append('tokenAddress', token);
       const res = await axios.post(`${BASE_URL}/upload_csv/merkle_root`, formData, formDataConfig);
-      console.log(res);
+      logMessage('Upload CSV', res);
       if (res?.data?.responseCode === 200) {
         dispatch({
           type: dropInputTypes.UPLOAD_CSV,

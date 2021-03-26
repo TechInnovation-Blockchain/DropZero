@@ -39,9 +39,12 @@ export const useStyles = makeStyles(theme => ({
     justifyContent: 'space-between',
     margin: theme.spacing(1, 0),
   },
+  btnWrapper: {
+    display: 'flex',
+  },
   accordionBtn: {
     fontSize: '14px',
-    width: '150px',
+    width: '140px',
     margin: '8px auto',
     display: 'flex',
   },

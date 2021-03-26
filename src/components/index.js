@@ -8,6 +8,7 @@ import Snackbar from './Snackbar';
 import Dialog from './Dialog';
 import Footer from './Footer';
 import LoadingDialog from './LoadingDialog';
+import DisclaimerDialog from './DIsclaimerDialog';
 
 export {
   Navbar,
@@ -20,4 +21,5 @@ export {
   Dialog,
   Footer,
   LoadingDialog,
+  DisclaimerDialog,
 };

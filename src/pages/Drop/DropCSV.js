@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Box, Typography, Grid } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PublishIcon from '@material-ui/icons/Publish';
 import web3 from 'web3';
-import { KeyboardDateTimePicker } from '@material-ui/pickers';
+import { useWeb3React } from '@web3-react/core';
 
-import { Button, Dialog, LoadingDialog } from '../../components';
+import { Button, Dialog, LoadingDialog, DisclaimerDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
 import { useDropInputs } from '../../hooks';
 import TempCSV from '../../assets/temp.csv';
@@ -16,14 +16,13 @@ const DropCSV = ({ setContent }) => {
     file: null,
     error: '',
     open: false,
+    openDis: false,
     loading: false,
     loadingContent: '',
-    section: 'startDate',
   });
-  const { startDate, endDate, csv, saveFieldsF, clearFieldsF, uploadCSVF } = useDropInputs();
-  const { file, error, open, loading, section, loadingContent } = formData;
-
-  // const [date, setDate] = useState(null);
+  const { token, csv, clearFieldsF, uploadCSVF } = useDropInputs();
+  const { account } = useWeb3React();
+  const { file, error, open, openDis, loading, loadingContent } = formData;
 
   const _uploadCSV = async e => {
     const _file = e?.target?.files[0];
@@ -60,10 +59,14 @@ const DropCSV = ({ setContent }) => {
   const validateCSV = data => {
     let validCSV = true;
     const header = data[0].split(',');
-    if (header.length === 2 && header[0] === 'address' && header[1] === 'amount') {
+    if (header.length === 2 && header[0].trim() === 'address' && header[1].trim() === 'amount') {
       for (let i = 1; i < data.length - 1; i++) {
         const rowData = data[i].split(',');
-        if (!web3.utils.isAddress(rowData[0]) || isNaN(rowData[1])) {
+        if (
+          !web3.utils.isAddress(rowData[0].trim()) ||
+          isNaN(rowData[1].trim()) ||
+          rowData[1].trim() === ''
+        ) {
           validCSV = false;
           break;
         }
@@ -80,23 +83,28 @@ const DropCSV = ({ setContent }) => {
 
   const handleUpload = async () => {
     setFormData({ ...formData, loading: true, loadingContent: 'Uploading CSV' });
-    await uploadCSVF(file);
+    await uploadCSVF(file, account, token);
     setFormData({ ...formData, loading: false, open: true, loadingContent: 'Uploading CSV' });
   };
 
   const handleClick = () => {
+    const walletAddress = localStorage.getItem('userDrop');
+    if (!(walletAddress && walletAddress === account)) {
+      setFormData({ ...formData, openDis: true, open: false });
+      return;
+    }
     clearFieldsF();
     setContent('token');
     handleClose();
   };
 
-  // const handleDateTimeChange = (date, key, nextSection) => {
-  //   console.log(date);
-  //   if (date != null) {
-  //     saveFieldsF({ [key]: date });
-  //     setFormData({ ...formData, section: nextSection });
-  //   }
-  // };
+  const handleDisclaimerClose = () => {
+    setFormData({ ...formData, openDis: false });
+    localStorage.setItem('userDrop', account);
+    clearFieldsF();
+    setContent('token');
+    handleClose();
+  };
 
   return (
     <Box className={classes.mainContainer}>
@@ -111,6 +119,12 @@ const DropCSV = ({ setContent }) => {
         btnOnClick={handleClick}
       />
 
+      <DisclaimerDialog
+        open={openDis}
+        handleClose={() => setFormData({ ...formData, openDis: false })}
+        btnOnClick={handleDisclaimerClose}
+      />
+
       <LoadingDialog open={loading} text={loadingContent} />
       <Typography variant='body2' className={classes.para}>
         Who would you like to drop these tokens to ?
@@ -118,37 +132,6 @@ const DropCSV = ({ setContent }) => {
       <Typography variant='body2' className={classes.error} style={{ top: '57%' }}>
         {error}
       </Typography>
-
-      {/* {section === 'startDate' ? (
-        <KeyboardDateTimePicker
-          className={classes.datePicker}
-          placeholder='Start Date'
-          value={startDate}
-          format='MM/dd/yyyy hh:mm'
-          onChange={date => handleDateTimeChange(date, 'startDate', 'endDate')}
-          InputProps={{ disableUnderline: true }}
-          disablePast
-          autoComplete='off'
-        />
-      ) : section === 'endDate' ? (
-        <KeyboardDateTimePicker
-          className={classes.datePicker}
-          placeholder='End Date'
-          value={endDate}
-          format='MM/dd/yyyy hh:mm'
-          onChange={date => handleDateTimeChange(date, 'endDate', 'uploadCSV')}
-          InputProps={{ disableUnderline: true }}
-          disablePast
-          autoComplete='off'
-        />
-      ) : (
-        <label className={classes.fileUploader}>
-          <input type='file' accept='.csv' onChange={_uploadCSV} />
-          <Box>
-            <Typography variant='body2'>{file ? file.name : 'Select File'}</Typography>
-          </Box>
-        </label>
-      )} */}
 
       <label className={classes.fileUploader}>
         <input type='file' accept='.csv' onChange={_uploadCSV} />

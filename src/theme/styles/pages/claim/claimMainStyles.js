@@ -8,7 +8,6 @@ export const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    // background: 'red',
     '& button[disabled]': {
       color: theme.palette.text.secondary,
     },
@@ -23,7 +22,6 @@ export const useStyles = makeStyles(theme => ({
   tokenContainer: {
     width: '100%',
     height: '180px',
-    // overflowY: 'auto',
   },
   token: {
     display: 'flex',
@@ -31,18 +29,13 @@ export const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     margin: '10px auto',
     width: '95%',
-    // height: '50px',
     height: '80px',
-    backgroundColor: theme.palette.background.input,
-    border: `1px solid ${theme.palette.background.input}`,
-    borderRadius: 10,
-    padding: '0 10px',
+    backgroundColor: theme.palette.background.secondary,
+    border: `1px solid ${theme.palette.background.secondary}`,
+    borderRadius: 5,
+    padding: theme.spacing(0, 2),
     boxSizing: 'border-box',
-    '& p': {
-      fontSize: '12px',
-      fontWeight: 'bolder',
-      margin: '3px 0',
-    },
+
     '& img': {
       width: '30px',
       height: '30px',
@@ -50,7 +43,29 @@ export const useStyles = makeStyles(theme => ({
     },
     cursor: 'pointer',
   },
-
+  tokenInfo: {
+    textAlign: 'left',
+    display: 'flex',
+    alignItems: 'center',
+    '& p': {
+      marginLeft: 10,
+      textTrasform: 'uppercase',
+      fontWeight: '600',
+      fontSize: '16px',
+    },
+  },
+  tokenDetail: {
+    textAlign: 'right',
+    '& p': {
+      margin: theme.spacing(0.5, 0),
+      fontWeight: '500',
+      '&:first-child': {
+        color: theme.palette.primary.main,
+        fontWeight: '600',
+        fontSize: '16px',
+      },
+    },
+  },
   selected: {
     backgroundColor: theme.palette.background.dialog,
     borderRadius: 10,
