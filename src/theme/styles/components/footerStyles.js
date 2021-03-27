@@ -7,7 +7,15 @@ export const useStyles = makeStyles(theme => ({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    '& a': {
+    // '& a': {
+    //   color: theme.palette.text.secondary,
+    //   marginRight: '15px',
+    //   '&:hover': {
+    //     color: theme.palette.text.primary,
+    //   },
+    // },
+    '& p': {
+      cursor: 'pointer',
       color: theme.palette.text.secondary,
       marginRight: '15px',
       '&:hover': {
@@ -16,7 +24,6 @@ export const useStyles = makeStyles(theme => ({
     },
     '@media(max-width:550px)': {
       width: '100%',
-      //   position: 'static',
       justifyContent: 'space-around',
       bottom: 10,
       right: 0,

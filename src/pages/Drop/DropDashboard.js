@@ -20,16 +20,16 @@ const DropDashboard = () => {
   const [formData, setFormData] = useState({
     page: 0,
     rowsPerPage: 3,
-    reverse: false,
   });
-  const { page, rowsPerPage, reverse } = formData;
+  const [reverse, setReverse] = useState(false);
+  const { page, rowsPerPage } = formData;
   const [expanded, setExpanded] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     if (page > newPage) {
-      setFormData({ ...formData, reverse: true });
+      setReverse(true);
     } else {
-      setFormData({ ...formData, reverse: false });
+      setReverse(false);
     }
     setFormData({ ...formData, page: newPage });
   };

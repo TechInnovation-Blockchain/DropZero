@@ -59,7 +59,13 @@ const DropCSV = ({ setContent }) => {
   const validateCSV = data => {
     let validCSV = true;
     const header = data[0].split(',');
-    if (header.length === 2 && header[0].trim() === 'address' && header[1].trim() === 'amount') {
+    console.log(data);
+    if (
+      header.length === 2 &&
+      header[0].trim() === 'address' &&
+      header[1].trim() === 'amount' &&
+      data.length > 2
+    ) {
       for (let i = 1; i < data.length - 1; i++) {
         const rowData = data[i].split(',');
         if (
@@ -121,6 +127,7 @@ const DropCSV = ({ setContent }) => {
 
       <DisclaimerDialog
         open={openDis}
+        heading='Disclaimer'
         handleClose={() => setFormData({ ...formData, openDis: false })}
         btnOnClick={handleDisclaimerClose}
       />

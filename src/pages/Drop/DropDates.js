@@ -49,8 +49,6 @@ const DropDates = ({ setContent }) => {
           <span>Back</span>
         </Button>
         <Button
-          // disabled={startDate && endDate ? false : true}
-          // disabled={dateError}
           disabled={startDate != 'Invalid Date' && endDate != 'Invalid Date' ? false : true}
           onClick={() => setContent('uploadCSV')}
         >

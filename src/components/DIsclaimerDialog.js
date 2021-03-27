@@ -3,7 +3,7 @@ import { Dialog as DialogMui, Typography, DialogContent, Button } from '@materia
 
 import { useStyles } from '../theme/styles/components/disclaimerStyles';
 
-const Disclaimer = ({ open, handleClose, btnOnClick }) => {
+const Disclaimer = ({ open, handleClose, heading, btnOnClick }) => {
   const classes = useStyles();
 
   return (
@@ -16,7 +16,7 @@ const Disclaimer = ({ open, handleClose, btnOnClick }) => {
       >
         <DialogContent className={classes.innerContainer}>
           <Typography variant='body2' className={classes.heading}>
-            DISCLAIMER
+            {heading}
           </Typography>
 
           <Typography variant='body2' className={classes.content}>
@@ -31,7 +31,7 @@ const Disclaimer = ({ open, handleClose, btnOnClick }) => {
           </Typography>
 
           <Button color='primary' onClick={btnOnClick} style={{ marginTop: '10px' }}>
-            I Agree
+            I Understand
           </Button>
         </DialogContent>
       </DialogMui>

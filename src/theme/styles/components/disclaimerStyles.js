@@ -11,6 +11,7 @@ export const useStyles = makeStyles(theme => ({
   heading: {
     fontWeight: 'bold',
     marginBottom: '10px',
+    textTransform: 'uppercase',
   },
   content: {
     color: theme.palette.text.primary,

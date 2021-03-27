@@ -28,16 +28,16 @@ const ClaimDashboard = () => {
   const [formData, setFormData] = useState({
     page: 0,
     rowsPerPage: 3,
-    reverse: false,
   });
-  const { page, rowsPerPage, reverse } = formData;
+  const [reverse, setReverse] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const { page, rowsPerPage } = formData;
 
   const handleChangePage = (event, newPage) => {
     if (page > newPage) {
-      setFormData({ ...formData, reverse: true });
+      setReverse(true);
     } else {
-      setFormData({ ...formData, reverse: false });
+      setReverse(false);
     }
     setFormData({ ...formData, page: newPage });
   };

@@ -9,6 +9,7 @@ import Dialog from './Dialog';
 import Footer from './Footer';
 import LoadingDialog from './LoadingDialog';
 import DisclaimerDialog from './DIsclaimerDialog';
+import Counter from './Counter';
 
 export {
   Navbar,
@@ -22,4 +23,5 @@ export {
   Footer,
   LoadingDialog,
   DisclaimerDialog,
+  Counter,
 };

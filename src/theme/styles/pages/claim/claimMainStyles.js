@@ -31,10 +31,11 @@ export const useStyles = makeStyles(theme => ({
     width: '95%',
     height: '80px',
     backgroundColor: theme.palette.background.secondary,
-    border: `1px solid ${theme.palette.background.secondary}`,
+    border: `3px solid ${theme.palette.background.secondary}`,
     borderRadius: 5,
     padding: theme.spacing(0, 2),
     boxSizing: 'border-box',
+    position: 'relative',
 
     '& img': {
       width: '30px',
@@ -69,9 +70,8 @@ export const useStyles = makeStyles(theme => ({
   selected: {
     backgroundColor: theme.palette.background.dialog,
     borderRadius: 10,
-    border: `1px solid ${theme.palette.primary.main}}`,
+    border: `3px solid ${theme.palette.primary.main}}`,
   },
-
   secondaryText: {
     color: theme.palette.text.secondary,
   },

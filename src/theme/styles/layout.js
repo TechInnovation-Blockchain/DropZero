@@ -19,7 +19,7 @@ export const useStyles = makeStyles(theme => ({
   },
   lightMainBox: {
     backgroundImage:
-      'radial-gradient(50% 50% at 50% 50%, rgba(149, 255, 133, 0.5) 0%, rgba(255, 255, 255, 0) 100%)',
+      'radial-gradient(50% 50% at 50% 50%, rgba(149, 255, 133, 0.3) 0%, rgba(255, 255, 255, 0) 100%)',
   },
   // mainBox: {
   //   backgroundPosition: 'center',

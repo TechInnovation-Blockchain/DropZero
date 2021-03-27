@@ -19,6 +19,7 @@ export const darkTheme = createMuiTheme({
       dialog: '#1A1A1A',
       disabled: '#2F2F2F',
       hover: '#000',
+      overlay: 'rgba(0,0,0,0.8)',
     },
     text: {
       primary: '#fff',
@@ -53,6 +54,7 @@ export const lightTheme = createMuiTheme({
       secondary2: '#fff',
       disabled: '#E2E2E2',
       hover: '#E5E5E5',
+      overlay: 'rgba(0,0,0,0.4)',
     },
     text: {
       primary: '#000',

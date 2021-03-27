@@ -5,6 +5,7 @@ import {
   AccordionDetails,
   Typography,
   Box,
+  Switch,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -15,19 +16,19 @@ import TempCSV from '../assets/temp.csv';
 
 const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [openStop, setOpenStop] = useState(false);
+  const [formData, setFormData] = useState({ open: false, openStop: false, checked: false });
+  const { open, openStop, checked } = formData;
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setFormData({ ...formData, open: false });
   };
 
   const handleStopClose = () => {
-    setOpenStop(false);
+    setFormData({ ...formData, openStop: false });
   };
 
   return (
@@ -91,11 +92,26 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
                 <Typography variant='body2'>Expiry</Typography>
                 <Typography variant='body2'>25th Mar 2021</Typography>
               </Box>
+              <Box className={classes.accordianContent}>
+                <Typography variant='body2'>Pause Drop</Typography>
+                <Switch
+                  checked={checked}
+                  onChange={() => setFormData({ ...formData, checked: !checked })}
+                  color='primary'
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                />
+              </Box>
               <Box className={classes.btnWrapper}>
-                <Button onClick={() => setOpen(true)} className={classes.accordionBtn}>
+                <Button
+                  onClick={() => setFormData({ ...formData, open: true })}
+                  className={classes.accordionBtn}
+                >
                   <span>Withdraw</span>
                 </Button>
-                <Button onClick={() => setOpenStop(true)} className={classes.accordionBtn}>
+                <Button
+                  onClick={() => setFormData({ ...formData, openStop: true })}
+                  className={classes.accordionBtn}
+                >
                   <span>Stop</span>
                 </Button>
               </Box>
