@@ -5,6 +5,7 @@ const initialState = {
     tokenName: 'Unknown',
     tokenLogo: '',
     token: '',
+    type: '',
     date: null,
     startDate: null,
     endDate: null,

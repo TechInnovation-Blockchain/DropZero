@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PublishIcon from '@material-ui/icons/Publish';
-import web3 from 'web3';
 import { useWeb3React } from '@web3-react/core';
 
 import { Button, Dialog, LoadingDialog, DisclaimerDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
 import { useDropInputs } from '../../hooks';
+import { getBalance } from '../../contracts/functions/erc20Functions';
+import { truncFileName } from '../../utils/formattingFunctions';
+import { validateCSV } from '../../utils/validatingFunctions';
 import TempCSV from '../../assets/temp.csv';
 
 const DropCSV = ({ setContent }) => {
@@ -19,29 +21,47 @@ const DropCSV = ({ setContent }) => {
     openDis: false,
     loading: false,
     loadingContent: '',
+    totalAmount: 0,
+    totalAddress: 0,
+    balance: 0,
   });
-  const { token, csv, clearFieldsF, uploadCSVF } = useDropInputs();
+  const { token, startDate, endDate, type, csv, clearFieldsF, uploadCSVF } = useDropInputs();
   const { account } = useWeb3React();
-  const { file, error, open, openDis, loading, loadingContent } = formData;
+  const {
+    file,
+    error,
+    open,
+    openDis,
+    loading,
+    loadingContent,
+    totalAmount,
+    totalAddress,
+    balance,
+  } = formData;
 
-  const _uploadCSV = async e => {
-    const _file = e?.target?.files[0];
+  const uploadingCSV = _file => {
     if (_file) {
       setFormData({
         ...formData,
         loading: true,
         loadingContent: 'Validating CSV',
+        totalAmount: 0,
+        totalAddress: 0,
       });
       const fileReader = new FileReader();
-      fileReader.onloadend = e => {
+      fileReader.onloadend = async e => {
         const content = e.target.result;
-        const validated = validateCSV(content.split('\n'));
-        if (validated) {
+        const { validCSV, _totalAmount, _totalAddress } = validateCSV(content.split('\n'));
+        if (validCSV) {
+          const balance = await getBalance(token, account);
           setFormData({
             ...formData,
             file: _file,
             error: '',
             loading: false,
+            totalAmount: _totalAmount,
+            totalAddress: _totalAddress,
+            balance,
           });
         } else {
           setFormData({
@@ -56,60 +76,48 @@ const DropCSV = ({ setContent }) => {
     }
   };
 
-  const validateCSV = data => {
-    let validCSV = true;
-    const header = data[0].split(',');
-    console.log(data);
-    if (
-      header.length === 2 &&
-      header[0].trim() === 'address' &&
-      header[1].trim() === 'amount' &&
-      data.length > 2
-    ) {
-      for (let i = 1; i < data.length - 1; i++) {
-        const rowData = data[i].split(',');
-        if (
-          !web3.utils.isAddress(rowData[0].trim()) ||
-          isNaN(rowData[1].trim()) ||
-          rowData[1].trim() === ''
-        ) {
-          validCSV = false;
-          break;
-        }
-      }
-    } else {
-      validCSV = false;
-    }
-    return validCSV;
+  const handleUploadChange = e => {
+    const _file = e?.target?.files[0];
+    uploadingCSV(_file);
   };
 
   const handleClose = () => {
     setFormData({ ...formData, open: false });
   };
 
-  const handleUpload = async () => {
+  const uploadCSVOnServer = async () => {
     setFormData({ ...formData, loading: true, loadingContent: 'Uploading CSV' });
-    await uploadCSVF(file, account, token);
-    setFormData({ ...formData, loading: false, open: true, loadingContent: 'Uploading CSV' });
+    const data = { file, account, token, startDate, endDate, type };
+    await uploadCSVF(data);
+    setFormData({ ...formData, loading: false });
+    clearFieldsF();
+    setContent('token');
+    handleClose();
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const walletAddress = localStorage.getItem('userDrop');
     if (!(walletAddress && walletAddress === account)) {
       setFormData({ ...formData, openDis: true, open: false });
       return;
     }
-    clearFieldsF();
-    setContent('token');
-    handleClose();
+    await uploadCSVOnServer();
   };
 
-  const handleDisclaimerClose = () => {
+  const handleDisclaimerClose = async () => {
     setFormData({ ...formData, openDis: false });
     localStorage.setItem('userDrop', account);
-    clearFieldsF();
-    setContent('token');
-    handleClose();
+    await uploadCSVOnServer();
+  };
+
+  const handleDrop = e => {
+    e.preventDefault();
+    const _file = e.dataTransfer.files[0];
+    if (_file.type === 'text/csv') uploadingCSV(_file);
+  };
+
+  const handleAllowDrop = e => {
+    e.preventDefault();
   };
 
   return (
@@ -117,12 +125,13 @@ const DropCSV = ({ setContent }) => {
       <Dialog
         open={open}
         handleClose={handleClose}
-        // text='You are about to deposite 100.00 tokens that will be claimable by 153 different
-        // addresses'
-        text={`Please confirm you are submitting ${csv?.result?.csv_length} addresses for a total of ${csv?.result?.amount} tokens.`}
-        secondaryText='If there are errors, please upload a new file. No changes can be made after you press CONFIRM'
+        text={`Please confirm you are submitting ${totalAddress} addresses for a total of ${totalAmount} tokens.`}
+        secondaryText='If there are errors, please upload a new file. No changes can be made after you press CONFIRM.'
         btnText='Confirm'
         btnOnClick={handleClick}
+        errorMsg={
+          balance > totalAmount ? 'Your current wallet have insufficient amount of tokens' : ''
+        }
       />
 
       <DisclaimerDialog
@@ -136,22 +145,29 @@ const DropCSV = ({ setContent }) => {
       <Typography variant='body2' className={classes.para}>
         Who would you like to drop these tokens to ?
       </Typography>
-      <Typography variant='body2' className={classes.error} style={{ top: '57%' }}>
+
+      <label className={classes.fileUploader} onDrop={handleDrop} onDragOver={handleAllowDrop}>
+        <input type='file' accept='.csv' onChange={handleUploadChange} />
+        <Box>
+          <Typography variant='body2'>
+            {file ? truncFileName(file.name, 25) : 'Choose or drag file'}
+          </Typography>
+        </Box>
+      </label>
+
+      <Typography variant='body2' className={classes.error} style={{ top: '58%' }}>
         {error}
       </Typography>
 
-      <label className={classes.fileUploader}>
-        <input type='file' accept='.csv' onChange={_uploadCSV} />
-        <Box>
-          <Typography variant='body2'>{file ? file.name : 'Select File'}</Typography>
-        </Box>
-      </label>
       <Box className={classes.btnContainer}>
         <Button onClick={() => setContent('dates')}>
           <ArrowBackIcon />
           <span>Back</span>
         </Button>
-        <Button disabled={file && error === '' ? false : true} onClick={handleUpload}>
+        <Button
+          disabled={file && error === '' ? false : true}
+          onClick={() => setFormData({ ...formData, open: true })}
+        >
           <span>Upload</span>
           <PublishIcon />
         </Button>

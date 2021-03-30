@@ -13,13 +13,13 @@ const Navbar = () => {
     <Box className={classes.mainContainer}>
       <Grid item xs={4} style={{ textAlign: 'center' }}>
         <NavLink
-          to='/drop'
+          to='/claim'
           className={classes.navlink}
           activeClassName={classes.activeNavlink}
           exact
         >
           <Typography variant='body2' className={classes.navTypography}>
-            Drop
+            Claim
           </Typography>
         </NavLink>
       </Grid>
@@ -30,13 +30,13 @@ const Navbar = () => {
       </Grid>
       <Grid item xs={4} style={{ textAlign: 'center' }}>
         <NavLink
-          to='/claim'
+          to='/drop'
           className={classes.navlink}
           activeClassName={classes.activeNavlink}
           exact
         >
           <Typography variant='body2' className={classes.navTypography}>
-            Claim
+            Drop
           </Typography>
         </NavLink>
       </Grid>

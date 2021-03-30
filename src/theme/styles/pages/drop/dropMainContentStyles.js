@@ -21,6 +21,7 @@ export const useStyles = makeStyles(theme => ({
     fontWeight: 'bolder',
     width: '90%',
     margin: '8px auto',
+    height: '50px',
     '@media(max-width:550px)': {
       width: '100%',
     },
@@ -45,7 +46,6 @@ export const useStyles = makeStyles(theme => ({
       fontWeight: 'bolder',
       color: theme.palette.text.secondary,
       letterSpacing: '1.5px',
-      // fontSize: '14px',
     },
     '& svg': {
       color: theme.palette.text.placeholder,
@@ -76,17 +76,21 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.error.main,
     fontWeight: 700,
     position: 'absolute',
-    left: 15,
-    top: '57%',
+    left: 12,
+    top: '48%',
     fontSize: '12px',
+    '@media(max-width:550px)': {
+      fontSize: '10px',
+    },
     '@media(max-width:330px)': {
-      top: '50%',
+      top: '51%',
     },
   },
   fileUploader: {
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
+
     '& input[type=file]': {
       display: 'none',
     },
@@ -126,7 +130,7 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacing(1, 0),
-    height: '40px',
+    height: '50px',
     '& p': {
       fontWeight: 700,
       marginLeft: 10,
@@ -138,10 +142,21 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
     position: 'absolute',
     left: 15,
-    top: '57%',
+    top: '48%',
     '& p': {
       marginLeft: 5,
       fontSize: '12px',
     },
+  },
+  smallerField: {
+    '& .MuiInputBase-input': {
+      fontSize: '11px',
+    },
+  },
+  help: {
+    position: 'absolute',
+    top: '58.5%',
+    right: 15,
+    color: theme.palette.text.placeholder,
   },
 }));

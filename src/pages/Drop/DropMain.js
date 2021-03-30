@@ -10,7 +10,7 @@ const DropMain = () => {
   const [content, setContent] = useState('token');
 
   return (
-    <PageAnimation in={true} reverse={1}>
+    <PageAnimation in={true} reverse={0}>
       <Box style={{ textAlign: 'center' }}>
         {content === 'token' ? (
           <DropToken setContent={setContent} />

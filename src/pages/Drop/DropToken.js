@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Box, Typography, CircularProgress } from '@material-ui/core';
+import { Box, Typography, CircularProgress, Tooltip } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import web3 from 'web3';
 
 import { InputField, Button } from '../../components';
@@ -12,26 +12,18 @@ import { getTokenLogo } from '../../redux';
 
 const DropToken = ({ setContent }) => {
   const classes = useStyles();
-  const { token, tokenName, tokenLogo, date, saveFieldsF } = useDropInputs();
+  const { token, tokenType, tokenName, tokenLogo, saveFieldsF } = useDropInputs();
   const [formData, setFormData] = useState({
     validated: token ? true : false,
     error: '',
     loading: false,
   });
-  const [dateError, setDateError] = useState(false);
   const { validated, error, loading } = formData;
 
   const handleChange = e => {
     if (e?.target) {
-      saveFieldsF({ token: e.target.value });
+      saveFieldsF({ [e.target.name]: e.target.value });
       setFormData({ ...formData, error: '' });
-    } else {
-      saveFieldsF({ date: e });
-      if (e == 'Invalid Date') {
-        setDateError(true);
-      } else {
-        setDateError(false);
-      }
     }
   };
 
@@ -60,7 +52,7 @@ const DropToken = ({ setContent }) => {
           setFormData({
             ...formData,
             validated: false,
-            error: 'Invalid Token Address',
+            error: 'Please enter a correct Token Address',
             loading: false,
           });
         }
@@ -75,9 +67,14 @@ const DropToken = ({ setContent }) => {
     !regex.test(e.key) && e.preventDefault();
   };
 
+  const handleAlphaOnly = e => {
+    const regex = /^[a-zA-Z,. ']*$/;
+    !regex.test(e.key) && e.preventDefault();
+  };
+
   return (
     <Box className={classes.mainContainer}>
-      {validated && web3.utils.isAddress(token) ? (
+      {validated ? (
         <Box className={classes.tokenInfo}>
           <img src={tokenLogo} alt='logo' width='30px' />
           <Typography variant='body2'>{tokenName}</Typography>
@@ -91,12 +88,14 @@ const DropToken = ({ setContent }) => {
       <InputField
         placeholder='Token Address*'
         name='token'
+        // value={token.length < 30 ? token : token.substring(token, 30) + '...'}
         value={token}
         onChange={handleChange}
         autoComplete='off'
         onKeyUp={validateAddress}
         inputProps={{ maxLength: 42 }}
         onKeyDown={handleKeyDown}
+        className={token.length === 42 ? classes.smallerField : ''}
       />
       {loading && (
         <Box className={classes.loading}>
@@ -108,24 +107,22 @@ const DropToken = ({ setContent }) => {
         {error}
       </Typography>
 
-      {/* <KeyboardDatePicker
-        className={classes.datePicker}
-        margin='normal'
-        id='date-picker-dialog'
-        placeholder='MM/dd/yyyy'
-        InputProps={{ disableUnderline: true }}
-        format='MM/dd/yyyy'
-        value={date}
+      <InputField
+        placeholder='Token Type'
+        name='tokenType'
+        value={tokenType}
         onChange={handleChange}
-        KeyboardButtonProps={{
-          'aria-label': 'change date',
-        }}
-        disablePast
         autoComplete='off'
-      /> */}
+        inputProps={{ maxLength: 20 }}
+        onKeyDown={handleAlphaOnly}
+      />
+
+      <Tooltip title='Example: "Early Birds"'>
+        <HelpOutlineIcon className={classes.help} />
+      </Tooltip>
 
       <Box>
-        <Button disabled={!validated || dateError} onClick={handleClick}>
+        <Button disabled={!validated} onClick={handleClick}>
           <span>Next</span>
           <ArrowForwardIcon />
         </Button>

@@ -58,12 +58,10 @@ export const trunc = (val, test) => {
   }
 };
 
-// export const debounce = (callback, wait) => {
-//   let timeout = null;
-
-//   return (...args) => {
-//     const next = () => callback(...args);
-//     clearTimeout(timeout);
-//     timeout = setTimeout(next, wait);
-//   };
-// };
+export const truncFileName = (fileName, acceptedLength) => {
+  if (fileName.length > acceptedLength) {
+    return `${fileName.substring(0, acceptedLength - 4)}...`;
+  } else {
+    return fileName;
+  }
+};

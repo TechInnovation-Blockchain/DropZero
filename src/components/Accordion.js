@@ -58,6 +58,13 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
             <Typography variant='body2'>Token</Typography>
             <Typography variant='body2'>Aqua</Typography>
           </Box>
+          <Box
+            className={classes.accordianContent}
+            style={{ alignItems: 'flex-start', minHeight: '20px', height: 'auto' }}
+          >
+            <Typography variant='body2'>Token type</Typography>
+            <Typography variant='body2'>XLP</Typography>
+          </Box>
           {claim && (
             <Box className={classes.accordianContent}>
               <Typography variant='body2'>Claimed on</Typography>
@@ -81,19 +88,20 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
                 btnOnClick={handleStopClose}
               />
               <Box className={classes.accordianContent}>
-                <Typography variant='body2'>Total claim</Typography>
+                <Typography variant='body2'>Total claimed</Typography>
                 <Typography variant='body2'>4,000</Typography>
               </Box>
               <Box className={classes.accordianContent}>
-                <Typography variant='body2'>Available amount</Typography>
+                <Typography variant='body2'>Total unclaimed</Typography>
                 <Typography variant='body2'>8,000</Typography>
               </Box>
               <Box className={classes.accordianContent}>
                 <Typography variant='body2'>Expiry</Typography>
                 <Typography variant='body2'>25th Mar 2021</Typography>
               </Box>
+
               <Box className={classes.accordianContent}>
-                <Typography variant='body2'>Pause Drop</Typography>
+                <Typography variant='body2'>Pause Claims</Typography>
                 <Switch
                   checked={checked}
                   onChange={() => setFormData({ ...formData, checked: !checked })}
@@ -101,6 +109,7 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
                   inputProps={{ 'aria-label': 'primary checkbox' }}
                 />
               </Box>
+
               <Box className={classes.btnWrapper}>
                 <Button
                   onClick={() => setFormData({ ...formData, open: true })}

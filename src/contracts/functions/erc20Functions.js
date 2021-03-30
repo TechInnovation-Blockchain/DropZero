@@ -28,3 +28,13 @@ export const name = async tokenAddress => {
     // logError('erc20TokenContract', e);
   }
 };
+
+export const getBalance = async (tokenAddress, walletAddress) => {
+  const contract = erc20TokenContract(tokenAddress);
+  try {
+    const balance = await contract.methods.balanceOf(walletAddress).call();
+    return balance;
+  } catch (e) {
+    logError('erc20TokenContract', e);
+  }
+};

@@ -23,7 +23,7 @@ const ConnectWallet = () => {
   const web3context = useWeb3React();
   const [open, setOpen] = useState(false);
   const { showSnackbarF } = useSnackbar();
-  const { setLoadingF } = useLoading();
+  const { setLoadingF, loading } = useLoading();
   const { storeWeb3ContextF } = useWeb3();
 
   const getErrorMessage = e => {
@@ -74,7 +74,7 @@ const ConnectWallet = () => {
           setLoadingF({ walletConnection: false });
         });
     },
-    [web3context]
+    [web3context, loading]
   );
 
   useEffect(() => {

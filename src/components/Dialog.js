@@ -5,7 +5,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useStyles } from '../theme/styles/components/dialogStyles';
 import Button from './Button';
 
-const Dialog = ({ open, handleClose, text, secondaryText, btnText, btnOnClick }) => {
+const Dialog = ({ open, handleClose, text, secondaryText, errorMsg, btnText, btnOnClick }) => {
   const classes = useStyles();
 
   return (
@@ -23,10 +23,16 @@ const Dialog = ({ open, handleClose, text, secondaryText, btnText, btnOnClick })
           <Typography variant='body2' className={classes.content}>
             {text}
           </Typography>
-          <Typography variant='body2' className={classes.secondaryText}>
-            {secondaryText}
-          </Typography>
-          <Button onClick={btnOnClick}>
+          {errorMsg ? (
+            <Typography variant='body2' className={classes.errorMsg}>
+              {errorMsg}
+            </Typography>
+          ) : (
+            <Typography variant='body2' className={classes.secondaryText}>
+              {secondaryText}
+            </Typography>
+          )}
+          <Button onClick={btnOnClick} disabled={errorMsg ? true : false}>
             <span>{btnText}</span>
           </Button>
         </DialogContent>

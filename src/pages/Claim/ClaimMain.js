@@ -1,9 +1,17 @@
-import { useState } from 'react';
-import { Box, Typography, Grid, Tooltip, TablePagination } from '@material-ui/core';
+import { useState, useEffect } from 'react';
+import { Box, Typography, Grid, Tooltip, TablePagination, IconButton } from '@material-ui/core';
 import { useWeb3React } from '@web3-react/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
-import { Button, PageAnimation, Dialog, DisclaimerDialog, Counter } from '../../components';
+import {
+  Button,
+  PageAnimation,
+  Dialog,
+  DisclaimerDialog,
+  Counter,
+  ClaimTabs,
+} from '../../components';
 import FLASH from '../../assets/FLASH.png';
 import DAI from '../../assets/DAI.png';
 import XIO from '../../assets/blockzerologo.png';
@@ -45,10 +53,12 @@ const ClaimMain = () => {
     openDis: false,
     page: 0,
     rowsPerPage: 2,
+    initial: true,
+    activeTab: false,
   });
   const [reverse, setReverse] = useState(false);
   const { account } = useWeb3React();
-  const { page, rowsPerPage, openDis } = formData;
+  const { page, rowsPerPage, openDis, initial, activeTab } = formData;
 
   const checkSelection = (token, rootHash) => {
     const exists = selected.filter(item => item.token === token && item.rootHash === rootHash)[0];
@@ -117,8 +127,12 @@ const ClaimMain = () => {
     localStorage.setItem('userClaim', account);
   };
 
+  useEffect(() => {
+    setFormData({ ...formData, initial: false });
+  }, []);
+
   return (
-    <PageAnimation in={true} reverse={0}>
+    <PageAnimation in={true} reverse={1}>
       <Dialog
         open={open}
         handleClose={handleClose}
@@ -132,70 +146,79 @@ const ClaimMain = () => {
         handleClose={() => setFormData({ ...formData, openDis: false })}
         btnOnClick={handleDisclaimerClose}
       />
-      <Box className={classes.mainContainer}>
-        {tokens.length > 0 ? (
-          <>
-            <Typography variant='body1' className={classes.heading}>
-              Available Tokens
+      {activeTab ? (
+        <ClaimTabs />
+      ) : (
+        <Box className={classes.mainContainer}>
+          {tokens.length > 0 ? (
+            <>
+              <Typography variant='body1' className={classes.heading}>
+                Available Tokens
+              </Typography>
+              <PageAnimation in={page} key={page} reverse={initial ? initial : reverse}>
+                <Box className={classes.tokenContainer}>
+                  {tokens.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(token => (
+                    <Box
+                      key={token.rootHash}
+                      className={`${classes.token} ${
+                        checkSelection(token.token, token.rootHash) ? classes.selected : ''
+                      }`}
+                      // onClick={() => handleSelect(token)}
+                    >
+                      {/* <Counter date={token.startDate} /> */}
+                      <Grid container alignItems='center' spacing={1} className={classes.grid}>
+                        <Grid item xs={9} className={classes.tokenInfo}>
+                          <img src={token.img} alt={token.token} />
+                          <Box style={{ textAlign: 'left' }}>
+                            <Typography variant='body2'>{token.token}</Typography>
+                          </Box>
+                        </Grid>
+
+                        <Grid item xs={3} className={classes.tokenDetail}>
+                          <Tooltip title={token.amount}>
+                            <Typography variant='body2'>{trunc(token.amount)}</Typography>
+                          </Tooltip>
+                          <IconButton
+                            size='small'
+                            style={{ padding: 0 }}
+                            onClick={() => setFormData({ ...formData, activeTab: true })}
+                          >
+                            <ExpandMoreIcon />
+                          </IconButton>
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  ))}
+                </Box>
+              </PageAnimation>
+            </>
+          ) : (
+            <Typography className={classes.secondaryText} variant='body2'>
+              No Tokens Available
             </Typography>
-            <PageAnimation in={page} key={page} reverse={reverse}>
-              <Box className={classes.tokenContainer}>
-                {tokens.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(token => (
-                  <Box
-                    key={token.rootHash}
-                    // className={`${classes.token} ${
-                    //   selected === token.name ? classes.selected : ''
-                    // }`}
-                    className={`${classes.token} ${
-                      checkSelection(token.token, token.rootHash) ? classes.selected : ''
-                    }`}
-                    onClick={() => handleSelect(token)}
-                  >
-                    {<Counter date={token.startDate} />}
-                    <Grid container alignItems='center' spacing={1} className={classes.grid}>
-                      <Grid item xs={6} className={classes.tokenInfo}>
-                        <img src={token.img} alt={token.token} />
-                        <Typography variant='body2'>{token.token}</Typography>
-                      </Grid>
+          )}
 
-                      <Grid item xs={6} className={classes.tokenDetail}>
-                        <Tooltip title={token.amount}>
-                          <Typography variant='body2'>{trunc(token.amount)}</Typography>
-                        </Tooltip>
-                        <Typography variant='body2'>21 Mar 2021, 14:02</Typography>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                ))}
-              </Box>
-            </PageAnimation>
-          </>
-        ) : (
-          <Typography className={classes.secondaryText} variant='body2'>
-            No Tokens Available
-          </Typography>
-        )}
-
-        {tokens.length > 0 ? (
+          {/* {tokens.length > 0 ? (
           <Button disabled={selected.length <= 0} onClick={() => setOpen(true)}>
             <span>Claim</span>
           </Button>
-        ) : null}
+        ) : null} */}
 
-        {tokens.length > 2 && (
-          <TablePagination
-            component='div'
-            style={{ display: 'flex', justifyContent: 'center' }}
-            count={tokens.length}
-            page={page}
-            onChangePage={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-            labelRowsPerPage=''
-            rowsPerPageOptions={[]}
-          />
-        )}
-      </Box>
+          {tokens.length > 2 && (
+            <TablePagination
+              component='div'
+              style={{ display: 'flex', justifyContent: 'center' }}
+              count={tokens.length}
+              page={page}
+              onChangePage={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              labelRowsPerPage=''
+              rowsPerPageOptions={[]}
+            />
+          )}
+        </Box>
+      )}
     </PageAnimation>
   );
 };

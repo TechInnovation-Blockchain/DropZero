@@ -10,6 +10,7 @@ import Footer from './Footer';
 import LoadingDialog from './LoadingDialog';
 import DisclaimerDialog from './DIsclaimerDialog';
 import Counter from './Counter';
+import ClaimTabs from './ClaimTabs';
 
 export {
   Navbar,
@@ -24,4 +25,5 @@ export {
   LoadingDialog,
   DisclaimerDialog,
   Counter,
+  ClaimTabs,
 };

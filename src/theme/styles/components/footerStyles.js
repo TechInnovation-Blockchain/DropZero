@@ -28,9 +28,17 @@ export const useStyles = makeStyles(theme => ({
       bottom: 10,
       right: 0,
       left: 0,
-      '& a': {
+      '& p': {
         margin: 0,
         fontSize: '12px',
+        letterSpacing: '2px',
+      },
+    },
+    '@media(max-width:330px)': {
+      flexDirection: 'column',
+      position: 'static',
+      '& p': {
+        margin: theme.spacing(0.5, 0),
       },
     },
   },

@@ -39,6 +39,12 @@ export const useStyles = makeStyles(theme => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: theme.spacing(1, 0),
+    '& p': {
+      width: '50%',
+    },
+    '& p:last-child': {
+      textAlign: 'right',
+    },
   },
   btnWrapper: {
     display: 'flex',
@@ -48,6 +54,9 @@ export const useStyles = makeStyles(theme => ({
     width: '140px',
     margin: '8px auto',
     display: 'flex',
+    '@media(max-width:550px)': {
+      width: '48%',
+    },
   },
   accordionLink: {
     color: theme.palette.primary.main,

@@ -33,13 +33,17 @@ export const clearFields = () => {
   };
 };
 
-export const uploadCSV = (file, account, token) => {
+export const uploadCSV = ({ file, account, token, startDate, endDate, type }) => {
   return async dispatch => {
     try {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('walletAddress', account);
       formData.append('tokenAddress', token);
+      type && formData.append('type', type);
+      startDate && formData.append('startDate', new Date(startDate).getTime());
+      endDate && formData.append('endDate', new Date(endDate).getTime());
+
       const res = await axios.post(`${BASE_URL}/upload_csv/merkle_root`, formData, formDataConfig);
       logMessage('Upload CSV', res);
       if (res?.data?.responseCode === 200) {

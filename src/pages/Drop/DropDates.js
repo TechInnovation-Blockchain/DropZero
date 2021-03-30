@@ -18,14 +18,14 @@ const DropDates = ({ setContent }) => {
   return (
     <Box className={classes.mainContainer}>
       <Typography variant='body2' className={classes.para}>
-        Enter starting and ending dates of calims for the token
+        Enter start and end dates of calims for the token
       </Typography>
 
       <KeyboardDateTimePicker
         className={classes.datePicker}
         placeholder='Start Date'
         value={startDate}
-        format='MM/dd/yyyy hh:mm'
+        format='dd MMM yyyy hh:mm'
         onChange={date => handleDateTimeChange(date, 'startDate')}
         InputProps={{ disableUnderline: true }}
         disablePast
@@ -36,7 +36,7 @@ const DropDates = ({ setContent }) => {
         className={classes.datePicker}
         placeholder='End Date'
         value={endDate}
-        format='MM/dd/yyyy hh:mm'
+        format='dd MMM yyyy hh:mm'
         onChange={date => handleDateTimeChange(date, 'endDate')}
         InputProps={{ disableUnderline: true }}
         disablePast

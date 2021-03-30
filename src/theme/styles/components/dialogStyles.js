@@ -44,7 +44,12 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
     width: '100%',
     lineHeight: '20px',
-    fontWeight: 'bolder ',
+    marginBottom: '10px',
+  },
+  errorMsg: {
+    color: theme.palette.error.main,
+    fontWeight: 700,
+    fontSize: '12px',
     marginBottom: '10px',
   },
 }));
