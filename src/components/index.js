@@ -11,6 +11,7 @@ import LoadingDialog from './LoadingDialog';
 import DisclaimerDialog from './DIsclaimerDialog';
 import Counter from './Counter';
 import ClaimTabs from './ClaimTabs';
+import ClaimTokenCard from './ClaimTokenCard';
 
 export {
   Navbar,
@@ -26,4 +27,5 @@ export {
   DisclaimerDialog,
   Counter,
   ClaimTabs,
+  ClaimTokenCard,
 };

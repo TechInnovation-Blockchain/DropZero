@@ -1,5 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
-import { KeyboardDateTimePicker } from '@material-ui/pickers';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
@@ -21,22 +21,22 @@ const DropDates = ({ setContent }) => {
         Enter start and end dates of calims for the token
       </Typography>
 
-      <KeyboardDateTimePicker
+      <KeyboardDatePicker
         className={classes.datePicker}
         placeholder='Start Date'
         value={startDate}
-        format='dd MMM yyyy hh:mm'
+        format='dd MMM yyyy'
         onChange={date => handleDateTimeChange(date, 'startDate')}
         InputProps={{ disableUnderline: true }}
         disablePast
         autoComplete='off'
       />
 
-      <KeyboardDateTimePicker
+      <KeyboardDatePicker
         className={classes.datePicker}
         placeholder='End Date'
         value={endDate}
-        format='dd MMM yyyy hh:mm'
+        format='dd MMM yyyy'
         onChange={date => handleDateTimeChange(date, 'endDate')}
         InputProps={{ disableUnderline: true }}
         disablePast

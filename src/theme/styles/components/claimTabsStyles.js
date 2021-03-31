@@ -3,11 +3,12 @@ import { makeStyles } from '@material-ui/styles';
 export const useStyles = makeStyles(theme => ({
   mainContainer: {
     textAlign: 'center',
-    minHeight: '350px',
+    minHeight: '380px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    margin: theme.spacing(2, 0),
     '& button[disabled]': {
       color: theme.palette.text.secondary,
     },
@@ -24,7 +25,7 @@ export const useStyles = makeStyles(theme => ({
   },
   tabs: {
     display: 'flex',
-    // borderBottom: `1px solid ${theme.palette.text.disabled}`,
+    borderBottom: `1px solid ${theme.palette.border.lightBorder}`,
     '& p': {
       width: '50%',
       padding: theme.spacing(2, 0),

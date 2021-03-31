@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles(theme => ({
   mainContainer: {
-    height: '350px',
+    height: '370px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
