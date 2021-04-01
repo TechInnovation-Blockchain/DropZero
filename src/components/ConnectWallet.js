@@ -119,7 +119,7 @@ const ConnectWallet = () => {
       <Box className={classes.connectWrapper}>
         {web3context.active && (
           <Typography variant='body2' className={classes.bottomError}>
-            {web3context.chainId !== 1 && 'CHANGE NETWORK TO MAINNET'}
+            {web3context.chainId !== 1 && 'Change network to mainnet'}
           </Typography>
         )}
         <Box className={classes.btnWrapper}>

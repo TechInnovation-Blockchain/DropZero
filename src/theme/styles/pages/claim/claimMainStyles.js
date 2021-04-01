@@ -28,4 +28,10 @@ export const useStyles = makeStyles(theme => ({
   secondaryText: {
     color: theme.palette.text.secondary,
   },
+  progress: {
+    height: '370px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }));

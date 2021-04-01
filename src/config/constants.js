@@ -17,3 +17,6 @@ export const formDataConfig = {
     'Content-Type': 'multipart/form-data',
   },
 };
+
+export const NoLogo =
+  'https://gateway.pinata.cloud/ipfs/QmNX2QerTxTm1RThD7Dc9X5uS9VFnQxmMotaMFhK5GYbBk';

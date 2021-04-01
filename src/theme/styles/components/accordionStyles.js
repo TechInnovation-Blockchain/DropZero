@@ -13,6 +13,11 @@ export const useStyles = makeStyles(theme => ({
     '& svg': {
       color: theme.palette.text.secondary,
     },
+    '@media(max-width:330px)': {
+      '& .MuiAccordionDetails-root': {
+        padding: '8px 5px 16px',
+      },
+    },
   },
   accordianHeader: {
     display: 'flex',
@@ -48,14 +53,19 @@ export const useStyles = makeStyles(theme => ({
   },
   btnWrapper: {
     display: 'flex',
+    width: '100%',
   },
   accordionBtn: {
     fontSize: '14px',
-    width: '140px',
+    width: '48%',
     margin: '8px auto',
     display: 'flex',
+    padding: '6px 0',
     '@media(max-width:550px)': {
       width: '48%',
+      '& span': {
+        fontSize: '12px',
+      },
     },
   },
   accordionLink: {

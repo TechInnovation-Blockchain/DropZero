@@ -20,7 +20,7 @@ export const useStyles = makeStyles(theme => ({
   tabsWrapper: {
     background: theme.palette.background.secondary,
     width: '100%',
-    minHeight: '280px',
+    minHeight: '330px',
     borderRadius: 10,
   },
   tabs: {

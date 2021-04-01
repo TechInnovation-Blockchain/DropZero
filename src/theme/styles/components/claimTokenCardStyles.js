@@ -6,11 +6,11 @@ export const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1, 0),
     padding: theme.spacing(0, 1),
     alignItems: 'center',
-    borderBottom: `1px solid ${theme.palette.border.lightBorder}`,
+    borderBottom: `1px solid ${theme.palette.border.lightBorder} !important`,
     background: theme.palette.background.secondary,
   },
   newContainer: {
-    borderBottom: 'none',
+    borderBottom: 'none !important',
     borderRadius: 5,
   },
   tokenImg: {

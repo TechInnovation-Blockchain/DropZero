@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, Tooltip } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PublishIcon from '@material-ui/icons/Publish';
 import { useWeb3React } from '@web3-react/core';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 import { Button, Dialog, LoadingDialog, DisclaimerDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
@@ -11,6 +12,8 @@ import { getBalance } from '../../contracts/functions/erc20Functions';
 import { truncFileName } from '../../utils/formattingFunctions';
 import { validateCSV } from '../../utils/validatingFunctions';
 import TempCSV from '../../assets/temp.csv';
+
+const fileNameRegex = /^[A-Z]{1,15}.csv$/i;
 
 const DropCSV = ({ setContent }) => {
   const classes = useStyles();
@@ -41,38 +44,46 @@ const DropCSV = ({ setContent }) => {
 
   const uploadingCSV = _file => {
     if (_file) {
-      setFormData({
-        ...formData,
-        loading: true,
-        loadingContent: 'Validating CSV',
-        totalAmount: 0,
-        totalAddress: 0,
-      });
-      const fileReader = new FileReader();
-      fileReader.onloadend = async e => {
-        const content = e.target.result;
-        const { validCSV, _totalAmount, _totalAddress } = validateCSV(content.split('\n'));
-        if (validCSV) {
-          const balance = await getBalance(token, account);
-          setFormData({
-            ...formData,
-            file: _file,
-            error: '',
-            loading: false,
-            totalAmount: _totalAmount,
-            totalAddress: _totalAddress,
-            balance,
-          });
-        } else {
-          setFormData({
-            ...formData,
-            file: _file,
-            error: 'Invalid CSV',
-            loading: false,
-          });
-        }
-      };
-      fileReader.readAsText(_file);
+      if (fileNameRegex.test(_file.name)) {
+        setFormData({
+          ...formData,
+          loading: true,
+          loadingContent: 'Validating CSV',
+          totalAmount: 0,
+          totalAddress: 0,
+        });
+        const fileReader = new FileReader();
+        fileReader.onloadend = async e => {
+          const content = e.target.result;
+          const { validCSV, _totalAmount, _totalAddress } = validateCSV(content.split('\n'));
+          if (validCSV) {
+            const balance = await getBalance(token, account);
+            setFormData({
+              ...formData,
+              file: _file,
+              error: '',
+              loading: false,
+              totalAmount: _totalAmount,
+              totalAddress: _totalAddress,
+              balance,
+            });
+          } else {
+            setFormData({
+              ...formData,
+              file: _file,
+              error: 'Invalid CSV',
+              loading: false,
+            });
+          }
+        };
+        fileReader.readAsText(_file);
+      } else {
+        setFormData({
+          ...formData,
+          file: _file,
+          error: 'Invalid filename',
+        });
+      }
     }
   };
 
@@ -150,8 +161,13 @@ const DropCSV = ({ setContent }) => {
         <input type='file' accept='.csv' onChange={handleUploadChange} />
         <Box>
           <Typography variant='body2'>
-            {file ? truncFileName(file.name, 25) : 'Choose or drag file'}
+            {file ? truncFileName(file.name, 20) : 'Choose or drag file'}
           </Typography>
+          {error === 'Invalid filename' && (
+            <Tooltip title='Example: "filename.csv" upto 15 characters are allowed'>
+              <HelpOutlineIcon className={classes.help} style={{ top: '32%', right: 10 }} />
+            </Tooltip>
+          )}
         </Box>
       </label>
 

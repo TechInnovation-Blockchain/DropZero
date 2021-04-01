@@ -1,42 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Box, Typography, TablePagination } from '@material-ui/core';
+import { Box, Typography, TablePagination, CircularProgress } from '@material-ui/core';
+import { useWeb3React } from '@web3-react/core';
 
 import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
 import { PageAnimation, ClaimTabs, ClaimTokenCard } from '../../components';
-import FLASH from '../../assets/FLASH.png';
-import DAI from '../../assets/DAI.png';
-import XIO from '../../assets/blockzerologo.png';
-
-const tokens = [
-  {
-    rootHash: '0x20398ad62bb2d930646d45a6d4292baa0b860c1f',
-    token: 'FLASH',
-    img: FLASH,
-    amount: 123456789264,
-    startDate: Date.now() + 50000,
-  },
-  {
-    rootHash: '0x20398ad62bb2d930646d45a6d4292baa0b860c2f',
-    token: 'DAI',
-    img: DAI,
-    amount: 0.144,
-  },
-  {
-    rootHash: '0x20398ad62bb2d930646d45a6d4292baa0b860c3f',
-    token: 'XIO',
-    img: XIO,
-    amount: 10000,
-  },
-  {
-    rootHash: '0x20398ad62bb2d930646d45a6d4292baa0b860c4f',
-    token: 'DAI',
-    img: DAI,
-    amount: 1.22,
-  },
-];
+import { useClaims } from '../../hooks';
 
 const ClaimMain = () => {
   const classes = useStyles();
+  const { account } = useWeb3React();
+  const {
+    availableClaims,
+    getAvailableClaimsF,
+    setLockAndUnlockClaimsF,
+    resetLockAndUnlockClaimsF,
+  } = useClaims();
+
   const [formData, setFormData] = useState({
     page: 0,
     rowsPerPage: 3,
@@ -59,30 +38,58 @@ const ClaimMain = () => {
     setFormData({ ...formData, page: 0, rowsPerPage: +event.target.value });
   };
 
+  const calculateTotalClaim = claim => {
+    let totalAmount = 0;
+    claim.forEach(({ amount }) => {
+      totalAmount += Number(amount);
+    });
+    return totalAmount;
+  };
+
+  const handleArrowClick = claims => {
+    setFormData({ ...formData, activeTab: true });
+    const unlockedClaims = [];
+    const lockedClaims = [];
+    claims.forEach(claim => {
+      if (new Date(claim.startDate).getTime() > Date.now()) {
+        lockedClaims.push(claim);
+      } else {
+        unlockedClaims.push(claim);
+      }
+    });
+    setLockAndUnlockClaimsF({ unlockedClaims, lockedClaims });
+  };
+
   useEffect(() => {
     setFormData({ ...formData, initial: false });
+    getAvailableClaimsF(account);
+    resetLockAndUnlockClaimsF();
   }, []);
 
-  return (
+  return availableClaims ? (
     <PageAnimation in={true} reverse={1}>
       {activeTab ? (
         <ClaimTabs goBack={() => setFormData({ ...formData, activeTab: false })} />
       ) : (
         <Box className={classes.mainContainer}>
-          {tokens.length > 0 ? (
+          {availableClaims.length > 0 ? (
             <>
               <Typography variant='body1' className={classes.heading}>
                 Available Tokens
               </Typography>
               <PageAnimation in={page} key={page} reverse={initial ? initial : reverse}>
                 <Box className={classes.tokenContainer}>
-                  {tokens.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(token => (
-                    <ClaimTokenCard
-                      showArrow
-                      onArrowClick={() => setFormData({ ...formData, activeTab: true })}
-                      {...token}
-                    />
-                  ))}
+                  {availableClaims
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map(claim => (
+                      <ClaimTokenCard
+                        key={claim.tokenAddress}
+                        showArrow
+                        token={claim}
+                        amount={calculateTotalClaim(claim.record)}
+                        onArrowClick={() => handleArrowClick(claim.record)}
+                      />
+                    ))}
                 </Box>
               </PageAnimation>
             </>
@@ -92,11 +99,11 @@ const ClaimMain = () => {
             </Typography>
           )}
 
-          {tokens.length > 2 && (
+          {availableClaims.length > rowsPerPage && (
             <TablePagination
               component='div'
               style={{ display: 'flex', justifyContent: 'center' }}
-              count={tokens.length}
+              count={availableClaims.length}
               page={page}
               onChangePage={handleChangePage}
               rowsPerPage={rowsPerPage}
@@ -108,6 +115,10 @@ const ClaimMain = () => {
         </Box>
       )}
     </PageAnimation>
+  ) : (
+    <Box className={classes.progress}>
+      <CircularProgress size={50} />
+    </Box>
   );
 };
 

@@ -6,7 +6,7 @@ import web3 from 'web3';
 
 import { InputField, Button } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
-import { name } from '../../contracts/functions/erc20Functions';
+import { getName } from '../../contracts/functions/erc20Functions';
 import { useDropInputs } from '../../hooks';
 import { getTokenLogo } from '../../redux';
 
@@ -39,7 +39,7 @@ const DropToken = ({ setContent }) => {
           ...formData,
           loading: true,
         });
-        const _tokenName = await name(token);
+        const _tokenName = await getName(token);
         if (web3.utils.isAddress(token) && _tokenName) {
           saveFieldsF({
             ...formData,

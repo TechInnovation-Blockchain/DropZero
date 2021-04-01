@@ -18,7 +18,7 @@ const DropDates = ({ setContent }) => {
   return (
     <Box className={classes.mainContainer}>
       <Typography variant='body2' className={classes.para}>
-        Enter start and end dates of calims for the token
+        Enter Start and End dates for token claims
       </Typography>
 
       <KeyboardDatePicker

@@ -1,5 +1,5 @@
 import { Fragment, useState, useEffect } from 'react';
-import { Box, TablePagination } from '@material-ui/core';
+import { Box, TablePagination, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useWeb3React } from '@web3-react/core';
 
@@ -91,43 +91,54 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
       />
 
       <PageAnimation in={page} key={page} reverse={initial ? initial : reverse}>
-        <Box style={{ height: '160px' }}>
-          {tokens.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(token => (
-            <ClaimTokenCard
-              className={`${classes.token} ${checkSelection(token) ? classes.selected : ''}`}
-              key={token.rootHash}
-              {...token}
-              onClick={() => handleSelect(token)}
-            />
-          ))}
+        <Box className={classes.tokenContainer}>
+          {tokens.length > 0 ? (
+            tokens
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map(token => (
+                <ClaimTokenCard
+                  className={`${classes.token} ${checkSelection(token) ? classes.selected : ''}`}
+                  key={token._id}
+                  token={token}
+                  amount={token.amount}
+                  onClick={() => handleSelect(token)}
+                />
+              ))
+          ) : (
+            <Typography className={classes.secondaryText} variant='body2'>
+              No Tokens Available
+            </Typography>
+          )}
         </Box>
       </PageAnimation>
 
-      <Box className={classes.btnWrapper}>
-        <Button onClick={goBack}>
-          <ArrowBackIcon />
-          <span>Back</span>
-        </Button>
-        {unlocked && (
-          <Button onClick={() => setOpen(true)}>
-            <span>{selected.length > 0 ? 'Claim' : 'Claim All'}</span>
+      <Box className={classes.bottomSec}>
+        <Box className={classes.btnWrapper}>
+          <Button onClick={goBack}>
+            <ArrowBackIcon />
+            <span>Back</span>
           </Button>
+          {unlocked && (
+            <Button onClick={() => setOpen(true)}>
+              <span>{selected.length > 0 ? 'Claim' : 'Claim All'}</span>
+            </Button>
+          )}
+        </Box>
+
+        {tokens.length > 2 && (
+          <TablePagination
+            component='div'
+            style={{ display: 'flex', justifyContent: 'center' }}
+            count={tokens.length}
+            page={page}
+            onChangePage={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            labelRowsPerPage=''
+            rowsPerPageOptions={[]}
+          />
         )}
       </Box>
-
-      {tokens.length > 2 && (
-        <TablePagination
-          component='div'
-          style={{ display: 'flex', justifyContent: 'center' }}
-          count={tokens.length}
-          page={page}
-          onChangePage={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-          labelRowsPerPage=''
-          rowsPerPageOptions={[]}
-        />
-      )}
     </Fragment>
   );
 };

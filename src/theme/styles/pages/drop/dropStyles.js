@@ -25,6 +25,7 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
     textTransform: 'uppercase',
     letterSpacing: 5,
+    position: 'relative',
   },
   noWallet: {
     height: 80,
@@ -36,5 +37,14 @@ export const useStyles = makeStyles(theme => ({
       fontWeight: 700,
       fontSize: '14px',
     },
+  },
+  paused: {
+    width: '10px',
+    height: '10px',
+    backgroundColor: '#f6c343',
+    borderRadius: '50%',
+    position: 'absolute',
+    top: '4px',
+    right: '-16px',
   },
 }));

@@ -14,15 +14,26 @@ export const validateCSV = data => {
     for (let i = 1; i < data.length - 1; i++) {
       const rowData = data[i].split(',');
       if (
-        !web3.utils.isAddress(rowData[0].trim()) ||
-        isNaN(rowData[1].trim()) ||
-        rowData[1].trim() === ''
+        web3.utils.isAddress(rowData[0].trim()) &&
+        !isNaN(rowData[1].trim()) &&
+        rowData[1].trim() !== '' &&
+        Number(rowData[1].trim()) > 0
       ) {
+        _totalAmount += Number(rowData[1]);
+      } else {
         validCSV = false;
         break;
-      } else {
-        _totalAmount += Number(rowData[1]);
       }
+      // if (
+      //   !web3.utils.isAddress(rowData[0].trim()) ||
+      //   isNaN(rowData[1].trim()) ||
+      //   rowData[1].trim() === ''
+      // ) {
+      //   validCSV = false;
+      //   break;
+      // } else {
+      //   _totalAmount += Number(rowData[1]);
+      // }
     }
   } else {
     validCSV = false;

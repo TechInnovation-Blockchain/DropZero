@@ -28,7 +28,15 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
   };
 
   const handleStopClose = () => {
-    setFormData({ ...formData, openStop: false });
+    setFormData({ ...formData, openStop: false, checked: true });
+  };
+
+  const handleSwitchChange = () => {
+    if (checked) {
+      setFormData({ ...formData, checked: false });
+    } else {
+      setFormData({ ...formData, openStop: true });
+    }
   };
 
   return (
@@ -68,7 +76,7 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
           {claim && (
             <Box className={classes.accordianContent}>
               <Typography variant='body2'>Claimed on</Typography>
-              <Typography variant='body2'>25/03/21</Typography>
+              <Typography variant='body2'>25 Mar 2021</Typography>
             </Box>
           )}
           {!claim ? (
@@ -83,7 +91,7 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
               <Dialog
                 open={openStop}
                 handleClose={handleStopClose}
-                text='Please confirm you want to stop all the claims '
+                text='Please confirm you want to pause all the claims '
                 btnText='Confirm'
                 btnOnClick={handleStopClose}
               />
@@ -104,27 +112,38 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
                 <Typography variant='body2'>Pause Claims</Typography>
                 <Switch
                   checked={checked}
-                  onChange={() => setFormData({ ...formData, checked: !checked })}
+                  onChange={handleSwitchChange}
                   color='primary'
                   inputProps={{ 'aria-label': 'primary checkbox' }}
                 />
               </Box>
 
               <Box className={classes.btnWrapper}>
+                {/* <Button
+                  onClick={() => setFormData({ ...formData, open: true })}
+                  className={classes.accordionBtn}
+                >
+                  <span>Withdraw</span>
+                </Button> */}
                 <Button
                   onClick={() => setFormData({ ...formData, open: true })}
                   className={classes.accordionBtn}
                 >
                   <span>Withdraw</span>
                 </Button>
-                <Button
+                <Button className={classes.accordionBtn}>
+                  <a href={TempCSV} download>
+                    <span>Claim Status</span>
+                  </a>
+                </Button>
+                {/* <Button
                   onClick={() => setFormData({ ...formData, openStop: true })}
                   className={classes.accordionBtn}
                 >
                   <span>Stop</span>
-                </Button>
+                </Button> */}
               </Box>
-              <Typography
+              {/* <Typography
                 className={classes.accordionLink}
                 href={TempCSV}
                 download
@@ -132,7 +151,7 @@ const Accordion = ({ data: { name, img }, expanded, setExpanded, claim }) => {
                 component='a'
               >
                 Claimed Status
-              </Typography>
+              </Typography> */}
             </Fragment>
           ) : null}
         </Box>
