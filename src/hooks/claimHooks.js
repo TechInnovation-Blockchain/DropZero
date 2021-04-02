@@ -1,6 +1,11 @@
 import { useSelector } from 'react-redux';
 
-import { getAvailableClaims, setLockAndUnlockClaims, resetLockAndUnlockClaims } from '../redux';
+import {
+  getAvailableClaims,
+  setLockAndUnlockClaims,
+  resetLockAndUnlockClaims,
+  getClaimsHistory,
+} from '../redux';
 import { useDispatchWrap } from './utilHooks';
 
 export const useClaims = () => {
@@ -17,4 +22,11 @@ export const useClaims = () => {
     setLockAndUnlockClaimsF,
     resetLockAndUnlockClaimsF,
   };
+};
+
+export const useClaimsDashboard = () => {
+  const { claimsHistory } = useSelector(state => state.claim);
+  const getClaimsHistoryF = useDispatchWrap(getClaimsHistory);
+
+  return { claimsHistory, getClaimsHistoryF };
 };

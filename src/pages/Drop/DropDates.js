@@ -2,6 +2,7 @@ import { Box, Typography } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { DATE_FORMAT } from '../../config/constants';
 
 import { Button } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
@@ -25,7 +26,7 @@ const DropDates = ({ setContent }) => {
         className={classes.datePicker}
         placeholder='Start Date'
         value={startDate}
-        format='dd MMM yyyy'
+        format={DATE_FORMAT}
         onChange={date => handleDateTimeChange(date, 'startDate')}
         InputProps={{ disableUnderline: true }}
         disablePast
@@ -36,7 +37,7 @@ const DropDates = ({ setContent }) => {
         className={classes.datePicker}
         placeholder='End Date'
         value={endDate}
-        format='dd MMM yyyy'
+        format={DATE_FORMAT}
         onChange={date => handleDateTimeChange(date, 'endDate')}
         InputProps={{ disableUnderline: true }}
         disablePast

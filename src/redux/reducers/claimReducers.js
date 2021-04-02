@@ -4,6 +4,7 @@ const initialState = {
   availableClaims: null,
   unlockedClaims: [],
   lockedClaims: [],
+  claimsHistory: null,
 };
 
 const claimReducer = (state = initialState, action) => {
@@ -19,6 +20,8 @@ const claimReducer = (state = initialState, action) => {
       };
     case claimTypes.RESET_LOCK_UNLOCK_CLAIMS:
       return { ...state, unlockedClaims: [], lockedClaims: [] };
+    case claimTypes.GET_CLAIMS_HISTORY:
+      return { ...state, claimsHistory: payload };
     default:
       return state;
   }

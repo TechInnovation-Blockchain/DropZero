@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles(theme => ({
   accordian: {
-    margin: theme.spacing(3, 0),
+    margin: theme.spacing(2, 0),
     '& .MuiIconButton-edgeEnd': {
       position: 'absolute',
       right: 10,

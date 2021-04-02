@@ -5,7 +5,6 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'space-around',
     alignItems: 'center',
-    // padding: theme.spacing(2, 1),
     padding: theme.spacing(2, 1),
     background: theme.palette.background.secondary,
   },
@@ -26,8 +25,8 @@ export const useStyles = makeStyles(theme => ({
   },
   logo: {
     cursor: 'pointer',
-    width: '40px',
-    height: '40px',
+    width: '50px',
+    height: '50px',
     background: theme.palette.background.secondary2,
     display: 'flex',
     justifyContent: 'center',

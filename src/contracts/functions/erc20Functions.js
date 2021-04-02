@@ -19,11 +19,22 @@ export const decimal = async tokenAddress => {
     logError('erc20TokenContract', e);
   }
 };
+
 export const getName = async tokenAddress => {
   const contract = erc20TokenContract(tokenAddress);
   try {
-    const decimals = await contract.methods.name().call();
-    return decimals;
+    const name = await contract.methods.name().call();
+    return name;
+  } catch (e) {
+    // logError('erc20TokenContract', e);
+  }
+};
+
+export const getSymbol = async tokenAddress => {
+  const contract = erc20TokenContract(tokenAddress);
+  try {
+    const symbol = await contract.methods.symbol().call();
+    return symbol;
   } catch (e) {
     // logError('erc20TokenContract', e);
   }

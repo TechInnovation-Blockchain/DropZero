@@ -1,4 +1,4 @@
-import * as dropInputTypes from '../types/dropInputTypes';
+import * as dropTypes from '../types/dropTypes';
 
 const initialState = {
   fields: {
@@ -14,20 +14,23 @@ const initialState = {
     result: null,
     // error: '',
   },
+  userDrops: null,
 };
 
-const dropInputReducer = (state = initialState, action) => {
+const dropReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
-    case dropInputTypes.SAVE_FIELDS:
+    case dropTypes.SAVE_FIELDS:
       return { ...state, fields: { ...state.fields, ...payload } };
-    case dropInputTypes.CLEAR_FIELDS:
+    case dropTypes.CLEAR_FIELDS:
       return { ...state, fields: initialState.fields };
-    case dropInputTypes.UPLOAD_CSV:
+    case dropTypes.UPLOAD_CSV:
       return { ...state, csv: payload };
+    case dropTypes.GET_DROPS:
+      return { ...state, userDrops: payload };
     default:
       return state;
   }
 };
 
-export default dropInputReducer;
+export default dropReducer;

@@ -4,7 +4,8 @@ export const useStyles = makeStyles(theme => ({
   mainContainer: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     background: theme.palette.background.main,
     color: theme.palette.text.primary,

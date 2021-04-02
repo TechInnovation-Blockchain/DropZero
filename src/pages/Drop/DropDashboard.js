@@ -1,6 +1,10 @@
-import { useState, Fragment } from 'react';
-import { Box, TablePagination } from '@material-ui/core';
+import { useState, useEffect } from 'react';
+import { Box, TablePagination, CircularProgress, Typography } from '@material-ui/core';
+import { useWeb3React } from '@web3-react/core';
+
+import { useStyles } from '../../theme/styles/pages/claim/claimStyles';
 import { Accordion, PageAnimation } from '../../components';
+import { useDropDashboard } from '../../hooks';
 
 import Aqua from '../../assets/Aqua.png';
 import Flash from '../../assets/FLASH.png';
@@ -17,13 +21,17 @@ const tokens = [
 ];
 
 const DropDashboard = () => {
+  const classes = useStyles();
+  const { account } = useWeb3React();
+  const { userDrops, getUserDropsF } = useDropDashboard();
+
   const [formData, setFormData] = useState({
     page: 0,
     rowsPerPage: 3,
   });
   const [reverse, setReverse] = useState(false);
-  const { page, rowsPerPage } = formData;
   const [expanded, setExpanded] = useState(false);
+  const { page, rowsPerPage } = formData;
 
   const handleChangePage = (event, newPage) => {
     if (page > newPage) {
@@ -38,8 +46,12 @@ const DropDashboard = () => {
     setFormData({ ...formData, page: 0, rowsPerPage: +event.target.value });
   };
 
-  return (
-    <Fragment>
+  useEffect(() => {
+    getUserDropsF(account);
+  }, []);
+
+  return userDrops ? (
+    <Box style={{ paddingBottom: '20px' }}>
       <PageAnimation in={page} key={page} reverse={reverse}>
         <Box style={{ paddingBottom: '20px' }}>
           {tokens.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(token => (
@@ -65,7 +77,11 @@ const DropDashboard = () => {
           rowsPerPageOptions={[]}
         />
       )}
-    </Fragment>
+    </Box>
+  ) : (
+    <Box className={classes.noData}>
+      <CircularProgress size={50} />
+    </Box>
   );
 };
 

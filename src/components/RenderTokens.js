@@ -55,14 +55,14 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
   };
 
   const checkSelection = token => {
-    const exists = selected.filter(item => item.rootHash === token.rootHash)[0];
+    const exists = selected.filter(item => item._id === token._id)[0];
     return exists;
   };
 
   const handleSelect = token => {
     const exists = checkSelection(token);
     if (exists) {
-      setSelected(selected.filter(item => item.rootHash !== token.rootHash));
+      setSelected(selected.filter(item => item._id !== token._id));
     } else {
       setSelected([...selected, token]);
     }

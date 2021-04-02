@@ -4,6 +4,7 @@ import { Skeleton } from '@material-ui/lab';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Web3 from 'web3';
 import { format } from 'date-fns';
+import { DATE_FORMAT } from '../config/constants';
 
 import { useStyles } from '../theme/styles/components/claimTokenCardStyles';
 import { trunc } from '../utils/formattingFunctions';
@@ -57,7 +58,7 @@ const ClaimTokenCard = ({ token, showArrow, amount, onArrowClick, onClick, class
               <Skeleton animation='wave' width='100px' height='30px' />
             )}
             <Typography varaint='body2'>
-              {!showArrow ? format(new Date(endDate), 'dd MMM yyyy') : ''}
+              {!showArrow && endDate ? format(new Date(endDate), DATE_FORMAT) : ''}
             </Typography>
           </Box>
           <Box className={classes.tokenAmount}>

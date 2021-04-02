@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { Box, Typography, Tooltip } from '@material-ui/core';
+import { Box, Typography, Tooltip, CircularProgress } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PublishIcon from '@material-ui/icons/Publish';
 import { useWeb3React } from '@web3-react/core';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
-import { Button, Dialog, LoadingDialog, DisclaimerDialog } from '../../components';
+import { Button, Dialog, ActionDialog, DisclaimerDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
 import { useDropInputs } from '../../hooks';
 import { getBalance } from '../../contracts/functions/erc20Functions';
-import { truncFileName } from '../../utils/formattingFunctions';
+import { truncFileName, trunc } from '../../utils/formattingFunctions';
 import { validateCSV } from '../../utils/validatingFunctions';
 import TempCSV from '../../assets/temp.csv';
 
@@ -47,7 +47,6 @@ const DropCSV = ({ setContent }) => {
       if (fileNameRegex.test(_file.name)) {
         setFormData({
           ...formData,
-          loading: true,
           loadingContent: 'Validating CSV',
           totalAmount: 0,
           totalAddress: 0,
@@ -124,7 +123,8 @@ const DropCSV = ({ setContent }) => {
   const handleDrop = e => {
     e.preventDefault();
     const _file = e.dataTransfer.files[0];
-    if (_file.type === 'text/csv') uploadingCSV(_file);
+    const extension = _file?.name?.substring(_file?.name?.lastIndexOf('.', _file?.name?.length));
+    if (extension === '.csv') uploadingCSV(_file);
   };
 
   const handleAllowDrop = e => {
@@ -136,13 +136,15 @@ const DropCSV = ({ setContent }) => {
       <Dialog
         open={open}
         handleClose={handleClose}
-        text={`Please confirm you are submitting ${totalAddress} addresses for a total of ${totalAmount} tokens.`}
+        text={`Please confirm you are submitting ${totalAddress} addresses for a total of ${trunc(
+          totalAmount
+        )} tokens.`}
         secondaryText='If there are errors, please upload a new file. No changes can be made after you press CONFIRM.'
         btnText='Confirm'
         btnOnClick={handleClick}
-        errorMsg={
-          balance > totalAmount ? 'Your current wallet have insufficient amount of tokens' : ''
-        }
+        // errorMsg={
+        //   balance > totalAmount ? 'Your current wallet have insufficient amount of tokens' : ''
+        // }
       />
 
       <DisclaimerDialog
@@ -152,7 +154,8 @@ const DropCSV = ({ setContent }) => {
         btnOnClick={handleDisclaimerClose}
       />
 
-      <LoadingDialog open={loading} text={loadingContent} />
+      <ActionDialog variant='loading' open={loading} text={loadingContent} />
+
       <Typography variant='body2' className={classes.para}>
         Who would you like to drop these tokens to ?
       </Typography>
@@ -171,6 +174,13 @@ const DropCSV = ({ setContent }) => {
         </Box>
       </label>
 
+      {loadingContent === 'Validating CSV' && (
+        <Box className={classes.loading} style={{ top: '58%' }}>
+          <CircularProgress size={12} color='inherit' />
+          <Typography variant='body2'>Validating CSV</Typography>
+        </Box>
+      )}
+
       <Typography variant='body2' className={classes.error} style={{ top: '58%' }}>
         {error}
       </Typography>
@@ -188,7 +198,7 @@ const DropCSV = ({ setContent }) => {
           <PublishIcon />
         </Button>
       </Box>
-      <Typography component='a' href={TempCSV} download variant='body2'>
+      <Typography component='a' href={TempCSV} download='smaple.csv' variant='body2'>
         Download sample CSV
       </Typography>
     </Box>

@@ -100,7 +100,7 @@ export const useStyles = makeStyles(theme => ({
       border: `1px solid ${theme.palette.primary.main}`,
       borderRadius: 10,
       padding: theme.spacing(1, 1),
-      margin: theme.spacing(1.8, 0),
+      margin: theme.spacing(2, 0),
       width: '100%',
       cursor: 'pointer',
       '& p': {

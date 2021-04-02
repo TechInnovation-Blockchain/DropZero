@@ -4,6 +4,7 @@ const initialState = {
   theme: localStorage.getItem('theme') || 'dark',
   loading: { walletConnection: false },
   snackbar: { open: false, severity: 'success', message: '' },
+  initialRender: true,
 };
 
 const uiReducer = (state = initialState, action) => {
@@ -19,6 +20,8 @@ const uiReducer = (state = initialState, action) => {
       return { ...state, snackbar: { open: true, ...payload } };
     case uiTypes.HIDE_SNACKBAR:
       return { ...state, snackbar: { open: false } };
+    case uiTypes.INITIALLY_RENDERED:
+      return { ...state, initialRender: false };
     default:
       return state;
   }

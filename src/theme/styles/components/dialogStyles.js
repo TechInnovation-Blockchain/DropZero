@@ -7,7 +7,8 @@ export const useStyles = makeStyles(theme => ({
     margin: 0,
     borderRadius: 15,
     '@media(max-width:330px)': {
-      width: '250px',
+      width: 'auto',
+      // width: '250px',
       // minHeight: '250px',
     },
   },
@@ -51,5 +52,22 @@ export const useStyles = makeStyles(theme => ({
     fontWeight: 700,
     fontSize: '12px',
     marginBottom: '10px',
+  },
+  icon: {
+    fontSize: '100px',
+    marginBottom: '10px',
+    color: theme.palette.primary.main,
+  },
+  externalLink: {
+    display: 'flex',
+    alignItems: 'center',
+    color: theme.palette.primary.main,
+    '& p': {
+      fontSize: '12px',
+    },
+    '& svg': {
+      fontSize: '20px',
+      marginRight: '5px',
+    },
   },
 }));

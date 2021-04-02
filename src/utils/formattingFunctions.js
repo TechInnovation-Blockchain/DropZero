@@ -57,13 +57,6 @@ export const trunc = (val, test) => {
   }
 };
 
-export const truncAmount = amount => {
-  if (Number.isInteger(amount)) {
-    if (amount.toString().length > 8) {
-    }
-  }
-};
-
 export const truncFileName = (fileName, acceptedLength) => {
   if (fileName.length > acceptedLength) {
     return `${fileName.substring(0, acceptedLength - 4)}...`;

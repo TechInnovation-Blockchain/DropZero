@@ -130,13 +130,13 @@ const ConnectWallet = () => {
                 : 'CONNECT WALLET'}
             </span>
           </Button>
-          <Box className={classes.bottomPara}>
-            <Typography variant='body2'>Brought By </Typography>
-            <a href='https://blockzerolabs.io/' target='_blank'>
-              <img src={Blockzero} alt='logo' width='40px' />
-            </a>
-            <Typography variant='body2'>Blockzero Labs</Typography>
-          </Box>
+          <a href='https://blockzerolabs.io/' target='_blank'>
+            <Box className={classes.bottomPara}>
+              <Typography variant='body2'>Created By </Typography>
+              <img src={Blockzero} alt='logo' width='35px' />
+              <Typography variant='body2'>Blockzero Labs</Typography>
+            </Box>
+          </a>
         </Box>
       </Box>
 

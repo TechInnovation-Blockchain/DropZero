@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { toggleTheme, setLoading, showSnackbar, hideSnackbar } from '../redux';
+import { toggleTheme, setLoading, showSnackbar, hideSnackbar, initiallyRendered } from '../redux';
 import { useDispatchWrap } from './utilHooks';
 
 export const useTheme = () => {
@@ -23,4 +23,11 @@ export const useSnackbar = () => {
   const hideSnackbarF = useDispatchWrap(hideSnackbar);
 
   return { ...snackbar, showSnackbarF, hideSnackbarF };
+};
+
+export const useInitiallyRedndering = () => {
+  const initialRender = useSelector(state => state.ui.initialRender);
+  const initiallyRenderedF = useDispatchWrap(initiallyRendered);
+
+  return { initialRender, initiallyRenderedF };
 };

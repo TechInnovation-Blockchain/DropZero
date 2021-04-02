@@ -37,4 +37,13 @@ export const useStyles = makeStyles(theme => ({
       fontSize: '14px',
     },
   },
+  noData: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '200px',
+    '& p': {
+      color: theme.palette.text.secondary,
+    },
+  },
 }));

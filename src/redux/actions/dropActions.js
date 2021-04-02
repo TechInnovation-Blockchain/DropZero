@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-import * as dropInputTypes from '../types/dropInputTypes';
+import * as dropTypes from '../types/dropTypes';
 import { logError, logMessage } from '../../utils/log';
 import { BASE_URL, formDataConfig } from '../../config/constants';
 
+import data from './claimHistoryData.json';
+
 export const saveFields = data => {
   return dispatch => {
-    dispatch({ type: dropInputTypes.SAVE_FIELDS, payload: data });
+    dispatch({ type: dropTypes.SAVE_FIELDS, payload: data });
   };
 };
 
@@ -29,7 +31,7 @@ export const getTokenLogo = async tokenAddress => {
 
 export const clearFields = () => {
   return dispatch => {
-    dispatch({ type: dropInputTypes.CLEAR_FIELDS });
+    dispatch({ type: dropTypes.CLEAR_FIELDS });
   };
 };
 
@@ -48,21 +50,39 @@ export const uploadCSV = ({ file, account, token, startDate, endDate, type }) =>
       logMessage('Upload CSV', res);
       if (res?.data?.responseCode === 200) {
         dispatch({
-          type: dropInputTypes.UPLOAD_CSV,
+          type: dropTypes.UPLOAD_CSV,
           payload: { result: res.data.result, error: '' },
         });
       } else {
         dispatch({
-          type: dropInputTypes.UPLOAD_CSV,
+          type: dropTypes.UPLOAD_CSV,
           payload: { result: null, error: 'Invalid CSV' },
         });
       }
     } catch (error) {
       logError('Upload CSV', error);
       dispatch({
-        type: dropInputTypes.UPLOAD_CSV,
+        type: dropTypes.UPLOAD_CSV,
         payload: { result: null, error: 'Invalid CSV' },
       });
     }
+  };
+};
+
+export const getUserDrops = walletAddress => {
+  return async dispatch => {
+    // try {
+    //   const tempWalletAddress = '0x3060bf5212956b969b8609Ee65D50E2d3084Fada';
+    //   const res = await axios.get(
+    //     `${BASE_URL}/dropper/get_drops/${tempWalletAddress}`
+    //   );
+    //   logMessage('Get Drops', res);
+    //   if (res?.data?.responseCode === 201) {
+    //     dispatch({ type: dropTypes.GET_DROPS, payload: res.data.result });
+    //   }
+    // } catch (e) {
+    //   logError('Get Drops', e);
+    // }
+    dispatch({ type: dropTypes.GET_DROPS, payload: data });
   };
 };

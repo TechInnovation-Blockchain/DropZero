@@ -17,7 +17,7 @@ export const useStyles = makeStyles(theme => ({
     border: `3px solid ${theme.palette.background.secondary}`,
   },
   selected: {
-    border: `3px solid ${theme.palette.primary.main}`,
+    border: `3px solid ${theme.palette.primary.main} !important`,
   },
   tokenContainer: {
     height: '160px',

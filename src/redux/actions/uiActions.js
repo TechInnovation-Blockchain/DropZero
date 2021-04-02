@@ -23,3 +23,9 @@ export const hideSnackbar = () => {
     dispatch({ type: uiTypes.HIDE_SNACKBAR });
   };
 };
+
+export const initiallyRendered = () => {
+  return dispatch => {
+    dispatch({ type: uiTypes.INITIALLY_RENDERED });
+  };
+};

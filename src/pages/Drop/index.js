@@ -7,10 +7,13 @@ import { useWeb3React } from '@web3-react/core';
 import { useStyles } from '../../theme/styles/pages/drop/dropStyles';
 import DropMain from './DropMain';
 import DropDashboard from './DropDashboard';
+import { useInitiallyRedndering } from '../../hooks';
 
 const Drop = () => {
   const classes = useStyles();
   const { account } = useWeb3React();
+  const { initialRender, initiallyRenderedF } = useInitiallyRedndering();
+
   const [expand, setExpand] = useState(true);
   const [open, setOpen] = useState(false);
 
@@ -19,11 +22,14 @@ const Drop = () => {
   };
 
   useEffect(() => {
-    setOpen(true);
+    if (initialRender) {
+      setOpen(true);
+      initiallyRenderedF();
 
-    setTimeout(() => {
-      setOpen(false);
-    }, 5000);
+      setTimeout(() => {
+        setOpen(false);
+      }, 5000);
+    }
   }, []);
 
   return account ? (
@@ -36,20 +42,16 @@ const Drop = () => {
         onClick={handleToggle}
       >
         {expand ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        <Typography
-          variant='body2'
-          className={classes.triggerText}
-          onMouseOver={() => setOpen(true)}
-          onMouseOut={() => setOpen(false)}
-        >
+        <Typography variant='body2' className={classes.triggerText}>
           Drop Dashboard
-          <Tooltip title='Some drops are paused' open={open}>
-            <span className={classes.paused}></span>
+          <Tooltip title='Some drops are paused' arrow open={open}>
+            <span
+              className={classes.paused}
+              onMouseOver={() => setOpen(true)}
+              onMouseOut={() => setOpen(false)}
+            ></span>
           </Tooltip>
         </Typography>
-        {/* <Tooltip title='Some drops are paused'>
-          <Box></Box>
-        </Tooltip> */}
       </Box>
       <Collapse in={!expand}>
         <DropDashboard />
