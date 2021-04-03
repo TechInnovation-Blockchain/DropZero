@@ -13,12 +13,20 @@ import { getTokenLogo } from '../redux';
 import { getName } from '../contracts/functions/erc20Functions';
 import { NoLogo } from '../config/constants';
 
-const ClaimTokenCard = ({ token, showArrow, amount, onArrowClick, onClick, className }) => {
+const ClaimTokenCard = ({
+  token,
+  tokenAddress,
+  showArrow,
+  amount,
+  onArrowClick,
+  onClick,
+  className,
+}) => {
   const classes = useStyles();
 
   const [formData, setFormData] = useState({ tokenLogo: NoLogo, tokenName: '' });
   const { tokenLogo, tokenName } = formData;
-  const { tokenAddress, startDate, endDate, tokenType } = token;
+  const { startDate, endDate, tokenType } = token;
 
   useEffect(() => {
     if (tokenAddress) {

@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { saveFields, clearFields, uploadCSV, getUserDrops } from '../redux';
+import { saveFields, clearFields, uploadCSV, getUserDrops, withdrawDrops } from '../redux';
 import { useDispatchWrap } from './utilHooks';
 
 export const useDropInputs = () => {
@@ -15,6 +15,7 @@ export const useDropInputs = () => {
 export const useDropDashboard = () => {
   const { userDrops } = useSelector(state => state.drop);
   const getUserDropsF = useDispatchWrap(getUserDrops);
+  const withdrawDropsF = useDispatchWrap(withdrawDrops);
 
-  return { userDrops, getUserDropsF };
+  return { userDrops, getUserDropsF, withdrawDropsF };
 };

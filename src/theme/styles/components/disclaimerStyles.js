@@ -17,4 +17,14 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.text.primary,
     fontSize: '12px',
   },
+  checkboxWrapper: {
+    width: '100%',
+  },
+  checkbox: {
+    '& span': {
+      fontSize: '12px',
+      letterSpacing: '1px',
+      fontFamily: 'Montserrat',
+    },
+  },
 }));

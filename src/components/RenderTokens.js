@@ -16,13 +16,14 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
   const [formData, setFormData] = useState({
     initial: unlocked,
     openDis: false,
+    check: false,
     page: 0,
     rowsPerPage: 2,
   });
   const [reverse, setReverse] = useState(false);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState([]);
-  const { page, rowsPerPage, openDis, initial } = formData;
+  const { page, rowsPerPage, openDis, initial, check } = formData;
 
   const handleChangePage = (event, newPage) => {
     if (page > newPage) {
@@ -47,7 +48,9 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
 
   const handleDisclaimerClose = () => {
     setFormData({ ...formData, openDis: false, opem: false });
-    localStorage.setItem('userClaim', account);
+    if (check) {
+      localStorage.setItem('userClaim', account);
+    }
   };
 
   const handleClose = () => {
@@ -88,6 +91,9 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
         heading='Disclaimer'
         handleClose={() => setFormData({ ...formData, openDis: false })}
         btnOnClick={handleDisclaimerClose}
+        disableBackdrop
+        check={check}
+        handleChange={() => setFormData({ ...formData, check: !check })}
       />
 
       <PageAnimation in={page} key={page} reverse={initial ? initial : reverse}>
@@ -100,6 +106,7 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
                   className={`${classes.token} ${checkSelection(token) ? classes.selected : ''}`}
                   key={token._id}
                   token={token}
+                  tokenAddress={token.tokenAddress}
                   amount={token.amount}
                   onClick={() => handleSelect(token)}
                 />

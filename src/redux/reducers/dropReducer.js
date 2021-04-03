@@ -6,7 +6,6 @@ const initialState = {
     tokenLogo: '',
     token: '',
     type: '',
-    date: null,
     startDate: null,
     endDate: null,
   },

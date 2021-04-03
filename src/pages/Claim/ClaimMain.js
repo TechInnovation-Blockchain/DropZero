@@ -64,7 +64,7 @@ const ClaimMain = () => {
     setFormData({ ...formData, initial: false });
     getAvailableClaimsF(account);
     resetLockAndUnlockClaimsF();
-  }, []);
+  }, [account]);
 
   return availableClaims ? (
     <PageAnimation in={true} reverse={1}>
@@ -83,11 +83,12 @@ const ClaimMain = () => {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(claim => (
                       <ClaimTokenCard
-                        key={claim.tokenAddress}
+                        key={claim.address}
                         showArrow
                         token={claim}
-                        amount={calculateTotalClaim(claim.record)}
-                        onArrowClick={() => handleArrowClick(claim.record)}
+                        tokenAddress={claim.address}
+                        amount={calculateTotalClaim(claim.data)}
+                        onArrowClick={() => handleArrowClick(claim.data)}
                       />
                     ))}
                 </Box>

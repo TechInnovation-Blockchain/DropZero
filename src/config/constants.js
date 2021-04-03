@@ -1,5 +1,5 @@
 export const CONTRACT_ADDRESSES = {
-  erc20: '123456',
+  dropFactory: '0x50cdc3cFdF3ee67c43C12d8e6c9dccA29a4FC9bc',
 };
 
 export const BASE_URL = 'https://dropzero.herokuapp.com';

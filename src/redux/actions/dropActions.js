@@ -4,8 +4,9 @@ import * as dropTypes from '../types/dropTypes';
 import { logError, logMessage } from '../../utils/log';
 import { BASE_URL, formDataConfig } from '../../config/constants';
 
-import data from './claimHistoryData.json';
+// import data from './claimHistoryData.json';
 
+//save drop inputs
 export const saveFields = data => {
   return dispatch => {
     dispatch({ type: dropTypes.SAVE_FIELDS, payload: data });
@@ -29,12 +30,14 @@ export const getTokenLogo = async tokenAddress => {
   }
 };
 
+//clear all drop inputs
 export const clearFields = () => {
   return dispatch => {
     dispatch({ type: dropTypes.CLEAR_FIELDS });
   };
 };
 
+//uploading csv on server
 export const uploadCSV = ({ file, account, token, startDate, endDate, type }) => {
   return async dispatch => {
     try {
@@ -69,20 +72,37 @@ export const uploadCSV = ({ file, account, token, startDate, endDate, type }) =>
   };
 };
 
+//get dropper drops
 export const getUserDrops = walletAddress => {
   return async dispatch => {
-    // try {
-    //   const tempWalletAddress = '0x3060bf5212956b969b8609Ee65D50E2d3084Fada';
-    //   const res = await axios.get(
-    //     `${BASE_URL}/dropper/get_drops/${tempWalletAddress}`
-    //   );
-    //   logMessage('Get Drops', res);
-    //   if (res?.data?.responseCode === 201) {
-    //     dispatch({ type: dropTypes.GET_DROPS, payload: res.data.result });
-    //   }
-    // } catch (e) {
-    //   logError('Get Drops', e);
-    // }
-    dispatch({ type: dropTypes.GET_DROPS, payload: data });
+    try {
+      const tempWalletAddress = '0x022eb305961429bad9e95f7760b9bdd84578aace';
+      const res = await axios.get(`${BASE_URL}/dropper/get_drops/${walletAddress}`);
+      logMessage('Get Drops', res);
+      if (res?.data?.responseCode === 201) {
+        dispatch({
+          type: dropTypes.GET_DROPS,
+          payload: res.data.result ? res.data.result.csv : [],
+        });
+      }
+    } catch (e) {
+      logError('Get Drops', e);
+    }
+    // dispatch({ type: dropTypes.GET_DROPS, payload: data });
+  };
+};
+
+export const withdrawDrops = (walletAddress, csvID) => {
+  return async dispatch => {
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/dropper/withdraw_drop/${walletAddress}csv_id=${csvID}`
+      );
+      logMessage('Withdraw Drops', res);
+      if (res?.data?.responseCode === 201) {
+      }
+    } catch (e) {
+      logError('Get Drops', e);
+    }
   };
 };

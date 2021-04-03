@@ -1,9 +1,25 @@
-import { Fragment } from 'react';
-import { Dialog as DialogMui, Typography, DialogContent, Button } from '@material-ui/core';
+import { Fragment, useState } from 'react';
+import {
+  Dialog as DialogMui,
+  Typography,
+  DialogContent,
+  Button,
+  FormControlLabel,
+  Checkbox,
+  Box,
+} from '@material-ui/core';
 
 import { useStyles } from '../theme/styles/components/disclaimerStyles';
 
-const Disclaimer = ({ open, handleClose, heading, btnOnClick }) => {
+const Disclaimer = ({
+  open,
+  handleClose,
+  heading,
+  check,
+  handleChange,
+  btnOnClick,
+  disableBackdrop,
+}) => {
   const classes = useStyles();
 
   return (
@@ -13,6 +29,8 @@ const Disclaimer = ({ open, handleClose, heading, btnOnClick }) => {
         open={open}
         onClose={handleClose}
         aria-labelledby='form-dialog-title'
+        disableBackdropClick={disableBackdrop}
+        disableEscapeKeyDown={disableBackdrop}
       >
         <DialogContent className={classes.innerContainer}>
           <Typography variant='body2' className={classes.heading}>
@@ -30,7 +48,21 @@ const Disclaimer = ({ open, handleClose, heading, btnOnClick }) => {
             remaining essentially unchanged.
           </Typography>
 
-          <Button color='primary' onClick={btnOnClick} style={{ marginTop: '10px' }}>
+          {disableBackdrop && (
+            <Box className={classes.checkboxWrapper}>
+              <FormControlLabel
+                className={classes.checkbox}
+                control={<Checkbox checked={check} onChange={handleChange} color='primary' />}
+                label="Don't ask again"
+              />
+            </Box>
+          )}
+
+          <Button
+            color='primary'
+            onClick={btnOnClick}
+            style={disableBackdrop ? {} : { marginTop: '10px' }}
+          >
             I Understand
           </Button>
         </DialogContent>

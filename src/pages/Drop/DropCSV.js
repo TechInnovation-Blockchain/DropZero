@@ -27,6 +27,7 @@ const DropCSV = ({ setContent }) => {
     totalAmount: 0,
     totalAddress: 0,
     balance: 0,
+    check: false,
   });
   const { token, startDate, endDate, type, csv, clearFieldsF, uploadCSVF } = useDropInputs();
   const { account } = useWeb3React();
@@ -40,6 +41,7 @@ const DropCSV = ({ setContent }) => {
     totalAmount,
     totalAddress,
     balance,
+    check,
   } = formData;
 
   const uploadingCSV = _file => {
@@ -116,7 +118,9 @@ const DropCSV = ({ setContent }) => {
 
   const handleDisclaimerClose = async () => {
     setFormData({ ...formData, openDis: false });
-    localStorage.setItem('userDrop', account);
+    if (check) {
+      localStorage.setItem('userDrop', account);
+    }
     await uploadCSVOnServer();
   };
 
@@ -152,6 +156,9 @@ const DropCSV = ({ setContent }) => {
         heading='Disclaimer'
         handleClose={() => setFormData({ ...formData, openDis: false })}
         btnOnClick={handleDisclaimerClose}
+        check={check}
+        handleChange={() => setFormData({ ...formData, check: !check })}
+        disableBackdrop
       />
 
       <ActionDialog variant='loading' open={loading} text={loadingContent} />

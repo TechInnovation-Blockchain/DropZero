@@ -3,6 +3,7 @@
 body {
   margin: 0;
   background: var(--mainBackground);
+  -webkit-tap-highlight-color: transparent;
 }
 
 ::-webkit-scrollbar {

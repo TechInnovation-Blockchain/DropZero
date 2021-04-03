@@ -13,7 +13,15 @@ const DropDates = ({ setContent }) => {
   const { startDate, endDate, saveFieldsF } = useDropInputs();
 
   const handleDateTimeChange = (date, key) => {
-    saveFieldsF({ [key]: date });
+    if (key === 'startDate') {
+      const _startDate = new Date(date);
+      _startDate.setHours(0, 0, 0, 0);
+      saveFieldsF({ startDate: _startDate.toISOString() });
+    } else {
+      const _endDate = new Date(date);
+      _endDate.setHours(23, 59, 59, 999);
+      saveFieldsF({ endDate: _endDate.toISOString() });
+    }
   };
 
   return (

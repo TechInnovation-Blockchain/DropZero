@@ -27,6 +27,7 @@ const ActionDialog = ({
   link,
   btnText,
   showCloseBtn,
+  btnOnClick = () => {},
 }) => {
   const classes = useStyles();
 
@@ -58,13 +59,15 @@ const ActionDialog = ({
           <Typography
             variant='body2'
             className={classes.content}
-            style={{ textTransform: 'uppercase' }}
+            style={{ textTransform: 'uppercase', width: '100%' }}
           >
             {text}
           </Typography>
 
           {secondaryText && (
-            <Typography variant='body2' className={classes.secondaryText}></Typography>
+            <Typography variant='body2' className={classes.secondaryText}>
+              {secondaryText}
+            </Typography>
           )}
 
           {link && (
@@ -77,7 +80,7 @@ const ActionDialog = ({
           )}
 
           {btnText && (
-            <Button style={{ width: '50%', margin: '10px 0' }}>
+            <Button onClick={btnOnClick} style={{ width: '100%', margin: '10px 0' }}>
               <span>{btnText}</span>
             </Button>
           )}

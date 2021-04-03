@@ -6,28 +6,6 @@ import { useStyles } from '../../theme/styles/pages/claim/claimStyles';
 import { useClaimsDashboard } from '../../hooks';
 import { Accordion, PageAnimation } from '../../components';
 
-// import Aqua from '../../assets/Aqua.png';
-// import Flash from '../../assets/FLASH.png';
-
-// const tokens = [
-//   {
-//     name: 'Aqua',
-//     img: Aqua,
-//   },
-//   {
-//     name: 'Flash',
-//     img: Flash,
-//   },
-//   {
-//     name: 'XIO',
-//     img: Flash,
-//   },
-//   {
-//     name: 'DAI',
-//     img: Flash,
-//   },
-// ];
-
 const ClaimDashboard = () => {
   const classes = useStyles();
   const { account } = useWeb3React();
@@ -38,7 +16,7 @@ const ClaimDashboard = () => {
     rowsPerPage: 3,
   });
   const [reverse, setReverse] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState('');
   const { page, rowsPerPage } = formData;
 
   const handleChangePage = (event, newPage) => {
@@ -56,7 +34,7 @@ const ClaimDashboard = () => {
 
   useEffect(() => {
     getClaimsHistoryF(account);
-  }, []);
+  }, [account]);
 
   return claimsHistory ? (
     <Box style={{ paddingBottom: '20px' }}>

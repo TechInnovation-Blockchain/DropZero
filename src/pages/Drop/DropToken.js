@@ -3,16 +3,19 @@ import { Box, Typography, CircularProgress, Tooltip } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import web3 from 'web3';
+import { useWeb3React } from '@web3-react/core';
 
 import { InputField, Button } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
 import { getName } from '../../contracts/functions/erc20Functions';
+import { createDrop } from '../../contracts/functions/dropFactoryFunctions';
 import { useDropInputs } from '../../hooks';
 import { getTokenLogo } from '../../redux';
 
 const DropToken = ({ setContent }) => {
   const classes = useStyles();
   const { token, tokenType, tokenName, tokenLogo, saveFieldsF } = useDropInputs();
+  const { account } = useWeb3React();
   const [formData, setFormData] = useState({
     validated: token ? true : false,
     error: '',
@@ -28,6 +31,7 @@ const DropToken = ({ setContent }) => {
   };
 
   const handleClick = async () => {
+    // createDrop(token, account);
     saveFieldsF({ token: web3.utils.toChecksumAddress(token) });
     setContent('dates');
   };

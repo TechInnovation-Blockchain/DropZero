@@ -17,11 +17,13 @@ import Web3 from 'web3';
 import { useStyles } from '../theme/styles/components/accordionStyles';
 import Button from './Button';
 import Dialog from './Dialog';
+import ActionDialog from './ActionDialog';
 import TempCSV from '../assets/temp.csv';
 import { DATE_FORMAT, NoLogo } from '../config/constants';
 import { getTokenLogo } from '../redux';
 import { getSymbol, getName } from '../contracts/functions/erc20Functions';
 import { trunc } from '../utils/formattingFunctions';
+import { FormatListBulletedRounded } from '@material-ui/icons';
 
 const Accordion = ({ data, expanded, setExpanded, claim }) => {
   const classes = useStyles();
@@ -33,6 +35,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
     openStop: false,
     checked: false,
   });
+  const [actionDialog, setActionDialog] = useState({});
   const { open, openStop, checked, tokenLogo, tokenSymbol, tokenName } = formData;
   const { _id, tokenAddress, tokenType, endDate, amount } = data;
 
@@ -40,7 +43,26 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const handleClose = () => {
+  const handleWithdrawConfirm = () => {
+    setActionDialog({
+      variant: 'loading',
+      open: true,
+      text: 'Withdraw Pending',
+    });
+
+    setTimeout(() => {
+      setActionDialog({
+        variant: 'success',
+        open: true,
+        text: 'Withdraw Successful',
+        secondaryText: '100.00 tokens successfully withdrawn and returned to your connected wallet',
+        showCloseBtn: true,
+        handleClose: () => setActionDialog({ open: false }),
+        btnText: 'Close',
+        btnOnClick: () => setActionDialog({ open: false }),
+      });
+    }, 5000);
+
     setFormData({ ...formData, open: false });
   };
 
@@ -107,11 +129,6 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
             )}
           </Grid>
         </Grid>
-        {/* <Box className={classes.accordianHeader}>
-          <Typography variant='body2'>12,000</Typography>
-          <img src={tokenLogo} alt={tokenName} width='25px' />
-          <Typography variant='body2'>{tokenName}</Typography>
-        </Box> */}
       </AccordionSummary>
       <AccordionDetails>
         <Box className={classes.accordianContentWrapper}>
@@ -123,7 +140,11 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
           </Box>
           <Box className={classes.accordianContent}>
             <Typography variant='body2'>Token</Typography>
-            <Typography variant='body2'>{tokenName}</Typography>
+            {tokenName ? (
+              <Typography variant='body2'>{tokenName}</Typography>
+            ) : (
+              <Skeleton animation='wave' width='80px' height='30px' />
+            )}
           </Box>
           {tokenType && (
             <Box
@@ -144,10 +165,10 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
             <Fragment>
               <Dialog
                 open={open}
-                handleClose={handleClose}
+                handleClose={() => setFormData({ ...formData, open: false })}
                 text='Please confirm you are withdrawing 100.00 tokens from Dropzero to be returned to your connected wallet'
                 btnText='Confirm'
-                btnOnClick={handleClose}
+                btnOnClick={handleWithdrawConfirm}
               />
               <Dialog
                 open={openStop}
@@ -156,6 +177,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
                 btnText='Confirm'
                 btnOnClick={handleStopClose}
               />
+              <ActionDialog {...actionDialog} />
               <Box className={classes.accordianContent}>
                 <Typography variant='body2'>Total claimed</Typography>
                 <Typography variant='body2'>4,000</Typography>

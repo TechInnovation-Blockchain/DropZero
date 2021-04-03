@@ -41,7 +41,7 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '200px',
+    height: '100px',
     '& p': {
       color: theme.palette.text.secondary,
     },
