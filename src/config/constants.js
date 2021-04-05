@@ -1,5 +1,5 @@
 export const CONTRACT_ADDRESSES = {
-  dropFactory: '0x50cdc3cFdF3ee67c43C12d8e6c9dccA29a4FC9bc',
+  dropFactory: '0x0dF68B34E567A6E867F296E73C82b9546Da437f1',
 };
 
 export const BASE_URL = 'https://dropzero.herokuapp.com';
@@ -22,3 +22,8 @@ export const NoLogo =
   'https://gateway.pinata.cloud/ipfs/QmNX2QerTxTm1RThD7Dc9X5uS9VFnQxmMotaMFhK5GYbBk';
 
 export const DATE_FORMAT = 'dd MMM yyyy';
+
+export const ETHERSCAN_TX_BASE_URL =
+  process.env.REACT_APP_ENVIRONMENT === 'PRODUCTION'
+    ? 'https://etherscan.io/tx/'
+    : 'https://rinkeby.etherscan.io/tx/';

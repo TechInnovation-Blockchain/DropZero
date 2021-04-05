@@ -54,7 +54,7 @@ export const lightTheme = createMuiTheme({
       secondary2: '#fff',
       disabled: '#E2E2E2',
       hover: '#E5E5E5',
-      overlay: 'rgba(0,0,0,0.4)',
+      overlay: 'rgba(0,0,0,0.8)',
     },
     text: {
       primary: '#000',

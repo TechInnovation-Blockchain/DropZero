@@ -17,16 +17,12 @@ export const useStyles = makeStyles(theme => ({
       letterSpacing: 2,
     },
   },
-  // link: {
-  //   textDecoration: 'none',
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   color: theme.palette.xioRed.main,
-  // },
-  // linkIcon: {
-  //   color: theme.palette.xioRed.main,
-  //   paddingRight: 5,
-  //   marginTop: 2,
-  //   alignItems: 'flex-start',
-  // },
+  etherscan: {
+    display: 'flex',
+    alignItems: 'center',
+    color: theme.palette.primary.main,
+    '& svg': {
+      marginRight: '4px',
+    },
+  },
 }));

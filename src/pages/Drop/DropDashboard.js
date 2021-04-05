@@ -46,7 +46,7 @@ const DropDashboard = () => {
               .map(token => (
                 <Accordion
                   key={token._id}
-                  data={token.record}
+                  data={token}
                   expanded={expanded}
                   setExpanded={setExpanded}
                 />

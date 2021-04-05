@@ -1,5 +1,6 @@
 import { erc20TokenContract } from '../getContract';
 import { logError } from '../../utils/log';
+import { CONTRACT_ADDRESSES } from '../../config/constants';
 
 export const getDecimal = async tokenAddress => {
   const contract = erc20TokenContract(tokenAddress);
@@ -38,5 +39,18 @@ export const getBalance = async (tokenAddress, walletAddress) => {
     return balance;
   } catch (e) {
     logError('getBalance', e);
+  }
+};
+
+export const getAllowance = async (tokenAddress, walletAddress) => {
+  const contract = erc20TokenContract(tokenAddress);
+  try {
+    const allowance = await contract.methods
+      .allowance(walletAddress, CONTRACT_ADDRESSES.dropFactory)
+      .call();
+    console.log(allowance);
+    return allowance;
+  } catch (e) {
+    logError('allowance', e);
   }
 };

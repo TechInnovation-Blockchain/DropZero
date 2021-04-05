@@ -1,6 +1,13 @@
 import { useSelector } from 'react-redux';
 
-import { toggleTheme, setLoading, showSnackbar, hideSnackbar, initiallyRendered } from '../redux';
+import {
+  toggleTheme,
+  setLoading,
+  showSnackbar,
+  hideSnackbar,
+  initiallyRendered,
+  showSnackbarInDeep,
+} from '../redux';
 import { useDispatchWrap } from './utilHooks';
 
 export const useTheme = () => {
@@ -21,8 +28,9 @@ export const useSnackbar = () => {
   const snackbar = useSelector(state => state.ui.snackbar);
   const showSnackbarF = useDispatchWrap(showSnackbar);
   const hideSnackbarF = useDispatchWrap(hideSnackbar);
+  const showSnackbarInDeepF = useDispatchWrap(showSnackbarInDeep);
 
-  return { ...snackbar, showSnackbarF, hideSnackbarF };
+  return { ...snackbar, showSnackbarF, hideSnackbarF, showSnackbarInDeepF };
 };
 
 export const useInitiallyRedndering = () => {
@@ -30,4 +38,10 @@ export const useInitiallyRedndering = () => {
   const initiallyRenderedF = useDispatchWrap(initiallyRendered);
 
   return { initialRender, initiallyRenderedF };
+};
+
+export const useModal = () => {
+  const modal = useSelector(state => state.ui.modal);
+
+  return { modalProps: modal };
 };

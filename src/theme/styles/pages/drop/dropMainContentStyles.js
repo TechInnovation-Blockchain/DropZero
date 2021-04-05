@@ -30,8 +30,8 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     width: '90%',
-    '@media(max-width:330px)': {
-      width: '95%',
+    '@media(max-width:550px)': {
+      width: '100%',
     },
   },
   datePicker: {
@@ -159,5 +159,10 @@ export const useStyles = makeStyles(theme => ({
     top: '58.5%',
     right: 15,
     color: theme.palette.text.placeholder,
+  },
+  dropExist: {
+    position: 'absolute',
+    bottom: 10,
+    color: theme.palette.text.secondary,
   },
 }));

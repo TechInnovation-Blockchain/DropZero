@@ -3,6 +3,7 @@ import axios from 'axios';
 import * as dropTypes from '../types/dropTypes';
 import { logError, logMessage } from '../../utils/log';
 import { BASE_URL, formDataConfig } from '../../config/constants';
+import { showSnackbar } from './uiActions';
 
 // import data from './claimHistoryData.json';
 
@@ -52,22 +53,25 @@ export const uploadCSV = ({ file, account, token, startDate, endDate, type }) =>
       const res = await axios.post(`${BASE_URL}/upload_csv/merkle_root`, formData, formDataConfig);
       logMessage('Upload CSV', res);
       if (res?.data?.responseCode === 200) {
+        dispatch(showSnackbar({ message: 'CSV Uploaded Successfully', severity: 'info' }));
         dispatch({
           type: dropTypes.UPLOAD_CSV,
           payload: { result: res.data.result, error: '' },
         });
       } else {
-        dispatch({
-          type: dropTypes.UPLOAD_CSV,
-          payload: { result: null, error: 'Invalid CSV' },
-        });
+        dispatch(showSnackbar({ message: 'CSV Uploaded Error', severity: 'error' }));
+        // dispatch({
+        //   type: dropTypes.UPLOAD_CSV,
+        //   payload: { result: null, error: 'Invalid CSV' },
+        // });
       }
     } catch (error) {
       logError('Upload CSV', error);
-      dispatch({
-        type: dropTypes.UPLOAD_CSV,
-        payload: { result: null, error: 'Invalid CSV' },
-      });
+      dispatch(showSnackbar({ message: 'CSV Uploaded Error', severity: 'error' }));
+      // dispatch({
+      //   type: dropTypes.UPLOAD_CSV,
+      //   payload: { result: null, error: 'Invalid CSV' },
+      // });
     }
   };
 };
@@ -82,7 +86,7 @@ export const getUserDrops = walletAddress => {
       if (res?.data?.responseCode === 201) {
         dispatch({
           type: dropTypes.GET_DROPS,
-          payload: res.data.result ? res.data.result.csv : [],
+          payload: res.data.result ? res.data.result : [],
         });
       }
     } catch (e) {

@@ -17,17 +17,22 @@ import {
 
 import Button from './Button';
 import { useStyles } from '../theme/styles/components/dialogStyles';
+import { showModal } from '../redux';
 
 const ActionDialog = ({
   open,
-  handleClose,
+  handleClose = () => {
+    showModal({ open: false });
+  },
   text,
   variant,
   secondaryText,
   link,
   btnText,
   showCloseBtn,
-  btnOnClick = () => {},
+  btnOnClick = () => {
+    showModal({ open: false });
+  },
 }) => {
   const classes = useStyles();
 
