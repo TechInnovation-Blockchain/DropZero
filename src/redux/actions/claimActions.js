@@ -16,10 +16,13 @@ export const getAvailableClaims = walletAddress => {
       logMessage('Get Available Claims', res);
       if (res?.data?.responseCode === 201) {
         dispatch({ type: claimTypes.GET_AVAILABLE_CLAIMS, payload: res.data.result });
+      } else {
+        dispatch({ type: claimTypes.GET_AVAILABLE_CLAIMS, payload: [] });
       }
     } catch (e) {
       logError('Get Available Claims', e);
       dispatch(showSnackbar({ message: e.message, severity: 'error' }));
+      dispatch({ type: claimTypes.GET_AVAILABLE_CLAIMS, payload: [] });
     }
     // dispatch({ type: claimTypes.GET_AVAILABLE_CLAIMS, payload: data });
   };
@@ -45,10 +48,13 @@ export const getClaimsHistory = walletAddress => {
       logMessage('Get Claims History', res);
       if (res?.data?.responseCode === 201) {
         dispatch({ type: claimTypes.GET_CLAIMS_HISTORY, payload: res.data.result });
+      } else {
+        dispatch({ type: claimTypes.GET_CLAIMS_HISTORY, payload: [] });
       }
     } catch (e) {
       logError('Get Claims History', e);
       dispatch(showSnackbar({ message: e.message, severity: 'error' }));
+      dispatch({ type: claimTypes.GET_CLAIMS_HISTORY, payload: [] });
     }
     // dispatch({ type: claimTypes.GET_CLAIMS_HISTORY, payload: _data });
   };

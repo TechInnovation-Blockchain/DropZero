@@ -1,6 +1,13 @@
 import { useSelector } from 'react-redux';
 
-import { saveFields, clearFields, uploadCSV, getUserDrops, withdrawDrops } from '../redux';
+import {
+  saveFields,
+  clearFields,
+  uploadCSV,
+  getUserDrops,
+  withdrawDrops,
+  clearCSV,
+} from '../redux';
 import { useDispatchWrap } from './utilHooks';
 
 export const useDropInputs = () => {
@@ -8,8 +15,9 @@ export const useDropInputs = () => {
   const clearFieldsF = useDispatchWrap(clearFields);
   const saveFieldsF = useDispatchWrap(saveFields);
   const uploadCSVF = useDispatchWrap(uploadCSV);
+  const clearCSVF = useDispatchWrap(clearCSV);
 
-  return { ...fields, csv, saveFieldsF, clearFieldsF, uploadCSVF };
+  return { ...fields, csv, saveFieldsF, clearFieldsF, uploadCSVF, clearCSVF };
 };
 
 export const useDropDashboard = () => {

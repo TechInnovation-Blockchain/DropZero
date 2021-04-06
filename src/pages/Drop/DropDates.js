@@ -13,15 +13,23 @@ const DropDates = ({ setContent }) => {
   const { startDate, endDate, saveFieldsF } = useDropInputs();
 
   const handleDateTimeChange = (date, key) => {
-    if (key === 'startDate') {
-      const _startDate = new Date(date);
+    saveFieldsF({ [key]: date });
+  };
+
+  const handleNextClick = () => {
+    if (startDate) {
+      const _startDate = new Date(startDate);
       _startDate.setHours(0, 0, 0, 0);
       saveFieldsF({ startDate: _startDate.toISOString() });
-    } else {
-      const _endDate = new Date(date);
+    }
+
+    if (endDate) {
+      const _endDate = new Date(endDate);
       _endDate.setHours(23, 59, 59, 999);
       saveFieldsF({ endDate: _endDate.toISOString() });
     }
+
+    setContent('uploadCSV');
   };
 
   return (
@@ -59,7 +67,7 @@ const DropDates = ({ setContent }) => {
         </Button>
         <Button
           disabled={startDate != 'Invalid Date' && endDate != 'Invalid Date' ? false : true}
-          onClick={() => setContent('uploadCSV')}
+          onClick={handleNextClick}
         >
           <span>Next</span>
           <ArrowForwardIcon />

@@ -8,11 +8,10 @@ const initialState = {
     type: '',
     startDate: null,
     endDate: null,
+    dropExists: false,
+    approved: 0,
   },
-  csv: {
-    result: null,
-    // error: '',
-  },
+  csv: null,
   userDrops: null,
 };
 
@@ -27,6 +26,8 @@ const dropReducer = (state = initialState, action) => {
       return { ...state, csv: payload };
     case dropTypes.GET_DROPS:
       return { ...state, userDrops: payload };
+    case dropTypes.CLEAR_CSV:
+      return { ...state, csv: null };
     default:
       return state;
   }

@@ -4,10 +4,11 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PublishIcon from '@material-ui/icons/Publish';
 import { useWeb3React } from '@web3-react/core';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import Web3 from 'web3';
 
 import { Button, Dialog, ActionDialog, DisclaimerDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
-import { useDropInputs } from '../../hooks';
+import { useDropInputs, useLoading } from '../../hooks';
 import { getBalance } from '../../contracts/functions/erc20Functions';
 import { addDropData } from '../../contracts/functions/dropFactoryFunctions';
 import { truncFileName, trunc } from '../../utils/formattingFunctions';
@@ -18,34 +19,43 @@ const fileNameRegex = /^[A-Z]{1,15}.csv$/i;
 
 const DropCSV = ({ setContent }) => {
   const classes = useStyles();
+  const {
+    token,
+    startDate,
+    endDate,
+    type,
+    csv,
+    clearFieldsF,
+    uploadCSVF,
+    clearCSVF,
+  } = useDropInputs();
+  const { account } = useWeb3React();
+  const {
+    loading: { dapp },
+  } = useLoading();
+
   const [formData, setFormData] = useState({
     file: null,
     error: '',
     open: false,
     openDis: false,
-    loading: false,
     loadingContent: '',
-    variant: 'loading',
     totalAmount: 0,
     totalAddress: 0,
     balance: 0,
     check: false,
   });
-  // const [actionDialog, setActionDialog] = useState({ open: false, variant: 'loading', text: '' });
-  const { token, startDate, endDate, type, csv, clearFieldsF, uploadCSVF } = useDropInputs();
-  const { account } = useWeb3React();
+
   const {
     file,
     error,
     open,
     openDis,
-    loading,
-    loadingContent,
     totalAmount,
     totalAddress,
     balance,
     check,
-    variant,
+    loadingContent,
   } = formData;
 
   const uploadingCSV = _file => {
@@ -67,17 +77,16 @@ const DropCSV = ({ setContent }) => {
               ...formData,
               file: _file,
               error: '',
-              loading: false,
+              loadingContent: '',
               totalAmount: _totalAmount,
               totalAddress: _totalAddress,
-              balance,
+              balance: Number(balance),
             });
           } else {
             setFormData({
               ...formData,
               file: _file,
               error: 'Invalid CSV',
-              loading: false,
             });
           }
         };
@@ -101,41 +110,27 @@ const DropCSV = ({ setContent }) => {
     setFormData({ ...formData, open: false });
   };
 
-  const uploadCSVOnServer = async () => {
-    setFormData({ ...formData, loading: true, loadingContent: 'Uploading CSV' });
-    // setActionDialog({ ...ActionDialog, open: true, text: 'Uploading CSV' });
+  const uploadCSVOnServer = () => {
+    setFormData({ ...formData, loadingContent: 'Uploading CSV', openDis: false });
     const data = { file, account, token, startDate, endDate, type };
-    await uploadCSVF(data);
-    setFormData({ ...formData, loadingContent: 'Transaction Pending' });
-    const dropData = {
-      tokenAmount: csv.result?.amount,
-      startDate: new Date(startDate).getTime(),
-      endDate: new Date(endDate).getTime(),
-      merkleRoot: csv.result?.merkle_root,
-      tokenAddress: token,
-      walletAddress: account,
-    };
-    console.log(dropData);
-    // await addDropData(dropData);
-    // clearFieldsF();
-    // handleClose();
+    uploadCSVF(data);
   };
 
-  const handleClick = async () => {
+  const handleConfirmClick = () => {
     const walletAddress = localStorage.getItem('userDrop');
     if (!(walletAddress && walletAddress === account)) {
       setFormData({ ...formData, openDis: true, open: false });
       return;
     }
-    await uploadCSVOnServer();
+    uploadCSVOnServer();
   };
 
-  const handleDisclaimerClose = async () => {
-    setFormData({ ...formData, openDis: false });
+  const handleDisclaimerClose = () => {
     if (check) {
       localStorage.setItem('userDrop', account);
     }
-    await uploadCSVOnServer();
+    setFormData({ ...formData, openDis: false });
+    uploadCSVOnServer();
   };
 
   const handleDrop = e => {
@@ -149,9 +144,37 @@ const DropCSV = ({ setContent }) => {
     e.preventDefault();
   };
 
-  // useEffect(()=>{
+  const createDrop = async merkleRoot => {
+    const dropData = {
+      tokenAmount: Web3.utils.toWei(totalAmount.toString()),
+      startDate: startDate
+        ? Math.round(new Date(startDate).getTime() / 1000)
+        : Math.round(Date.now() / 10000),
+      endDate: endDate ? Math.round(new Date(endDate).getTime() / 1000) : 4294967295,
+      merkleRoot,
+      tokenAddress: token,
+      walletAddress: account,
+    };
 
-  // },[])
+    await addDropData(
+      dropData,
+      () => {
+        setFormData({ ...formData, loadingContent: '', open: false });
+        clearCSVF();
+      },
+      () => {
+        clearFieldsF();
+        setContent('token');
+      }
+    );
+  };
+
+  useEffect(() => {
+    const merkleRoot = csv?.merkle_root;
+    if (merkleRoot) {
+      createDrop(merkleRoot);
+    }
+  }, [csv]);
 
   return (
     <Box className={classes.mainContainer}>
@@ -163,9 +186,9 @@ const DropCSV = ({ setContent }) => {
         )} tokens.`}
         secondaryText='If there are errors, please upload a new file. No changes can be made after you press CONFIRM.'
         btnText='Confirm'
-        btnOnClick={handleClick}
+        btnOnClick={handleConfirmClick}
         errorMsg={
-          balance > totalAmount ? 'Your current wallet have insufficient amount of tokens' : ''
+          balance < totalAmount ? 'Your current wallet have insufficient amount of tokens' : ''
         }
       />
 
@@ -179,9 +202,11 @@ const DropCSV = ({ setContent }) => {
         disableBackdrop
       />
 
-      <ActionDialog variant={variant} open={loading} text={loadingContent} />
-
-      {/* <ActionDialog {...actionDialog} /> */}
+      <ActionDialog
+        variant='loading'
+        open={loadingContent === 'Uploading CSV'}
+        text='Uploading CSV'
+      />
 
       <Typography variant='body2' className={classes.para}>
         Who would you like to drop these tokens to ?
@@ -220,9 +245,10 @@ const DropCSV = ({ setContent }) => {
         <Button
           disabled={file && error === '' ? false : true}
           onClick={() => setFormData({ ...formData, open: true })}
+          loading={dapp === 'upload'}
         >
           <span>Upload</span>
-          <PublishIcon />
+          {dapp !== 'upload' && <PublishIcon />}
         </Button>
       </Box>
       <Typography component='a' href={TempCSV} download='smaple.csv' variant='body2'>

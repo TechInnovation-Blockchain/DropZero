@@ -38,6 +38,13 @@ export const clearFields = () => {
   };
 };
 
+//clear csv data
+export const clearCSV = () => {
+  return dispatch => {
+    dispatch({ type: dropTypes.CLEAR_CSV });
+  };
+};
+
 //uploading csv on server
 export const uploadCSV = ({ file, account, token, startDate, endDate, type }) => {
   return async dispatch => {
@@ -53,11 +60,11 @@ export const uploadCSV = ({ file, account, token, startDate, endDate, type }) =>
       const res = await axios.post(`${BASE_URL}/upload_csv/merkle_root`, formData, formDataConfig);
       logMessage('Upload CSV', res);
       if (res?.data?.responseCode === 200) {
-        dispatch(showSnackbar({ message: 'CSV Uploaded Successfully', severity: 'info' }));
         dispatch({
           type: dropTypes.UPLOAD_CSV,
-          payload: { result: res.data.result, error: '' },
+          payload: res.data.result,
         });
+        dispatch(showSnackbar({ message: 'CSV Uploaded Successfully', severity: 'info' }));
       } else {
         dispatch(showSnackbar({ message: 'CSV Uploaded Error', severity: 'error' }));
         // dispatch({
@@ -88,8 +95,17 @@ export const getUserDrops = walletAddress => {
           type: dropTypes.GET_DROPS,
           payload: res.data.result ? res.data.result : [],
         });
+      } else {
+        dispatch({
+          type: dropTypes.GET_DROPS,
+          payload: [],
+        });
       }
     } catch (e) {
+      dispatch({
+        type: dropTypes.GET_DROPS,
+        payload: [],
+      });
       logError('Get Drops', e);
     }
     // dispatch({ type: dropTypes.GET_DROPS, payload: data });

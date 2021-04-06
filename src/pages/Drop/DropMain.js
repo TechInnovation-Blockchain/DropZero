@@ -5,9 +5,17 @@ import { PageAnimation } from '../../components';
 import DropToken from './DropToken';
 import DropDates from './DropDates';
 import DropCSV from './DropCSV';
+import { useDropInputs } from '../../hooks';
 
 const DropMain = () => {
   const [content, setContent] = useState('token');
+  const { clearFieldsF, clearCSVF } = useDropInputs();
+
+  window.ethereum?.on('accountsChanged', () => {
+    setContent('token');
+    clearFieldsF();
+    clearCSVF();
+  });
 
   return (
     <PageAnimation in={true} reverse={0}>

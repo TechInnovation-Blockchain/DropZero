@@ -216,7 +216,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
                 </Button>
                 <Button className={classes.accordionBtn}>
                   <a
-                    href={TempCSV}
+                    href={'https://dropzero.herokuapp.com/download/10dcb.csv'}
                     download={`${tokenSymbol}-claimed-status-(${format(
                       Date.now(),
                       DATE_FORMAT

@@ -7,7 +7,7 @@ import { useWeb3React } from '@web3-react/core';
 
 import { InputField, Button } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
-import { getName, getAllowance } from '../../contracts/functions/erc20Functions';
+import { getName, getAllowance, approve } from '../../contracts/functions/erc20Functions';
 import { createDrop, isDropCreated } from '../../contracts/functions/dropFactoryFunctions';
 import { useDropInputs, useLoading } from '../../hooks';
 import { getTokenLogo } from '../../redux';
@@ -17,7 +17,15 @@ const tokenTypeRegex = /^[a-zA-Z ']*$/;
 
 const DropToken = ({ setContent }) => {
   const classes = useStyles();
-  const { token, tokenType, tokenName, tokenLogo, saveFieldsF } = useDropInputs();
+  const {
+    token,
+    tokenType,
+    tokenName,
+    tokenLogo,
+    dropExists,
+    approved,
+    saveFieldsF,
+  } = useDropInputs();
   const { account } = useWeb3React();
   const {
     loading: { dapp },
@@ -27,9 +35,8 @@ const DropToken = ({ setContent }) => {
     validated: token ? true : false,
     error: '',
     loading: false,
-    dropExists: false,
   });
-  const { validated, error, loading, dropExists } = formData;
+  const { validated, error, loading } = formData;
 
   const handleTokenChange = ({ target }) => {
     const token = target?.value;
@@ -47,12 +54,17 @@ const DropToken = ({ setContent }) => {
   };
 
   const handleClick = async () => {
+    setFormData({ ...formData, dropExists: false });
     saveFieldsF({ token: web3.utils.toChecksumAddress(token) });
     setContent('dates');
   };
 
   const handleDropCreate = async () => {
-    await createDrop(token, account, () => setFormData({ ...formData, dropExists: true }));
+    await createDrop(token, account, () => saveFieldsF({ dropExists: true }));
+  };
+
+  const handleApprove = async () => {
+    await approve(token, account, () => saveFieldsF({ approved: 1 }));
   };
 
   const validateAddress = token => {
@@ -60,37 +72,59 @@ const DropToken = ({ setContent }) => {
       if (token) {
         setFormData({
           ...formData,
+          validated: false,
           loading: true,
+          error: '',
         });
+        saveFieldsF({
+          dropExists: false,
+          approved: 0,
+        });
+
         const _tokenName = await getName(token);
         if (web3.utils.isAddress(token) && _tokenName) {
           saveFieldsF({
-            ...formData,
             tokenName: _tokenName,
             tokenLogo: await getTokenLogo(web3.utils.toChecksumAddress(token)),
+            dropExists: await isDropCreated(token),
+            approved: await getAllowance(token, account),
           });
           setFormData({
             ...formData,
             validated: true,
             loading: false,
-            dropExists: await isDropCreated(token),
+            error: '',
           });
-          await getAllowance(token, account);
         } else {
-          saveFieldsF({ tokenName: 'Unknown' });
+          saveFieldsF({ tokenName: 'Unknown', dropExists: false, approved: 0 });
           setFormData({
             ...formData,
             validated: false,
             error: 'Please enter a correct Token Address',
             loading: false,
-            dropExists: false,
           });
         }
       } else {
+        saveFieldsF({ dropExists: false, approved: 0 });
         setFormData({ ...formData, validated: false, error: '' });
       }
     }, 500);
   };
+
+  window.ethereum?.on('accountsChanged', () => {
+    setFormData({
+      ...formData,
+      validated: false,
+      error: '',
+      loading: false,
+    });
+
+    saveFieldsF({
+      dropExists: false,
+      approved: 0,
+      token: '',
+    });
+  });
 
   return (
     <Box className={classes.mainContainer}>
@@ -138,10 +172,20 @@ const DropToken = ({ setContent }) => {
       </Tooltip>
 
       <Box className={classes.btnContainer}>
-        <Button loading={dapp} disabled={!validated || dropExists} onClick={handleDropCreate}>
-          <span>Create</span>
-        </Button>
-        <Button disabled={!validated || !dropExists} onClick={handleClick}>
+        {dropExists && approved <= 0 ? (
+          <Button loading={dapp === 'drop'} disabled={approved > 0} onClick={handleApprove}>
+            <span>Approve</span>
+          </Button>
+        ) : (
+          <Button
+            loading={dapp === 'drop'}
+            disabled={!validated || dropExists}
+            onClick={handleDropCreate}
+          >
+            <span>Create</span>
+          </Button>
+        )}
+        <Button disabled={!validated || !dropExists || approved <= 0} onClick={handleClick}>
           <span>Next</span>
           <ArrowForwardIcon />
         </Button>
