@@ -8,10 +8,11 @@ import Web3 from 'web3';
 
 import { Button, Dialog, ActionDialog, DisclaimerDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
-import { useDropInputs, useLoading } from '../../hooks';
+import { useDropInputs, useLoading, useDropDashboard } from '../../hooks';
 import { getBalance } from '../../contracts/functions/erc20Functions';
 import { addDropData } from '../../contracts/functions/dropFactoryFunctions';
 import { truncFileName, trunc } from '../../utils/formattingFunctions';
+import { logMessage } from '../../utils/log';
 import { validateCSV } from '../../utils/validatingFunctions';
 import TempCSV from '../../assets/temp.csv';
 
@@ -30,6 +31,7 @@ const DropCSV = ({ setContent }) => {
     clearCSVF,
   } = useDropInputs();
   const { account } = useWeb3React();
+  const { getUserDropsF } = useDropDashboard();
   const {
     loading: { dapp },
   } = useLoading();
@@ -70,6 +72,7 @@ const DropCSV = ({ setContent }) => {
         const fileReader = new FileReader();
         fileReader.onloadend = async e => {
           const content = e.target.result;
+          logMessage('CSV Content', content);
           const { validCSV, _totalAmount, _totalAddress } = validateCSV(content.split('\n'));
           if (validCSV) {
             const balance = await getBalance(token, account);
@@ -165,6 +168,7 @@ const DropCSV = ({ setContent }) => {
       () => {
         clearFieldsF();
         setContent('token');
+        getUserDropsF(account);
       }
     );
   };
@@ -251,7 +255,7 @@ const DropCSV = ({ setContent }) => {
           {dapp !== 'upload' && <PublishIcon />}
         </Button>
       </Box>
-      <Typography component='a' href={TempCSV} download='smaple.csv' variant='body2'>
+      <Typography component='a' href={TempCSV} download='sample.csv' variant='body2'>
         Download sample CSV
       </Typography>
     </Box>

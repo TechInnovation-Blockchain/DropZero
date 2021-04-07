@@ -21,7 +21,8 @@ export const getAvailableClaims = walletAddress => {
       }
     } catch (e) {
       logError('Get Available Claims', e);
-      dispatch(showSnackbar({ message: e.message, severity: 'error' }));
+      e.message === 'Newtwork Error' &&
+        dispatch(showSnackbar({ message: e.message, severity: 'error' }));
       dispatch({ type: claimTypes.GET_AVAILABLE_CLAIMS, payload: [] });
     }
     // dispatch({ type: claimTypes.GET_AVAILABLE_CLAIMS, payload: data });
@@ -53,7 +54,7 @@ export const getClaimsHistory = walletAddress => {
       }
     } catch (e) {
       logError('Get Claims History', e);
-      dispatch(showSnackbar({ message: e.message, severity: 'error' }));
+      // dispatch(showSnackbar({ message: e.message, severity: 'error' }));
       dispatch({ type: claimTypes.GET_CLAIMS_HISTORY, payload: [] });
     }
     // dispatch({ type: claimTypes.GET_CLAIMS_HISTORY, payload: _data });

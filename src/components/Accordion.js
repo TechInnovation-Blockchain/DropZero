@@ -5,7 +5,6 @@ import {
   AccordionDetails,
   Typography,
   Box,
-  Switch,
   Grid,
   Tooltip,
 } from '@material-ui/core';
@@ -13,69 +12,53 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
 import { Skeleton } from '@material-ui/lab';
 import Web3 from 'web3';
+import { useWeb3React } from '@web3-react/core';
 
 import { useStyles } from '../theme/styles/components/accordionStyles';
 import Button from './Button';
 import Dialog from './Dialog';
-import ActionDialog from './ActionDialog';
-import TempCSV from '../assets/temp.csv';
 import { DATE_FORMAT, NoLogo } from '../config/constants';
-import { getTokenLogo } from '../redux';
+import { getTokenLogo, getCSVFile } from '../redux';
 import { getSymbol, getName } from '../contracts/functions/erc20Functions';
+import { withdraw } from '../contracts/functions/dropFactoryFunctions';
+import PauseDrop from './PauseDrop';
 import { trunc } from '../utils/formattingFunctions';
-import { FormatListBulletedRounded } from '@material-ui/icons';
+import { useDropDashboard } from '../hooks';
 
 const Accordion = ({ data, expanded, setExpanded, claim }) => {
   const classes = useStyles();
+  const { withdrawDropsF } = useDropDashboard();
+  const { account } = useWeb3React();
+
   const [formData, setFormData] = useState({
     tokenLogo: NoLogo,
     tokenSymbol: '',
     tokenName: '',
     open: false,
-    openStop: false,
-    checked: false,
+    csvFile: '',
   });
-  const [actionDialog, setActionDialog] = useState({});
-  const { open, openStop, checked, tokenLogo, tokenSymbol, tokenName } = formData;
-  const { _id, tokenAddress, tokenType, endDate, amount } = data;
+  const { open, tokenLogo, tokenSymbol, tokenName, csvFile } = formData;
+  const {
+    _id,
+    tokenAddress,
+    tokenType,
+    endDate,
+    amount,
+    totalAmount,
+    totalClaimed,
+    pauseDrop,
+    merkleRoot,
+  } = data;
 
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const handleWithdrawConfirm = () => {
-    setActionDialog({
-      variant: 'loading',
-      open: true,
-      text: 'Withdraw Pending',
-    });
-
-    setTimeout(() => {
-      setActionDialog({
-        variant: 'success',
-        open: true,
-        text: 'Withdraw Successful',
-        secondaryText: '100.00 tokens successfully withdrawn and returned to your connected wallet',
-        showCloseBtn: true,
-        handleClose: () => setActionDialog({ open: false }),
-        btnText: 'Close',
-        btnOnClick: () => setActionDialog({ open: false }),
-      });
-    }, 5000);
-
+  const handleWithdrawConfirm = async () => {
     setFormData({ ...formData, open: false });
-  };
-
-  const handleStopClose = () => {
-    setFormData({ ...formData, openStop: false, checked: true });
-  };
-
-  const handleSwitchChange = () => {
-    if (checked) {
-      setFormData({ ...formData, checked: false });
-    } else {
-      setFormData({ ...formData, openStop: true });
-    }
+    await withdraw(tokenAddress, account, merkleRoot, () => {
+      withdrawDropsF(account, _id);
+    });
   };
 
   useEffect(() => {
@@ -84,13 +67,17 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
         const logo = await getTokenLogo(Web3.utils.toChecksumAddress(tokenAddress));
         const symbol = await getSymbol(tokenAddress);
         const name = await getName(tokenAddress);
+        let _csvFile = '';
+        if (!claim) {
+          _csvFile = await getCSVFile(data?._id, name);
+        }
         setFormData({
           tokenLogo: logo,
           tokenSymbol: symbol ? symbol : 'Unknown',
           tokenName: name ? name : '',
+          csvFile: _csvFile,
         });
       };
-
       fetchAPI();
     }
   }, [tokenAddress]);
@@ -108,13 +95,11 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
       >
         <Grid container className={classes.accordianHeader}>
           <Grid item xs={5}>
-            {amount && (
-              <Tooltip title={amount} placement='bottom-end'>
-                <Typography style={{ textAlign: 'right' }} variant='body2'>
-                  {trunc(amount)}
-                </Typography>
-              </Tooltip>
-            )}
+            <Tooltip title={claim ? amount : totalAmount} placement='bottom-end'>
+              <Typography style={{ textAlign: 'right' }} variant='body2'>
+                {trunc(claim ? amount : totalAmount)}
+              </Typography>
+            </Tooltip>
           </Grid>
           <Grid item xs={2} style={{ textAlign: 'center' }}>
             <img src={tokenLogo} alt={tokenSymbol} width='30px' />
@@ -134,8 +119,8 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
         <Box className={classes.accordianContentWrapper}>
           <Box className={classes.accordianContent}>
             <Typography variant='body2'>Total amount</Typography>
-            <Tooltip title={amount} placement='bottom-end'>
-              <Typography variant='body2'>{amount}</Typography>
+            <Tooltip title={claim ? amount : totalAmount} placement='bottom-end'>
+              <Typography variant='body2'>{trunc(claim ? amount : totalAmount)}</Typography>
             </Tooltip>
           </Box>
           <Box className={classes.accordianContent}>
@@ -166,38 +151,39 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
               <Dialog
                 open={open}
                 handleClose={() => setFormData({ ...formData, open: false })}
-                text='Please confirm you are withdrawing 100.00 tokens from Dropzero to be returned to your connected wallet'
+                text={`Please confirm you are withdrawing ${trunc(
+                  totalAmount
+                )} tokens from Dropzero to be returned to your connected wallet`}
                 btnText='Confirm'
                 btnOnClick={handleWithdrawConfirm}
               />
-              <Dialog
-                open={openStop}
-                handleClose={handleStopClose}
-                text='Please confirm you want to pause all the claims '
-                btnText='Confirm'
-                btnOnClick={handleStopClose}
-              />
-              <ActionDialog {...actionDialog} />
+
               <Box className={classes.accordianContent}>
                 <Typography variant='body2'>Total claimed</Typography>
-                <Typography variant='body2'>4,000</Typography>
+                <Tooltip title={totalClaimed} placement='bottom-end'>
+                  <Typography variant='body2'>{trunc(totalClaimed)}</Typography>
+                </Tooltip>
               </Box>
               <Box className={classes.accordianContent}>
                 <Typography variant='body2'>Total unclaimed</Typography>
-                <Typography variant='body2'>8,000</Typography>
+                <Tooltip title={totalAmount - totalClaimed} placement='bottom-end'>
+                  <Typography variant='body2'>{trunc(totalAmount - totalClaimed)}</Typography>
+                </Tooltip>
               </Box>
-              <Box className={classes.accordianContent}>
-                <Typography variant='body2'>Expiry</Typography>
-                <Typography variant='body2'>25th Mar 2021</Typography>
-              </Box>
+              {endDate && (
+                <Box className={classes.accordianContent}>
+                  <Typography variant='body2'>Expiry</Typography>
+                  <Typography variant='body2'>{format(endDate, DATE_FORMAT)}</Typography>
+                </Box>
+              )}
 
               <Box className={classes.accordianContent}>
                 <Typography variant='body2'>Pause Claims</Typography>
-                <Switch
-                  checked={checked}
-                  onChange={handleSwitchChange}
-                  color='primary'
-                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                <PauseDrop
+                  value={pauseDrop}
+                  dropId={_id}
+                  merkleRoot={merkleRoot}
+                  tokenAddress={tokenAddress}
                 />
               </Box>
 
@@ -214,19 +200,13 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
                 >
                   <span>Withdraw</span>
                 </Button>
-                <Button className={classes.accordionBtn}>
-                  <a
-                    href={'https://dropzero.herokuapp.com/download/10dcb.csv'}
-                    download={`${tokenSymbol}-claimed-status-(${format(
-                      Date.now(),
-                      DATE_FORMAT
-                    )}).csv`}
-                  >
+                <Button disabled={csvFile === ''} className={classes.accordionBtn}>
+                  <a href={csvFile} target='_blank'>
                     <span>Claim Status</span>
                   </a>
                 </Button>
                 {/* <Button
-                  onClick={() => setFormData({ ...formData, openStop: true })}
+                  onClick={() => setFormData({ ...formData, openPause: true })}
                   className={classes.accordionBtn}
                 >
                   <span>Stop</span>

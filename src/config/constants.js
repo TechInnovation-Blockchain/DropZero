@@ -30,3 +30,8 @@ export const ETHERSCAN_TX_BASE_URL =
   process.env.REACT_APP_ENVIRONMENT === 'PRODUCTION'
     ? 'https://etherscan.io/tx/'
     : 'https://rinkeby.etherscan.io/tx/';
+
+export const ETHERSCAN_ADDRESS_BASE_URL =
+  process.env.REACT_APP_ENVIRONMENT === 'PRODUCTION'
+    ? 'https://etherscan.io/address/'
+    : 'https://rinkeby.etherscan.io/address/';

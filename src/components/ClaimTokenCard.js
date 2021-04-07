@@ -4,7 +4,7 @@ import { Skeleton } from '@material-ui/lab';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Web3 from 'web3';
 import { format } from 'date-fns';
-import { DATE_FORMAT } from '../config/constants';
+import { DATE_FORMAT, ETHERSCAN_ADDRESS_BASE_URL } from '../config/constants';
 
 import { useStyles } from '../theme/styles/components/claimTokenCardStyles';
 import { trunc } from '../utils/formattingFunctions';
@@ -51,10 +51,7 @@ const ClaimTokenCard = ({
         onClick={onClick}
       >
         <Grid item xs={2} className={classes.tokenImg}>
-          <a
-            href='https://rinkeby.etherscan.io/address/0x20398aD62bb2D930646d45a6D4292baa0b860C1f#code'
-            target='_blank'
-          >
+          <a href={ETHERSCAN_ADDRESS_BASE_URL + tokenAddress} target='_blank'>
             <img src={tokenLogo} alt={NoLogo} />
           </a>
         </Grid>

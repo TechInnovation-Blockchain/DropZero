@@ -115,14 +115,43 @@ export const getUserDrops = walletAddress => {
 export const withdrawDrops = (walletAddress, csvID) => {
   return async dispatch => {
     try {
+      console.log('Wallet Address => ', walletAddress);
+      console.log('csvID => ', csvID);
       const res = await axios.get(
         `${BASE_URL}/dropper/withdraw_drop/${walletAddress}csv_id=${csvID}`
       );
       logMessage('Withdraw Drops', res);
       if (res?.data?.responseCode === 201) {
+        dispatch({ type: dropTypes.WITHDRAW_DROP, payload: csvID });
       }
     } catch (e) {
-      logError('Get Drops', e);
+      logError('Withdraw Drops', e);
     }
   };
+};
+
+export const pauseDrop = (dropId, pause) => {
+  return async dispatch => {
+    try {
+      const res = await axios.get(`${BASE_URL}/dropper/pause_drop/${dropId}?pause=${pause}`);
+      if (res?.data?.responseCode === 201) {
+        dispatch({ type: dropTypes.PAUSE_DROP, payload: { id: dropId, pause } });
+      }
+      logMessage('Pause Drop', res);
+    } catch (e) {
+      logError('Pause Drops', e);
+    }
+  };
+};
+
+export const getCSVFile = async (dropId, tokenName) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/dropper/get_csv/${dropId}?token_name=${tokenName}`);
+    logMessage('getCSVFile', res);
+    if (res?.data?.responseCode === 201) {
+      return res.data.result;
+    }
+  } catch (e) {
+    logError('getCSVFile', e);
+  }
 };

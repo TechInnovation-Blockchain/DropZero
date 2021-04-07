@@ -31,7 +31,16 @@ export const createDrop = async (tokenAddress, walletAddress, callback) => {
       .on('transactionHash', txnHash => {
         transactionPending({ transactionHash: txnHash }, { text: 'Creating Drop' }, 'drop');
       })
+      // .on('confirmation', receipt => {
+      //   console.log('CANCELLED', receipt);
+      //   transactionSuccess(
+      //     { transactionHash: receipt.transactionHash },
+      //     { text: 'Drop CANCELLED' },
+      //     ''
+      //   );
+      // })
       .then(receipt => {
+        // console.log(receipt);
         transactionSuccess(
           { transactionHash: receipt.transactionHash },
           { text: 'Drop Created' },
@@ -49,6 +58,7 @@ export const createDrop = async (tokenAddress, walletAddress, callback) => {
       });
   } catch (e) {
     logError('createDrop', e);
+    transactionFailed({}, { text: 'Drop Failed' }, '');
   }
 };
 
@@ -85,17 +95,18 @@ export const addDropData = async (
       });
   } catch (e) {
     logError('addDropData', e);
+    transactionFailed({}, { text: 'Drop Failed' }, '');
   }
 };
 
-export const pauseDrop = async (tokenAddress, walletAddress, merkleRoot) => {
+export const pauseDrop = async (tokenAddress, walletAddress, merkleRoot, callback) => {
   try {
     transactionPending({}, { text: 'Pausing Drop' });
     await contract.methods
       .pause(tokenAddress, merkleRoot)
       .send({ from: walletAddress })
       .on('transactionHash', txnHash => {
-        transactionPending({ transactionHash: txnHash }, { text: 'Pausing Drop' });
+        transactionPending({ transactionHash: txnHash }, { text: 'Pausing Drop' }, 'pause');
       })
       .then(receipt => {
         transactionSuccess(
@@ -103,25 +114,27 @@ export const pauseDrop = async (tokenAddress, walletAddress, merkleRoot) => {
           { text: 'Drop Paused' },
           ''
         );
+        callback();
       })
       .catch(e => {
         if (e.code === 4001) {
-          transactionRejected({}, { text: 'Pausing Rejected' }, '');
+          transactionRejected({}, { text: 'Pausing Rejected' });
         } else {
-          transactionFailed({}, { text: 'Pausing Failed' }, '');
+          transactionFailed({}, { text: 'Pausing Failed' });
         }
         logError('pauseDrop', e);
       });
   } catch (e) {
     logError('pauseDrop', e);
+    transactionFailed({}, { text: 'Pausing Failed' });
   }
 };
 
-export const unpauseDrop = async (tokenAddress, walletAddress, merkleRoot) => {
+export const unpauseDrop = async (tokenAddress, walletAddress, merkleRoot, callback) => {
   try {
     transactionPending({}, { text: 'Unpausing Drop' });
     await contract.methods
-      .unpauseDrop(tokenAddress, merkleRoot)
+      .unpause(tokenAddress, merkleRoot)
       .send({ from: walletAddress })
       .on('transactionHash', txnHash => {
         transactionPending({ transactionHash: txnHash }, { text: 'Unpausing Drop' });
@@ -132,21 +145,23 @@ export const unpauseDrop = async (tokenAddress, walletAddress, merkleRoot) => {
           { text: 'Drop Unpaused' },
           ''
         );
+        callback();
       })
       .catch(e => {
         if (e.code === 4001) {
-          transactionRejected({}, { text: 'Unpausing Rejected' }, '');
+          transactionRejected({}, { text: 'Unpausing Rejected' });
         } else {
-          transactionFailed({}, { text: 'Unpausing Failed' }, '');
+          transactionFailed({}, { text: 'Unpausing Failed' });
         }
         logError('unpauseDrop', e);
       });
   } catch (e) {
     logError('unpauseDrop', e);
+    transactionFailed({}, { text: 'Unpausing Failed' });
   }
 };
 
-export const withdraw = async (tokenAddress, walletAddress, merkleRoot) => {
+export const withdraw = async (tokenAddress, walletAddress, merkleRoot, callback) => {
   try {
     transactionPending({}, { text: 'Withdraw Pending' });
     await contract.methods
@@ -161,6 +176,7 @@ export const withdraw = async (tokenAddress, walletAddress, merkleRoot) => {
           { text: 'Withdraw Successful' },
           ''
         );
+        callback();
       })
       .catch(e => {
         if (e.code === 4001) {
@@ -172,5 +188,6 @@ export const withdraw = async (tokenAddress, walletAddress, merkleRoot) => {
       });
   } catch (e) {
     logError('withdraw', e);
+    transactionFailed({}, { text: 'Withdraw Failed' }, '');
   }
 };

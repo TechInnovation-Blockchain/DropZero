@@ -24,7 +24,7 @@ const ClaimTabs = ({ goBack }) => {
             className={tab === 'unlock' ? classes.activeTab : ''}
             variant='body2'
           >
-            UNLOCK
+            ACTIVE
           </Typography>
 
           <Typography
@@ -32,7 +32,7 @@ const ClaimTabs = ({ goBack }) => {
             className={tab === 'lock' ? classes.activeTab : ''}
             variant='body2'
           >
-            LOCK
+            UPCOMING
           </Typography>
         </Box>
 

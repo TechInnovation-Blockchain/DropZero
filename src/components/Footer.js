@@ -25,6 +25,7 @@ const Footer = () => {
         heading={heading}
         handleClose={handleClose}
         btnOnClick={handleClose}
+        type='drop'
       />
       {/* <Typography component='a' target='_blank' href='!#' variant='body2'>
         Terms & Conditions

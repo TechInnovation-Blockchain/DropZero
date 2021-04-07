@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Typography, CircularProgress, Tooltip } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
@@ -9,7 +9,7 @@ import { InputField, Button } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
 import { getName, getAllowance, approve } from '../../contracts/functions/erc20Functions';
 import { createDrop, isDropCreated } from '../../contracts/functions/dropFactoryFunctions';
-import { useDropInputs, useLoading } from '../../hooks';
+import { useDropInputs, useLoading, useWeb3 } from '../../hooks';
 import { getTokenLogo } from '../../redux';
 
 const tokenRegex = /^[a-zA-Z0-9]*$/;
@@ -26,7 +26,8 @@ const DropToken = ({ setContent }) => {
     approved,
     saveFieldsF,
   } = useDropInputs();
-  const { account } = useWeb3React();
+  // const { account } = useWeb3React();
+  const { account } = useWeb3();
   const {
     loading: { dapp },
   } = useLoading();
@@ -111,20 +112,46 @@ const DropToken = ({ setContent }) => {
     }, 500);
   };
 
-  window.ethereum?.on('accountsChanged', () => {
-    setFormData({
-      ...formData,
-      validated: false,
-      error: '',
-      loading: false,
-    });
+  // window.ethereum?.on('accountsChanged', () => {
+  //   setFormData({
+  //     ...formData,
+  //     validated: false,
+  //     error: '',
+  //     loading: false,
+  //   });
 
-    saveFieldsF({
-      dropExists: false,
-      approved: 0,
-      token: '',
-    });
-  });
+  //   saveFieldsF({
+  //     dropExists: false,
+  //     approved: 0,
+  //     token: '',
+  //   });
+  // });
+
+  // useEffect(() => {
+  //   setFormData({
+  //     ...formData,
+  //     validated: false,
+  //     error: '',
+  //     loading: false,
+  //   });
+
+  //   saveFieldsF({
+  //     dropExists: false,
+  //     approved: 0,
+  //     token: '',
+  //   });
+  //   console.log('hello');
+  // }, [account]);
+
+  // console.log(token);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     console.log('Token => ', token);
+  //   }, 5000);
+  // }, [account]);
+
+  // console.log(formData);
 
   return (
     <Box className={classes.mainContainer}>

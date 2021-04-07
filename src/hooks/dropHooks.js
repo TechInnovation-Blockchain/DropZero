@@ -7,6 +7,7 @@ import {
   getUserDrops,
   withdrawDrops,
   clearCSV,
+  pauseDrop,
 } from '../redux';
 import { useDispatchWrap } from './utilHooks';
 
@@ -21,9 +22,10 @@ export const useDropInputs = () => {
 };
 
 export const useDropDashboard = () => {
-  const { userDrops } = useSelector(state => state.drop);
+  const { userDrops, dropsPausing } = useSelector(state => state.drop);
   const getUserDropsF = useDispatchWrap(getUserDrops);
   const withdrawDropsF = useDispatchWrap(withdrawDrops);
+  const pauseDropF = useDispatchWrap(pauseDrop);
 
-  return { userDrops, getUserDropsF, withdrawDropsF };
+  return { userDrops, dropsPausing, getUserDropsF, withdrawDropsF, pauseDropF };
 };

@@ -91,9 +91,9 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
         heading='Disclaimer'
         handleClose={() => setFormData({ ...formData, openDis: false })}
         btnOnClick={handleDisclaimerClose}
-        disableBackdrop
         check={check}
         handleChange={() => setFormData({ ...formData, check: !check })}
+        type='claim'
       />
 
       <PageAnimation in={page} key={page} reverse={initial ? initial : reverse}>

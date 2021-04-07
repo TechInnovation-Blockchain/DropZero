@@ -16,9 +16,18 @@ export const useStyles = makeStyles(theme => ({
   content: {
     color: theme.palette.text.primary,
     fontSize: '12px',
+    width: '100%',
+    '& p': {
+      textAlign: 'start',
+    },
+  },
+  colored: {
+    color: theme.palette.primary.main,
+    fontWeight: '500',
   },
   checkboxWrapper: {
     width: '100%',
+    marfinTop: '10px',
   },
   checkbox: {
     '& span': {
