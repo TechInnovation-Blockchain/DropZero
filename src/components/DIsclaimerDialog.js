@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import {
   Dialog as DialogMui,
   Typography,
@@ -90,11 +90,7 @@ const Disclaimer = ({
             </Box>
           )}
 
-          <Button
-            color='primary'
-            onClick={btnOnClick}
-            style={disableBackdrop ? {} : { marginTop: '10px' }}
-          >
+          <Button color='primary' onClick={btnOnClick} style={{ marginTop: '10px' }}>
             I Understand
           </Button>
         </DialogContent>

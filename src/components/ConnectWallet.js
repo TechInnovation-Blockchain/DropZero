@@ -18,6 +18,8 @@ import { conciseAddress } from '../utils/formattingFunctions';
 import { useSnackbar, useLoading, useWeb3 } from '../hooks';
 import Blockzero from '../assets/blockzerologo.png';
 
+import { setWeb3Provider } from '../contracts/getContract';
+
 const ConnectWallet = () => {
   const classes = useStyles();
   const web3context = useWeb3React();
@@ -85,12 +87,12 @@ const ConnectWallet = () => {
 
   useEffect(() => {
     storeWeb3ContextF(web3context);
-    // if (web3context?.library?.provider) {
-    //   dispatch(setWeb3Provider(web3context.library.provider));
-    // }
-    // if (web3context?.error) {
-    //   web3context.deactivate();
-    // }
+    if (web3context?.library?.provider) {
+      setWeb3Provider(web3context.library.provider);
+    }
+    if (web3context?.error) {
+      web3context.deactivate();
+    }
     if (web3context.active || web3context.account) {
       setOpen(false);
     }

@@ -24,7 +24,7 @@ const DropCSV = ({ setContent }) => {
     token,
     startDate,
     endDate,
-    type,
+    tokenType,
     csv,
     clearFieldsF,
     uploadCSVF,
@@ -45,7 +45,6 @@ const DropCSV = ({ setContent }) => {
     totalAmount: 0,
     totalAddress: 0,
     balance: 0,
-    check: false,
   });
 
   const {
@@ -56,7 +55,6 @@ const DropCSV = ({ setContent }) => {
     totalAmount,
     totalAddress,
     balance,
-    check,
     loadingContent,
   } = formData;
 
@@ -109,29 +107,15 @@ const DropCSV = ({ setContent }) => {
     uploadingCSV(_file);
   };
 
-  const handleClose = () => {
-    setFormData({ ...formData, open: false });
-  };
-
   const uploadCSVOnServer = () => {
     setFormData({ ...formData, loadingContent: 'Uploading CSV', openDis: false });
-    const data = { file, account, token, startDate, endDate, type };
-    uploadCSVF(data);
-  };
-
-  const handleConfirmClick = () => {
-    const walletAddress = localStorage.getItem('userDrop');
-    if (!(walletAddress && walletAddress === account)) {
-      setFormData({ ...formData, openDis: true, open: false });
-      return;
-    }
-    uploadCSVOnServer();
+    const data = { file, account, token, startDate, endDate, tokenType };
+    uploadCSVF(data, () => {
+      setFormData({ ...formData, loadingContent: '', open: false, openDis: false });
+    });
   };
 
   const handleDisclaimerClose = () => {
-    if (check) {
-      localStorage.setItem('userDrop', account);
-    }
     setFormData({ ...formData, openDis: false });
     uploadCSVOnServer();
   };
@@ -184,13 +168,13 @@ const DropCSV = ({ setContent }) => {
     <Box className={classes.mainContainer}>
       <Dialog
         open={open}
-        handleClose={handleClose}
+        handleClose={() => setFormData({ ...formData, open: false })}
         text={`Please confirm you are submitting ${totalAddress} addresses for a total of ${trunc(
           totalAmount
         )} tokens.`}
         secondaryText='If there are errors, please upload a new file. No changes can be made after you press CONFIRM.'
         btnText='Confirm'
-        btnOnClick={handleConfirmClick}
+        btnOnClick={() => setFormData({ ...formData, openDis: true, open: false })}
         errorMsg={
           balance < totalAmount ? 'Your current wallet have insufficient amount of tokens' : ''
         }
@@ -201,9 +185,7 @@ const DropCSV = ({ setContent }) => {
         heading='Disclaimer'
         handleClose={() => setFormData({ ...formData, openDis: false })}
         btnOnClick={handleDisclaimerClose}
-        check={check}
-        handleChange={() => setFormData({ ...formData, check: !check })}
-        disableBackdrop
+        type='drop'
       />
 
       <ActionDialog

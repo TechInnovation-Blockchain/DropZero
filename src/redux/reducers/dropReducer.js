@@ -5,7 +5,7 @@ const initialState = {
     tokenName: '',
     tokenLogo: '',
     token: '',
-    type: '',
+    tokenType: '',
     startDate: null,
     endDate: null,
     dropExists: false,

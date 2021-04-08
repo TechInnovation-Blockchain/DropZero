@@ -8,6 +8,8 @@ export const CONTRACT_ADDRESSES = {
 
 export const BASE_URL = 'https://dropzero.herokuapp.com';
 
+// export const BASE_URL = 'http://192.168.1.79:8000';
+
 export const config = {
   headers: {
     'Content-Type': 'application/json',

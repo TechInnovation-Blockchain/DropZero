@@ -64,7 +64,7 @@ export const transactionPending = (snackBar, modal, loading) => {
   });
 };
 
-export const transactionSuccess = (snackBar, modal, loading) => {
+export const transactionSuccess = (snackBar, modal) => {
   store.dispatch({
     type: uiTypes.SHOW_SNACKBAR_INDEEP,
     payload: { message: 'Transaction Successful', severity: 'success', ...snackBar },
@@ -77,11 +77,11 @@ export const transactionSuccess = (snackBar, modal, loading) => {
 
   store.dispatch({
     type: uiTypes.LOADING,
-    payload: { dapp: loading },
+    payload: { dapp: false },
   });
 };
 
-export const transactionRejected = (snackBar, modal, loading) => {
+export const transactionRejected = (snackBar, modal) => {
   store.dispatch({
     type: uiTypes.SHOW_SNACKBAR_INDEEP,
     payload: { message: 'Transaction Rejected', severity: 'error', ...snackBar },
@@ -94,11 +94,11 @@ export const transactionRejected = (snackBar, modal, loading) => {
 
   store.dispatch({
     type: uiTypes.LOADING,
-    payload: { dapp: loading },
+    payload: { dapp: false },
   });
 };
 
-export const transactionFailed = (snackBar, modal, loading) => {
+export const transactionFailed = (snackBar, modal) => {
   store.dispatch({
     type: uiTypes.SHOW_SNACKBAR_INDEEP,
     payload: { message: 'Transaction Failed', severity: 'error', ...snackBar },
@@ -111,6 +111,6 @@ export const transactionFailed = (snackBar, modal, loading) => {
 
   store.dispatch({
     type: uiTypes.LOADING,
-    payload: { dapp: loading },
+    payload: { dapp: false },
   });
 };

@@ -23,12 +23,15 @@ import { getSymbol, getName } from '../contracts/functions/erc20Functions';
 import { withdraw } from '../contracts/functions/dropFactoryFunctions';
 import PauseDrop from './PauseDrop';
 import { trunc } from '../utils/formattingFunctions';
-import { useDropDashboard } from '../hooks';
+import { useDropDashboard, useLoading } from '../hooks';
 
 const Accordion = ({ data, expanded, setExpanded, claim }) => {
   const classes = useStyles();
   const { withdrawDropsF } = useDropDashboard();
   const { account } = useWeb3React();
+  const {
+    loading: { dapp },
+  } = useLoading();
 
   const [formData, setFormData] = useState({
     tokenLogo: NoLogo,
@@ -173,7 +176,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
               {endDate && (
                 <Box className={classes.accordianContent}>
                   <Typography variant='body2'>Expiry</Typography>
-                  <Typography variant='body2'>{format(endDate, DATE_FORMAT)}</Typography>
+                  <Typography variant='body2'>{format(new Date(endDate), DATE_FORMAT)}</Typography>
                 </Box>
               )}
 
@@ -188,13 +191,8 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
               </Box>
 
               <Box className={classes.btnWrapper}>
-                {/* <Button
-                  onClick={() => setFormData({ ...formData, open: true })}
-                  className={classes.accordionBtn}
-                >
-                  <span>Withdraw</span>
-                </Button> */}
                 <Button
+                  loading={dapp === 'withdraw'}
                   onClick={() => setFormData({ ...formData, open: true })}
                   className={classes.accordionBtn}
                 >
@@ -205,22 +203,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
                     <span>Claim Status</span>
                   </a>
                 </Button>
-                {/* <Button
-                  onClick={() => setFormData({ ...formData, openPause: true })}
-                  className={classes.accordionBtn}
-                >
-                  <span>Stop</span>
-                </Button> */}
               </Box>
-              {/* <Typography
-                className={classes.accordionLink}
-                href={TempCSV}
-                download
-                variant='body2'
-                component='a'
-              >
-                Claimed Status
-              </Typography> */}
             </Fragment>
           ) : null}
         </Box>

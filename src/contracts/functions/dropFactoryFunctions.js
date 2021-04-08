@@ -12,7 +12,6 @@ const contract = dropFactoryContract();
 //check drop exists or not
 export const isDropCreated = async tokenAddress => {
   try {
-    // const res = await contract.methods.isDropCreated(tokenAddress).call();
     const res = await contract.methods.drops(tokenAddress).call();
     logMessage('isDropCreated', res);
     return res !== '0x0000000000000000000000000000000000000000';
@@ -40,25 +39,20 @@ export const createDrop = async (tokenAddress, walletAddress, callback) => {
       //   );
       // })
       .then(receipt => {
-        // console.log(receipt);
-        transactionSuccess(
-          { transactionHash: receipt.transactionHash },
-          { text: 'Drop Created' },
-          ''
-        );
+        transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Created' });
         callback();
       })
       .catch(e => {
         if (e.code === 4001) {
-          transactionRejected({}, { text: 'Drop Rejected' }, '');
+          transactionRejected({}, { text: 'Drop Rejected' });
         } else {
-          transactionFailed({}, { text: 'Drop Failed' }, '');
+          transactionFailed({}, { text: 'Drop Failed' });
         }
         logError('createDrop', e);
       });
   } catch (e) {
     logError('createDrop', e);
-    transactionFailed({}, { text: 'Drop Failed' }, '');
+    transactionFailed({}, { text: 'Drop Failed' });
   }
 };
 
@@ -78,24 +72,20 @@ export const addDropData = async (
         transactionPending({ transactionHash: txnHash }, { text: 'Drop Pending' }, 'upload');
       })
       .then(receipt => {
-        transactionSuccess(
-          { transactionHash: receipt.transactionHash },
-          { text: 'Drop Created' },
-          ''
-        );
+        transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Created' });
         callback();
       })
       .catch(e => {
         if (e.code === 4001) {
-          transactionRejected({}, { text: 'Drop Rejected' }, '');
+          transactionRejected({}, { text: 'Drop Rejected' });
         } else {
-          transactionFailed({}, { text: 'Drop Failed' }, '');
+          transactionFailed({}, { text: 'Drop Failed' });
         }
         logError('createDrop', e);
       });
   } catch (e) {
     logError('addDropData', e);
-    transactionFailed({}, { text: 'Drop Failed' }, '');
+    transactionFailed({}, { text: 'Drop Failed' });
   }
 };
 
@@ -109,11 +99,7 @@ export const pauseDrop = async (tokenAddress, walletAddress, merkleRoot, callbac
         transactionPending({ transactionHash: txnHash }, { text: 'Pausing Drop' }, 'pause');
       })
       .then(receipt => {
-        transactionSuccess(
-          { transactionHash: receipt.transactionHash },
-          { text: 'Drop Paused' },
-          ''
-        );
+        transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Paused' });
         callback();
       })
       .catch(e => {
@@ -140,11 +126,7 @@ export const unpauseDrop = async (tokenAddress, walletAddress, merkleRoot, callb
         transactionPending({ transactionHash: txnHash }, { text: 'Unpausing Drop' });
       })
       .then(receipt => {
-        transactionSuccess(
-          { transactionHash: receipt.transactionHash },
-          { text: 'Drop Unpaused' },
-          ''
-        );
+        transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Unpaused' });
         callback();
       })
       .catch(e => {
@@ -163,31 +145,97 @@ export const unpauseDrop = async (tokenAddress, walletAddress, merkleRoot, callb
 
 export const withdraw = async (tokenAddress, walletAddress, merkleRoot, callback) => {
   try {
-    transactionPending({}, { text: 'Withdraw Pending' });
+    transactionPending({}, { text: 'Withdraw Pending' }, 'withdraw');
     await contract.methods
       .withdraw(tokenAddress, merkleRoot)
       .send({ from: walletAddress })
       .on('transactionHash', txnHash => {
-        transactionPending({ transactionHash: txnHash }, { text: 'Withdraw Pending' });
+        transactionPending({ transactionHash: txnHash }, { text: 'Withdraw Pending' }, 'withdraw');
       })
       .then(receipt => {
         transactionSuccess(
           { transactionHash: receipt.transactionHash },
-          { text: 'Withdraw Successful' },
-          ''
+          { text: 'Withdraw Successful' }
         );
         callback();
       })
       .catch(e => {
         if (e.code === 4001) {
-          transactionRejected({}, { text: 'Withdraw Rejected' }, '');
+          transactionRejected({}, { text: 'Withdraw Rejected' });
         } else {
-          transactionFailed({}, { text: 'Withdraw Failed' }, '');
+          transactionFailed({}, { text: 'Withdraw Failed' });
         }
         logError('withdraw', e);
       });
   } catch (e) {
     logError('withdraw', e);
-    transactionFailed({}, { text: 'Withdraw Failed' }, '');
+    transactionFailed({}, { text: 'Withdraw Failed' });
+  }
+};
+
+export const multipleClaims = async (
+  { tokenAddress, walletAddress, indexs, amounts, merkleRoots, merkleProofs },
+  callback
+) => {
+  try {
+    transactionPending({}, { text: 'Claim Pending' }, 'claim');
+    await contract.methods
+      .multipleClaimsFromDrop(tokenAddress, indexs, amounts, merkleRoots, merkleProofs)
+      .send({ from: walletAddress })
+      .on('transactionHash', txnHash => {
+        transactionPending({ transactionHash: txnHash }, { text: 'Claim Pending' }, 'claim');
+      })
+      .then(receipt => {
+        transactionSuccess(
+          { transactionHash: receipt.transactionHash },
+          { text: 'Claim Successful' }
+        );
+        callback();
+      })
+      .catch(e => {
+        if (e.code === 4001) {
+          transactionRejected({}, { text: 'Claim Rejected' });
+        } else {
+          transactionFailed({}, { text: 'Claim Failed' });
+        }
+        logError('multiple claim', e);
+      });
+  } catch (e) {
+    logError('multiple claim', e);
+    transactionFailed({}, { text: 'Claim Failed' });
+  }
+};
+
+export const singleClaim = async (
+  { tokenAddress, walletAddress, indexs, amounts, merkleRoots, merkleProofs },
+  callback
+) => {
+  try {
+    console.log('single claim');
+    transactionPending({}, { text: 'Claim Pending' }, 'claim');
+    await contract.methods
+      .claimFromDrop(tokenAddress, indexs[0], amounts[0], merkleRoots[0], merkleProofs[0])
+      .send({ from: walletAddress })
+      .on('transactionHash', txnHash => {
+        transactionPending({ transactionHash: txnHash }, { text: 'Claim Pending' }, 'claim');
+      })
+      .then(receipt => {
+        transactionSuccess(
+          { transactionHash: receipt.transactionHash },
+          { text: 'Claim Successful' }
+        );
+        callback();
+      })
+      .catch(e => {
+        if (e.code === 4001) {
+          transactionRejected({}, { text: 'Claim Rejected' });
+        } else {
+          transactionFailed({}, { text: 'Claim Failed' });
+        }
+        logError('single claim', e);
+      });
+  } catch (e) {
+    logError('single claim', e);
+    transactionFailed({}, { text: 'Claim Failed' });
   }
 };

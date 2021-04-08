@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect } from 'react';
 import { Box, TablePagination, Typography } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useWeb3React } from '@web3-react/core';
+import Web3 from 'web3';
 
 import PageAnimation from './PageAnimation';
 import ClaimTokenCard from './ClaimTokenCard';
@@ -9,21 +10,42 @@ import Dialog from './Dialog';
 import DisclaimerDialog from './DIsclaimerDialog';
 import Button from './Button';
 import { useStyles } from '../theme/styles/components/renderTokensStyles';
+import { trunc } from '../utils/formattingFunctions';
+import { getName } from '../contracts/functions/erc20Functions';
+import { multipleClaims, singleClaim } from '../contracts/functions/dropFactoryFunctions';
+import { useClaims, useLoading } from '../hooks';
 
 const RenderTokens = ({ tokens, goBack, unlocked }) => {
   const classes = useStyles();
   const { account } = useWeb3React();
+  const { removeClaimF } = useClaims();
+  const {
+    loading: { dapp },
+  } = useLoading();
+
   const [formData, setFormData] = useState({
-    initial: unlocked,
+    open: false,
     openDis: false,
     check: false,
     page: 0,
     rowsPerPage: 2,
+    totalAmount: 0,
+    tokenName: '',
+    sendContractData: {},
   });
   const [reverse, setReverse] = useState(false);
-  const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState([]);
-  const { page, rowsPerPage, openDis, initial, check } = formData;
+  const [initial, setInitial] = useState(unlocked);
+  const {
+    page,
+    rowsPerPage,
+    open,
+    openDis,
+    check,
+    totalAmount,
+    tokenName,
+    sendContractData,
+  } = formData;
 
   const handleChangePage = (event, newPage) => {
     if (page > newPage) {
@@ -38,23 +60,44 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     setFormData({ ...formData, page: 0, rowsPerPage: +event.target.value });
   };
 
-  const handleConfirm = () => {
-    handleClose();
+  const handleConfirm = async () => {
     const walletAddress = localStorage.getItem('userClaim');
+    setFormData({ ...formData, open: false });
     if (!(walletAddress && walletAddress === account)) {
-      setFormData({ ...formData, openDis: true });
+      setFormData({ ...formData, open: false, openDis: true });
+      return;
+    }
+
+    if (sendContractData.amounts?.length > 1) {
+      await multipleClaims(sendContractData, () => {
+        removeClaimF(sendContractData.id, sendContractData.tokenAddress);
+        setSelected([]);
+      });
+    } else {
+      await singleClaim(sendContractData, () => {
+        removeClaimF(sendContractData.id, sendContractData.tokenAddress);
+        setSelected([]);
+      });
     }
   };
 
-  const handleDisclaimerClose = () => {
-    setFormData({ ...formData, openDis: false, opem: false });
+  const handleDisclaimerClose = async () => {
+    setFormData({ ...formData, openDis: false });
     if (check) {
       localStorage.setItem('userClaim', account);
     }
-  };
 
-  const handleClose = () => {
-    setOpen(false);
+    if (sendContractData.amounts?.length > 1) {
+      await multipleClaims(sendContractData, () => {
+        removeClaimF(sendContractData.id, sendContractData.tokenAddress);
+        setSelected([]);
+      });
+    } else {
+      await singleClaim(sendContractData, () => {
+        removeClaimF(sendContractData.id, sendContractData.tokenAddress);
+        setSelected([]);
+      });
+    }
   };
 
   const checkSelection = token => {
@@ -71,9 +114,46 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     }
   };
 
+  const filterDataForContract = tokens => {
+    let amount = 0;
+    const data = {
+      tokenAddress: tokens[0].tokenAddress,
+      walletAddress: account,
+      id: [],
+      indexs: [],
+      amounts: [],
+      merkleRoots: [],
+      merkleProofs: [],
+    };
+
+    tokens.forEach(token => {
+      data['id'] = [...data['id'], token._id];
+      data['indexs'] = [...data['indexs'], token.index];
+      data['amounts'] = [...data['amounts'], Web3.utils.toWei(token.amount.toString())];
+      data['merkleRoots'] = [...data['merkleRoots'], token.csvId.merkleRoot];
+      data['merkleProofs'] = [...data['merkleProofs'], token.proof];
+      amount += Number(token.amount);
+    });
+    console.log(data);
+    setFormData({ ...formData, totalAmount: amount, open: true, sendContractData: data });
+  };
+
+  const handleClaimClick = () => {
+    filterDataForContract(selected.length > 0 ? selected : tokens);
+  };
+
+  const fetchAPI = async () => {
+    const name = await getName(tokens[0].tokenAddress);
+    setFormData({ ...formData, tokenName: name });
+  };
+
   useEffect(() => {
     if (unlocked) {
-      setFormData({ ...formData, initial: false });
+      setInitial(false);
+    }
+
+    if (tokens.length > 0) {
+      fetchAPI();
     }
   }, []);
 
@@ -81,15 +161,15 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     <Fragment>
       <Dialog
         open={open}
-        handleClose={handleClose}
-        text='You will claim 100.00 Flash tokens to your connected wallet'
+        handleClose={() => setFormData({ ...formData, open: false })}
+        text={`You will claim ${trunc(totalAmount)} ${tokenName} tokens to your connected wallet`}
         btnText='Claim'
         btnOnClick={handleConfirm}
       />
       <DisclaimerDialog
         open={openDis}
         heading='Disclaimer'
-        handleClose={() => setFormData({ ...formData, openDis: false })}
+        handleClose={() => setFormData({ ...formData, openDis: false, open: false })}
         btnOnClick={handleDisclaimerClose}
         check={check}
         handleChange={() => setFormData({ ...formData, check: !check })}
@@ -119,14 +199,18 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
         </Box>
       </PageAnimation>
 
-      <Box className={classes.bottomSec}>
+      <Box className={`${classes.bottomSec} ${dapp === 'claim' ? classes.loadingBtn : ''}`}>
         <Box className={classes.btnWrapper}>
           <Button onClick={goBack}>
             <ArrowBackIcon />
             <span>Back</span>
           </Button>
           {unlocked && (
-            <Button onClick={() => setOpen(true)}>
+            <Button
+              loading={dapp === 'claim'}
+              disabled={tokens.length === 0}
+              onClick={handleClaimClick}
+            >
               <span>{selected.length > 0 ? 'Claim' : 'Claim All'}</span>
             </Button>
           )}

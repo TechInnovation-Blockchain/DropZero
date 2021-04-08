@@ -32,6 +32,24 @@ const DropDates = ({ setContent }) => {
     setContent('uploadCSV');
   };
 
+  const setStartMaxDate = date => {
+    const tempDate = new Date(date);
+    tempDate.setDate(tempDate.getDate() - 1);
+    return tempDate;
+  };
+
+  const setEndMinDate = date => {
+    let tempDate;
+    if (date) {
+      tempDate = new Date(date);
+      tempDate.setDate(tempDate.getDate() + 1);
+    } else {
+      tempDate = new Date(Date.now());
+      tempDate.setDate(tempDate.getDate() + 1);
+    }
+    return tempDate;
+  };
+
   return (
     <Box className={classes.mainContainer}>
       <Typography variant='body2' className={classes.para}>
@@ -47,6 +65,7 @@ const DropDates = ({ setContent }) => {
         InputProps={{ disableUnderline: true }}
         disablePast
         autoComplete='off'
+        maxDate={endDate ? setStartMaxDate(endDate) : ''}
       />
 
       <KeyboardDatePicker
@@ -58,6 +77,7 @@ const DropDates = ({ setContent }) => {
         InputProps={{ disableUnderline: true }}
         disablePast
         autoComplete='off'
+        minDate={startDate ? setEndMinDate(startDate) : setEndMinDate()}
       />
 
       <Box className={classes.btnContainer}>

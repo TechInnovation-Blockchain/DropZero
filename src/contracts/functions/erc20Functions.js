@@ -77,20 +77,20 @@ export const approve = async (tokenAddress, walletAddress, callback) => {
       .then(receipt => {
         transactionSuccess(
           { transactionHash: receipt.transactionHash },
-          { text: 'Approval Successful' },
-          ''
+          { text: 'Approval Successful' }
         );
         callback();
       })
       .catch(e => {
         if (e.code === 4001) {
-          transactionRejected({}, { text: 'Approval Rejected' }, '');
+          transactionRejected({}, { text: 'Approval Rejected' });
         } else {
-          transactionFailed({}, { text: 'Approval Failed' }, '');
+          transactionFailed({}, { text: 'Approval Failed' });
         }
         logError('approve', e);
       });
   } catch (e) {
     logError('approve', e);
+    transactionFailed({}, { text: 'Approval Failed' });
   }
 };

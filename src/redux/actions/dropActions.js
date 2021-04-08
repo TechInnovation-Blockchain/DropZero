@@ -5,8 +5,6 @@ import { logError, logMessage } from '../../utils/log';
 import { BASE_URL, formDataConfig } from '../../config/constants';
 import { showSnackbar } from './uiActions';
 
-// import data from './claimHistoryData.json';
-
 //save drop inputs
 export const saveFields = data => {
   return dispatch => {
@@ -46,14 +44,14 @@ export const clearCSV = () => {
 };
 
 //uploading csv on server
-export const uploadCSV = ({ file, account, token, startDate, endDate, type }) => {
+export const uploadCSV = ({ file, account, token, startDate, endDate, tokenType }, onError) => {
   return async dispatch => {
     try {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('walletAddress', account);
       formData.append('tokenAddress', token);
-      type && formData.append('type', type);
+      tokenType && formData.append('tokenType', tokenType);
       startDate && formData.append('startDate', new Date(startDate).getTime());
       endDate && formData.append('endDate', new Date(endDate).getTime());
 
@@ -64,21 +62,15 @@ export const uploadCSV = ({ file, account, token, startDate, endDate, type }) =>
           type: dropTypes.UPLOAD_CSV,
           payload: res.data.result,
         });
-        dispatch(showSnackbar({ message: 'CSV Uploaded Successfully', severity: 'info' }));
+        dispatch(showSnackbar({ message: 'CSV Uploaded Successfully', severity: 'success' }));
       } else {
-        dispatch(showSnackbar({ message: 'CSV Uploaded Error', severity: 'error' }));
-        // dispatch({
-        //   type: dropTypes.UPLOAD_CSV,
-        //   payload: { result: null, error: 'Invalid CSV' },
-        // });
+        dispatch(showSnackbar({ message: 'CSV Upload Error', severity: 'error' }));
+        onError();
       }
     } catch (error) {
       logError('Upload CSV', error);
-      dispatch(showSnackbar({ message: 'CSV Uploaded Error', severity: 'error' }));
-      // dispatch({
-      //   type: dropTypes.UPLOAD_CSV,
-      //   payload: { result: null, error: 'Invalid CSV' },
-      // });
+      dispatch(showSnackbar({ message: 'CSV Upload Error', severity: 'error' }));
+      onError();
     }
   };
 };
@@ -87,7 +79,6 @@ export const uploadCSV = ({ file, account, token, startDate, endDate, type }) =>
 export const getUserDrops = walletAddress => {
   return async dispatch => {
     try {
-      const tempWalletAddress = '0x022eb305961429bad9e95f7760b9bdd84578aace';
       const res = await axios.get(`${BASE_URL}/dropper/get_drops/${walletAddress}`);
       logMessage('Get Drops', res);
       if (res?.data?.responseCode === 201) {
@@ -108,7 +99,6 @@ export const getUserDrops = walletAddress => {
       });
       logError('Get Drops', e);
     }
-    // dispatch({ type: dropTypes.GET_DROPS, payload: data });
   };
 };
 

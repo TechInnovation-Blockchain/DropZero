@@ -9,7 +9,23 @@ export const useStyles = makeStyles(theme => ({
       width: '45%',
       '@media(max-width:550px)': {
         padding: theme.spacing(0.5),
-        '& span': {},
+        '& span': {
+          fontSize: '12px',
+        },
+      },
+    },
+  },
+  loadingBtn: {
+    '& button': {
+      '& span': {
+        fontSize: '12px',
+        padding: theme.spacing(0.2, 0),
+      },
+      '@media(max-width:550px)': {
+        width: '48%',
+        '& span': {
+          fontSize: '10px',
+        },
       },
     },
   },

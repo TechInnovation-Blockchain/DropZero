@@ -15,6 +15,10 @@ try {
   logError('Connect Web3', e);
 }
 
+export const setWeb3Provider = provider => {
+  web3 = new Web3(provider);
+};
+
 export const erc20TokenContract = tokenAddress => {
   let contract;
   try {
