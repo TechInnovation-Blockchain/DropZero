@@ -1,11 +1,20 @@
 import { Fragment } from 'react';
-import { Dialog as DialogMui, Typography, DialogContent, IconButton } from '@material-ui/core';
+import { Dialog as DialogMui, Typography, DialogContent, IconButton, Box } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { useStyles } from '../theme/styles/components/dialogStyles';
 import Button from './Button';
 
-const Dialog = ({ open, handleClose, text, secondaryText, errorMsg, btnText, btnOnClick }) => {
+const Dialog = ({
+  open,
+  handleClose,
+  text,
+  secondaryText,
+  errorMsg,
+  btnText,
+  btnOnClick,
+  renderContent,
+}) => {
   const classes = useStyles();
 
   return (
@@ -23,6 +32,7 @@ const Dialog = ({ open, handleClose, text, secondaryText, errorMsg, btnText, btn
           <Typography variant='body2' className={classes.content}>
             {text}
           </Typography>
+          <Box className={classes.renderContent}>{renderContent}</Box>
           {errorMsg ? (
             <Typography variant='body2' className={classes.errorMsg}>
               {errorMsg}

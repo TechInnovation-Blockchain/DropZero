@@ -22,7 +22,7 @@ export const setWeb3Provider = provider => {
 export const erc20TokenContract = tokenAddress => {
   let contract;
   try {
-    if (window?.web3?.currentProvider && web3) {
+    if (window?.web3?.currentProvider || web3) {
       contract = new web3.eth.Contract(erc20Abi, tokenAddress);
     } else {
       contract = new web3Infura.eth.Contract(erc20Abi, tokenAddress);
@@ -38,10 +38,8 @@ export const dropFactoryContract = () => {
   try {
     if (window?.web3?.currentProvider && web3) {
       contract = new web3.eth.Contract(dropFactoryAbi, CONTRACT_ADDRESSES.dropFactory);
-      console.log('Web3 Contract => ', contract);
     } else {
       contract = new web3Infura.eth.Contract(dropFactoryAbi, CONTRACT_ADDRESSES.dropFactory);
-      console.log('Infura Contract => ', contract);
     }
     return contract;
   } catch (e) {

@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles(theme => ({
+  mainContainer: {
+    background: '#000',
+  },
   innerContainer: {
     backgroundColor: theme.palette.background.dialog,
     display: 'flex',

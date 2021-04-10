@@ -17,7 +17,6 @@ import { walletList } from '../utils/web3Connectors';
 import { conciseAddress } from '../utils/formattingFunctions';
 import { useSnackbar, useLoading, useWeb3 } from '../hooks';
 import Blockzero from '../assets/blockzerologo.png';
-
 import { setWeb3Provider } from '../contracts/getContract';
 
 const ConnectWallet = () => {
@@ -52,7 +51,6 @@ const ConnectWallet = () => {
       if (connector instanceof WalletConnectConnector && connector.walletConnectProvider?.wc?.uri) {
         connector.walletConnectProvider = undefined;
       } else if (connector instanceof FortmaticConnector) {
-        // setLoadingF({ walletConnection: false });
         onClose();
       }
 
@@ -87,8 +85,8 @@ const ConnectWallet = () => {
 
   useEffect(() => {
     storeWeb3ContextF(web3context);
-    if (web3context?.library?.provider) {
-      setWeb3Provider(web3context.library.provider);
+    if (web3context?.library?._provider) {
+      setWeb3Provider(web3context.library._provider);
     }
     if (web3context?.error) {
       web3context.deactivate();

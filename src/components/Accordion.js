@@ -13,16 +13,17 @@ import { format } from 'date-fns';
 import { Skeleton } from '@material-ui/lab';
 import Web3 from 'web3';
 import { useWeb3React } from '@web3-react/core';
+import { isMobile } from 'react-device-detect';
 
 import { useStyles } from '../theme/styles/components/accordionStyles';
 import Button from './Button';
 import Dialog from './Dialog';
-import { DATE_FORMAT, NoLogo } from '../config/constants';
+import PauseDrop from './PauseDrop';
+import { DATE_FORMAT, NoLogo, ETHERSCAN_ADDRESS_BASE_URL } from '../config/constants';
 import { getTokenLogo, getCSVFile } from '../redux';
 import { getSymbol, getName } from '../contracts/functions/erc20Functions';
 import { withdraw } from '../contracts/functions/dropFactoryFunctions';
-import PauseDrop from './PauseDrop';
-import { trunc } from '../utils/formattingFunctions';
+import { trunc, truncFileName } from '../utils/formattingFunctions';
 import { useDropDashboard, useLoading } from '../hooks';
 
 const Accordion = ({ data, expanded, setExpanded, claim }) => {
@@ -59,8 +60,8 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
 
   const handleWithdrawConfirm = async () => {
     setFormData({ ...formData, open: false });
-    await withdraw(tokenAddress, account, merkleRoot, () => {
-      withdrawDropsF(account, _id);
+    await withdraw(_id, tokenAddress, account, merkleRoot, () => {
+      withdrawDropsF(_id);
     });
   };
 
@@ -105,7 +106,9 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
             </Tooltip>
           </Grid>
           <Grid item xs={2} style={{ textAlign: 'center' }}>
-            <img src={tokenLogo} alt={tokenSymbol} width='30px' />
+            <a href={ETHERSCAN_ADDRESS_BASE_URL + tokenAddress} target='_blank'>
+              <img src={tokenLogo} alt={tokenSymbol} width='30px' />
+            </a>
           </Grid>
           <Grid item xs={5}>
             {tokenSymbol ? (
@@ -129,7 +132,15 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
           <Box className={classes.accordianContent}>
             <Typography variant='body2'>Token</Typography>
             {tokenName ? (
-              <Typography variant='body2'>{tokenName}</Typography>
+              (isMobile && tokenName.length > 14) || tokenName.length > 19 ? (
+                <Tooltip title={tokenName}>
+                  <Typography variant='body2'>
+                    {truncFileName(tokenName, isMobile ? 14 : 19)}
+                  </Typography>
+                </Tooltip>
+              ) : (
+                <Typography variant='body2'>{tokenName}</Typography>
+              )
             ) : (
               <Skeleton animation='wave' width='80px' height='30px' />
             )}
@@ -154,11 +165,19 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
               <Dialog
                 open={open}
                 handleClose={() => setFormData({ ...formData, open: false })}
-                text={`Please confirm you are withdrawing ${trunc(
-                  totalAmount
-                )} tokens from Dropzero to be returned to your connected wallet`}
                 btnText='Confirm'
                 btnOnClick={handleWithdrawConfirm}
+                renderContent={
+                  <Typography variant='body2'>
+                    Please confirm you are withdrawing{' '}
+                    <Tooltip title={totalAmount}>
+                      <Typography variant='body2' component='span'>
+                        {trunc(totalAmount)}{' '}
+                      </Typography>
+                    </Tooltip>
+                    tokens from Dropzero to be returned to your connected wallet
+                  </Typography>
+                }
               />
 
               <Box className={classes.accordianContent}>

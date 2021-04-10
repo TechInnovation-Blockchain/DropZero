@@ -30,8 +30,6 @@ const Disclaimer = ({
         open={open}
         onClose={handleClose}
         aria-labelledby='form-dialog-title'
-        // disableBackdropClick={disableBackdrop}
-        // disableEscapeKeyDown={disableBackdrop}
       >
         <DialogContent className={classes.innerContainer}>
           <Typography variant='body2' className={classes.heading}>
@@ -52,30 +50,36 @@ const Disclaimer = ({
               All queries relating to claimable tokens are to be directed to the project, not
               Blockzero Labs.
             </Typography>
+          ) : type === 'drop' ? (
+            <Typography variant='body2' className={classes.content}>
+              Thank you for using Dropzero by Blockzero Labs. This permissionless protocol
+              simplifies token airdrops for both projects (droppers) and users (claimers).
+              <br />
+              <br />
+              <span className={classes.colored}>1) </span> You are responsible for the accuracy of
+              all data uploaded <br /> <br />
+              <span className={classes.colored}>2) </span> Airdrops can be made by anyone, even if
+              they are not owners of the Token Address
+              <br />
+              <br />
+              <span className={classes.colored}>3) </span> Any queries relating to airdrops are to
+              be directed to the project, not Blockzero Labs
+              <br />
+              <br />
+              <span className={classes.colored}>4) </span> Any communications to users, including
+              pausing, stopping and withdrawing airdrops will be owned and managed by the project
+              <br />
+              <br />
+              <span className={classes.colored}>5) </span> YAll airdrops through Dropzero are
+              on-chain and Blockzero Labs do not own or manage any airdrop data or mainnet
+              performance
+            </Typography>
           ) : (
-            type === 'drop' && (
+            type === 'main' && (
               <Typography variant='body2' className={classes.content}>
-                Thank you for using Dropzero by Blockzero Labs. This permissionless protocol
-                simplifies token airdrops for both projects (droppers) and users (claimers).
-                <br />
-                <br />
-                <span className={classes.colored}>1) </span> You are responsible for the accuracy of
-                all data uploaded <br /> <br />
-                <span className={classes.colored}>2) </span> Airdrops can be made by anyone, even if
-                they are not owners of the Token Address
-                <br />
-                <br />
-                <span className={classes.colored}>3) </span> Any queries relating to airdrops are to
-                be directed to the project, not Blockzero Labs
-                <br />
-                <br />
-                <span className={classes.colored}>4) </span> Any communications to users, including
-                pausing, stopping and withdrawing airdrops will be owned and managed by the project
-                <br />
-                <br />
-                <span className={classes.colored}>5) </span> YAll airdrops through Dropzero are
-                on-chain and Blockzero Labs do not own or manage any airdrop data or mainnet
-                performance
+                Dropzero is in beta and has not been formally audited. While the smart contracts and
+                code are publicly available, we highly encourage caution during these early days of
+                the Dapp. Use at your own discretion.
               </Typography>
             )
           )}

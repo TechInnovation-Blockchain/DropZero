@@ -5,6 +5,9 @@ import {
   transactionSuccess,
   transactionFailed,
   transactionRejected,
+  withdrawClaimedToken,
+  startpause,
+  startWithdraw,
 } from '../../redux';
 
 const contract = dropFactoryContract();
@@ -89,84 +92,109 @@ export const addDropData = async (
   }
 };
 
-export const pauseDrop = async (tokenAddress, walletAddress, merkleRoot, callback) => {
+//pause claims of drop
+export const pauseDrop = async (dropId, tokenAddress, walletAddress, merkleRoot, callback) => {
   try {
     transactionPending({}, { text: 'Pausing Drop' });
-    await contract.methods
-      .pause(tokenAddress, merkleRoot)
-      .send({ from: walletAddress })
-      .on('transactionHash', txnHash => {
-        transactionPending({ transactionHash: txnHash }, { text: 'Pausing Drop' }, 'pause');
-      })
-      .then(receipt => {
-        transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Paused' });
-        callback();
-      })
-      .catch(e => {
-        if (e.code === 4001) {
-          transactionRejected({}, { text: 'Pausing Rejected' });
-        } else {
-          transactionFailed({}, { text: 'Pausing Failed' });
-        }
-        logError('pauseDrop', e);
-      });
+    const res = await startpause(dropId, true);
+    if (res) {
+      await contract.methods
+        .pause(tokenAddress, merkleRoot)
+        .send({ from: walletAddress })
+        .on('transactionHash', txnHash => {
+          transactionPending({ transactionHash: txnHash }, { text: 'Pausing Drop' }, 'pause');
+        })
+        .then(receipt => {
+          transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Paused' });
+          callback();
+        })
+        .catch(e => {
+          if (e.code === 4001) {
+            transactionRejected({}, { text: 'Pausing Rejected' });
+          } else {
+            transactionFailed({}, { text: 'Pausing Failed' });
+          }
+          logError('pauseDrop', e);
+        });
+    } else {
+      transactionFailed({}, { text: 'Pausing Failed' });
+    }
   } catch (e) {
     logError('pauseDrop', e);
     transactionFailed({}, { text: 'Pausing Failed' });
   }
 };
 
-export const unpauseDrop = async (tokenAddress, walletAddress, merkleRoot, callback) => {
+//unpause claims of drop
+export const unpauseDrop = async (dropId, tokenAddress, walletAddress, merkleRoot, callback) => {
   try {
     transactionPending({}, { text: 'Unpausing Drop' });
-    await contract.methods
-      .unpause(tokenAddress, merkleRoot)
-      .send({ from: walletAddress })
-      .on('transactionHash', txnHash => {
-        transactionPending({ transactionHash: txnHash }, { text: 'Unpausing Drop' });
-      })
-      .then(receipt => {
-        transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Unpaused' });
-        callback();
-      })
-      .catch(e => {
-        if (e.code === 4001) {
-          transactionRejected({}, { text: 'Unpausing Rejected' });
-        } else {
-          transactionFailed({}, { text: 'Unpausing Failed' });
-        }
-        logError('unpauseDrop', e);
-      });
+    const res = await startpause(dropId, false);
+    if (res) {
+      await contract.methods
+        .unpause(tokenAddress, merkleRoot)
+        .send({ from: walletAddress })
+        .on('transactionHash', txnHash => {
+          transactionPending({ transactionHash: txnHash }, { text: 'Unpausing Drop' });
+        })
+        .then(receipt => {
+          transactionSuccess(
+            { transactionHash: receipt.transactionHash },
+            { text: 'Drop Unpaused' }
+          );
+          callback();
+        })
+        .catch(e => {
+          if (e.code === 4001) {
+            transactionRejected({}, { text: 'Unpausing Rejected' });
+          } else {
+            transactionFailed({}, { text: 'Unpausing Failed' });
+          }
+          logError('unpauseDrop', e);
+        });
+    } else {
+      transactionFailed({}, { text: 'Pausing Failed' });
+    }
   } catch (e) {
     logError('unpauseDrop', e);
     transactionFailed({}, { text: 'Unpausing Failed' });
   }
 };
 
-export const withdraw = async (tokenAddress, walletAddress, merkleRoot, callback) => {
+//withdraw and delete drop record
+export const withdraw = async (dropId, tokenAddress, walletAddress, merkleRoot, callback) => {
   try {
     transactionPending({}, { text: 'Withdraw Pending' }, 'withdraw');
-    await contract.methods
-      .withdraw(tokenAddress, merkleRoot)
-      .send({ from: walletAddress })
-      .on('transactionHash', txnHash => {
-        transactionPending({ transactionHash: txnHash }, { text: 'Withdraw Pending' }, 'withdraw');
-      })
-      .then(receipt => {
-        transactionSuccess(
-          { transactionHash: receipt.transactionHash },
-          { text: 'Withdraw Successful' }
-        );
-        callback();
-      })
-      .catch(e => {
-        if (e.code === 4001) {
-          transactionRejected({}, { text: 'Withdraw Rejected' });
-        } else {
-          transactionFailed({}, { text: 'Withdraw Failed' });
-        }
-        logError('withdraw', e);
-      });
+    const res = await startWithdraw(walletAddress, dropId);
+    if (res) {
+      await contract.methods
+        .withdraw(tokenAddress, merkleRoot)
+        .send({ from: walletAddress })
+        .on('transactionHash', txnHash => {
+          transactionPending(
+            { transactionHash: txnHash },
+            { text: 'Withdraw Pending' },
+            'withdraw'
+          );
+        })
+        .then(receipt => {
+          transactionSuccess(
+            { transactionHash: receipt.transactionHash },
+            { text: 'Withdraw Successful' }
+          );
+          callback();
+        })
+        .catch(e => {
+          if (e.code === 4001) {
+            transactionRejected({}, { text: 'Withdraw Rejected' });
+          } else {
+            transactionFailed({}, { text: 'Withdraw Failed' });
+          }
+          logError('withdraw', e);
+        });
+    } else {
+      transactionFailed({}, { text: 'Withdraw Failed' });
+    }
   } catch (e) {
     logError('withdraw', e);
     transactionFailed({}, { text: 'Withdraw Failed' });

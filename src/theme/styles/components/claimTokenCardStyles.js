@@ -8,6 +8,7 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     borderBottom: `1px solid ${theme.palette.border.lightBorder} !important`,
     background: theme.palette.background.secondary,
+    cursor: 'pointer',
   },
   newContainer: {
     borderBottom: 'none !important',

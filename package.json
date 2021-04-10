@@ -27,6 +27,7 @@
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "date-fns": "^2.19.0",
+    "ethers": "^5.1.0",
     "react": "^17.0.1",
     "react-countdown": "^2.3.1",
     "react-device-detect": "^1.17.0",

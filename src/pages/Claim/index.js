@@ -37,7 +37,9 @@ const Claim = () => {
     </Fragment>
   ) : (
     <Box className={classes.noWallet}>
-      <Typography variant='body2'>CONNECT WALLET</Typography>
+      <Typography variant='body2'>
+        Connect your wallet to see and claim available tokens.
+      </Typography>
     </Box>
   );
 };

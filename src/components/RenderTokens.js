@@ -1,7 +1,8 @@
 import { Fragment, useState, useEffect } from 'react';
-import { Box, TablePagination, Typography } from '@material-ui/core';
+import { Box, TablePagination, Typography, Tooltip } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useWeb3React } from '@web3-react/core';
+import { utils } from 'ethers';
 import Web3 from 'web3';
 
 import PageAnimation from './PageAnimation';
@@ -11,7 +12,7 @@ import DisclaimerDialog from './DIsclaimerDialog';
 import Button from './Button';
 import { useStyles } from '../theme/styles/components/renderTokensStyles';
 import { trunc } from '../utils/formattingFunctions';
-import { getName } from '../contracts/functions/erc20Functions';
+import { getName, getDecimal } from '../contracts/functions/erc20Functions';
 import { multipleClaims, singleClaim } from '../contracts/functions/dropFactoryFunctions';
 import { useClaims, useLoading } from '../hooks';
 
@@ -114,8 +115,10 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     }
   };
 
-  const filterDataForContract = tokens => {
+  const filterDataForContract = async tokens => {
     let amount = 0;
+    const decimal = await getDecimal(tokens[0].tokenAddress);
+
     const data = {
       tokenAddress: tokens[0].tokenAddress,
       walletAddress: account,
@@ -126,13 +129,13 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
       merkleProofs: [],
     };
 
-    tokens.forEach(token => {
+    tokens.forEach(async token => {
+      amount += Number(token.amount);
       data['id'] = [...data['id'], token._id];
       data['indexs'] = [...data['indexs'], token.index];
-      data['amounts'] = [...data['amounts'], Web3.utils.toWei(token.amount.toString())];
+      data['amounts'] = [...data['amounts'], utils.parseUnits(token.amount, decimal)];
       data['merkleRoots'] = [...data['merkleRoots'], token.csvId.merkleRoot];
       data['merkleProofs'] = [...data['merkleProofs'], token.proof];
-      amount += Number(token.amount);
     });
     console.log(data);
     setFormData({ ...formData, totalAmount: amount, open: true, sendContractData: data });
@@ -162,9 +165,19 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
       <Dialog
         open={open}
         handleClose={() => setFormData({ ...formData, open: false })}
-        text={`You will claim ${trunc(totalAmount)} ${tokenName} tokens to your connected wallet`}
         btnText='Claim'
         btnOnClick={handleConfirm}
+        renderContent={
+          <Typography variant='body2'>
+            You will claim{' '}
+            <Tooltip title={totalAmount}>
+              <Typography variant='body2' component='span'>
+                {trunc(totalAmount)}
+              </Typography>
+            </Tooltip>
+            {` ${tokenName} tokens to your connected wallet`}
+          </Typography>
+        }
       />
       <DisclaimerDialog
         open={openDis}

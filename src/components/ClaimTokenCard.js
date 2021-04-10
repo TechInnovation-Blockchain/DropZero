@@ -4,14 +4,13 @@ import { Skeleton } from '@material-ui/lab';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Web3 from 'web3';
 import { format } from 'date-fns';
-import { DATE_FORMAT, ETHERSCAN_ADDRESS_BASE_URL } from '../config/constants';
 
 import { useStyles } from '../theme/styles/components/claimTokenCardStyles';
 import { trunc } from '../utils/formattingFunctions';
 import Counter from './Counter';
 import { getTokenLogo } from '../redux';
-import { getName } from '../contracts/functions/erc20Functions';
-import { NoLogo } from '../config/constants';
+import { getName, getSymbol } from '../contracts/functions/erc20Functions';
+import { DATE_FORMAT, ETHERSCAN_ADDRESS_BASE_URL, NoLogo } from '../config/constants';
 
 const ClaimTokenCard = ({
   token,
@@ -24,8 +23,8 @@ const ClaimTokenCard = ({
 }) => {
   const classes = useStyles();
 
-  const [formData, setFormData] = useState({ tokenLogo: NoLogo, tokenName: '' });
-  const { tokenLogo, tokenName } = formData;
+  const [formData, setFormData] = useState({ tokenLogo: NoLogo, tokenName: '', tokenSymbol: '' });
+  const { tokenLogo, tokenName, tokenSymbol } = formData;
   const { startDate, endDate, tokenType } = token;
 
   useEffect(() => {
@@ -33,7 +32,8 @@ const ClaimTokenCard = ({
       const fetchAPI = async () => {
         const logo = await getTokenLogo(Web3.utils.toChecksumAddress(tokenAddress));
         const name = await getName(tokenAddress);
-        setFormData({ tokenLogo: logo, tokenName: name ? name : 'Unknown' });
+        const symbol = await getSymbol(tokenAddress);
+        setFormData({ tokenLogo: logo, tokenName: name, tokenSymbol: symbol });
       };
 
       fetchAPI();
@@ -57,8 +57,10 @@ const ClaimTokenCard = ({
         </Grid>
         <Grid item xs={10} className={classes.tokenInfo}>
           <Box className={classes.tokenName}>
-            {tokenName ? (
-              <Typography varaint='body2'>{tokenName}</Typography>
+            {tokenSymbol ? (
+              <Tooltip title={tokenName}>
+                <Typography varaint='body2'>{tokenSymbol}</Typography>
+              </Tooltip>
             ) : (
               <Skeleton animation='wave' width='100px' height='30px' />
             )}

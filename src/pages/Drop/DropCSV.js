@@ -5,11 +5,12 @@ import PublishIcon from '@material-ui/icons/Publish';
 import { useWeb3React } from '@web3-react/core';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Web3 from 'web3';
+import { utils } from 'ethers';
 
 import { Button, Dialog, ActionDialog, DisclaimerDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
 import { useDropInputs, useLoading, useDropDashboard } from '../../hooks';
-import { getBalance } from '../../contracts/functions/erc20Functions';
+import { getBalance, getDecimal } from '../../contracts/functions/erc20Functions';
 import { addDropData } from '../../contracts/functions/dropFactoryFunctions';
 import { truncFileName, trunc } from '../../utils/formattingFunctions';
 import { logMessage } from '../../utils/log';
@@ -102,8 +103,9 @@ const DropCSV = ({ setContent }) => {
     }
   };
 
-  const handleUploadChange = e => {
-    const _file = e?.target?.files[0];
+  const handleUploadChange = ({ target }) => {
+    const _file = target?.files[0];
+    target.value = '';
     uploadingCSV(_file);
   };
 
@@ -132,8 +134,9 @@ const DropCSV = ({ setContent }) => {
   };
 
   const createDrop = async merkleRoot => {
+    const decimal = await getDecimal(token);
     const dropData = {
-      tokenAmount: Web3.utils.toWei(totalAmount.toString()),
+      tokenAmount: utils.parseUnits(totalAmount.toString(), decimal),
       startDate: startDate
         ? Math.round(new Date(startDate).getTime() / 1000)
         : Math.round(Date.now() / 10000),
@@ -169,14 +172,22 @@ const DropCSV = ({ setContent }) => {
       <Dialog
         open={open}
         handleClose={() => setFormData({ ...formData, open: false })}
-        text={`Please confirm you are submitting ${totalAddress} addresses for a total of ${trunc(
-          totalAmount
-        )} tokens.`}
         secondaryText='If there are errors, please upload a new file. No changes can be made after you press CONFIRM.'
         btnText='Confirm'
         btnOnClick={() => setFormData({ ...formData, openDis: true, open: false })}
         errorMsg={
           balance < totalAmount ? 'Your current wallet have insufficient amount of tokens' : ''
+        }
+        renderContent={
+          <Typography variant='body2'>
+            {`Please confirm you are submitting ${totalAddress} addresses for a total of `}
+            <Tooltip title={totalAmount}>
+              <Typography variant='body2' component='span'>
+                {trunc(totalAmount)}{' '}
+              </Typography>
+            </Tooltip>
+            tokens.
+          </Typography>
         }
       />
 

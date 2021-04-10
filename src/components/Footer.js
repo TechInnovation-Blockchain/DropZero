@@ -27,12 +27,7 @@ const Footer = () => {
         btnOnClick={handleClose}
         type='drop'
       />
-      {/* <Typography component='a' target='_blank' href='!#' variant='body2'>
-        Terms & Conditions
-      </Typography>
-      <Typography component='a' target='_blank' href='!#' variant='body2'>
-        Privacy & Disclaimers
-      </Typography> */}
+
       <Typography onClick={() => handleOpen('Terms & Conditions')} variant='body2'>
         Terms & Conditions
       </Typography>

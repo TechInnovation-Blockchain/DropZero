@@ -85,7 +85,7 @@ const ActionDialog = ({
           )}
 
           {btnText && (
-            <Button onClick={btnOnClick} style={{ width: '100%', margin: '10px 0' }}>
+            <Button onClick={btnOnClick} style={{ width: '90%', margin: '10px 0' }}>
               <span>{btnText}</span>
             </Button>
           )}

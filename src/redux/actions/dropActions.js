@@ -12,6 +12,7 @@ export const saveFields = data => {
   };
 };
 
+//get token logo
 export const getTokenLogo = async tokenAddress => {
   const unknownLogo =
     'https://gateway.pinata.cloud/ipfs/QmNX2QerTxTm1RThD7Dc9X5uS9VFnQxmMotaMFhK5GYbBk';
@@ -102,38 +103,21 @@ export const getUserDrops = walletAddress => {
   };
 };
 
-export const withdrawDrops = (walletAddress, csvID) => {
+//remove drop from redux
+export const withdrawDrops = dropId => {
   return async dispatch => {
-    try {
-      console.log('Wallet Address => ', walletAddress);
-      console.log('csvID => ', csvID);
-      const res = await axios.get(
-        `${BASE_URL}/dropper/withdraw_drop/${walletAddress}csv_id=${csvID}`
-      );
-      logMessage('Withdraw Drops', res);
-      if (res?.data?.responseCode === 201) {
-        dispatch({ type: dropTypes.WITHDRAW_DROP, payload: csvID });
-      }
-    } catch (e) {
-      logError('Withdraw Drops', e);
-    }
+    dispatch({ type: dropTypes.WITHDRAW_DROP, payload: dropId });
   };
 };
 
+//change drop status in redux
 export const pauseDrop = (dropId, pause) => {
   return async dispatch => {
-    try {
-      const res = await axios.get(`${BASE_URL}/dropper/pause_drop/${dropId}?pause=${pause}`);
-      if (res?.data?.responseCode === 201) {
-        dispatch({ type: dropTypes.PAUSE_DROP, payload: { id: dropId, pause } });
-      }
-      logMessage('Pause Drop', res);
-    } catch (e) {
-      logError('Pause Drops', e);
-    }
+    dispatch({ type: dropTypes.PAUSE_DROP, payload: { id: dropId, pause } });
   };
 };
 
+//get csv file from server
 export const getCSVFile = async (dropId, tokenName) => {
   try {
     const res = await axios.get(`${BASE_URL}/dropper/get_csv/${dropId}?token_name=${tokenName}`);
@@ -143,5 +127,48 @@ export const getCSVFile = async (dropId, tokenName) => {
     }
   } catch (e) {
     logError('getCSVFile', e);
+  }
+};
+
+export const withdrawClaimedToken = async walletAddress => {
+  try {
+    const res = await axios.get(`${BASE_URL}/withdraw_claimed_token/${walletAddress}`);
+    logMessage('withdrawClaimedToken', res);
+  } catch (e) {
+    logError('withdrawClaimedToken', e);
+  }
+};
+
+//start cron job for pause/unpause on server
+export const startpause = async (dropId, action) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/dropper/pause_drop/${dropId}?pause=${action}`);
+    logMessage('pause', res);
+    if (res?.data?.responseCode === 201) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    logError('pause', e);
+    return false;
+  }
+};
+
+//start withdraw cron job on server
+export const startWithdraw = async (walletAddress, dropId) => {
+  try {
+    const res = await axios.get(
+      `${BASE_URL}/dropper/withdraw_drop/${walletAddress}csv_id=${dropId}`
+    );
+    logMessage('startWithdraw', res);
+    if (res?.data?.responseCode === 201) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    logError('startWithdraw', e);
+    return false;
   }
 };

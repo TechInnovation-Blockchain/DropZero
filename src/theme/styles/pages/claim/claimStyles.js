@@ -31,6 +31,8 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
+    height: '100px',
     '& p': {
       color: theme.palette.error.main,
       fontWeight: 700,
