@@ -2,9 +2,9 @@ export const CONTRACT_ADDRESSES = {
   dropFactory: '0xf913b2A5FeC65C237eEE959A34A0e5Ee81955fCC',
 };
 
-// export const BASE_URL = 'https://dropzero.herokuapp.com';
+export const BASE_URL = 'https://dropzero.herokuapp.com';
 
-export const BASE_URL = 'http://192.168.1.79:8000';
+// export const BASE_URL = 'http://192.168.1.79:8000';
 
 export const config = {
   headers: {

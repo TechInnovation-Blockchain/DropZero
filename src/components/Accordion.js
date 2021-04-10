@@ -44,6 +44,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
   const { open, tokenLogo, tokenSymbol, tokenName, csvFile } = formData;
   const {
     _id,
+    dropperAddress,
     tokenAddress,
     tokenType,
     endDate,
@@ -52,6 +53,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
     totalClaimed,
     pauseDrop,
     merkleRoot,
+    claimedDate,
   } = data;
 
   const handleChange = panel => (event, isExpanded) => {
@@ -60,7 +62,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
 
   const handleWithdrawConfirm = async () => {
     setFormData({ ...formData, open: false });
-    await withdraw(_id, tokenAddress, account, merkleRoot, () => {
+    await withdraw(_id, dropperAddress, tokenAddress, account, merkleRoot, () => {
       withdrawDropsF(_id);
     });
   };
@@ -157,7 +159,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
           {claim && (
             <Box className={classes.accordianContent}>
               <Typography variant='body2'>Claimed on</Typography>
-              <Typography variant='body2'>25 Mar 2021</Typography>
+              <Typography variant='body2'>{format(new Date(claimedDate), DATE_FORMAT)}</Typography>
             </Box>
           )}
           {!claim ? (

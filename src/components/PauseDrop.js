@@ -37,7 +37,7 @@ const PauseDrop = ({ value, tokenAddress, merkleRoot, dropId }) => {
     setFormData({ ...formData, open: false });
     await pauseDrop(dropId, tokenAddress, account, merkleRoot, () => {
       pauseDropF(dropId, true);
-      setFormData({ ...formData, check: true });
+      setFormData({ ...formData, open: false, check: true });
     });
   };
 

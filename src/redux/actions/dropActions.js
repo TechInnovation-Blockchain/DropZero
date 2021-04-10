@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import * as dropTypes from '../types/dropTypes';
 import { logError, logMessage } from '../../utils/log';
-import { BASE_URL, formDataConfig } from '../../config/constants';
+import { BASE_URL, formDataConfig, config } from '../../config/constants';
 import { showSnackbar } from './uiActions';
 
 //save drop inputs
@@ -45,13 +45,17 @@ export const clearCSV = () => {
 };
 
 //uploading csv on server
-export const uploadCSV = ({ file, account, token, startDate, endDate, tokenType }, onError) => {
+export const uploadCSV = (
+  { file, account, token, startDate, endDate, tokenType, decimal },
+  onError
+) => {
   return async dispatch => {
     try {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('walletAddress', account);
       formData.append('tokenAddress', token);
+      formData.append('decimal', decimal);
       tokenType && formData.append('tokenType', tokenType);
       startDate && formData.append('startDate', new Date(startDate).getTime());
       endDate && formData.append('endDate', new Date(endDate).getTime());
@@ -130,12 +134,38 @@ export const getCSVFile = async (dropId, tokenName) => {
   }
 };
 
-export const withdrawClaimedToken = async walletAddress => {
+export const withdrawClaimedToken = async claimId => {
   try {
-    const res = await axios.get(`${BASE_URL}/withdraw_claimed_token/${walletAddress}`);
+    const res = await axios.post(`${BASE_URL}/user/withdraw_claimed_token/${claimId}?claim=single`);
     logMessage('withdrawClaimedToken', res);
+    if (res?.data?.responseCode === 201) {
+      return true;
+    } else {
+      return false;
+    }
   } catch (e) {
     logError('withdrawClaimedToken', e);
+    return false;
+  }
+};
+
+export const withdrawMultipleClaimedToken = async (walletAddress, merkleRoot) => {
+  try {
+    const body = { merkleRoot };
+    const res = await axios.post(
+      `${BASE_URL}/user/withdraw_claimed_token/${walletAddress}?claim=multiple`,
+      body,
+      config
+    );
+    logMessage('withdrawMultipleClaimedToken', res);
+    if (res?.data?.responseCode === 201) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    logError('withdrawMultipleClaimedToken', e);
+    return false;
   }
 };
 
@@ -156,10 +186,10 @@ export const startpause = async (dropId, action) => {
 };
 
 //start withdraw cron job on server
-export const startWithdraw = async (walletAddress, dropId) => {
+export const startWithdraw = async (dropperAddress, dropId) => {
   try {
     const res = await axios.get(
-      `${BASE_URL}/dropper/withdraw_drop/${walletAddress}csv_id=${dropId}`
+      `${BASE_URL}/dropper/withdraw_drop/${dropperAddress}?csv_id=${dropId}`
     );
     logMessage('startWithdraw', res);
     if (res?.data?.responseCode === 201) {
@@ -169,6 +199,18 @@ export const startWithdraw = async (walletAddress, dropId) => {
     }
   } catch (e) {
     logError('startWithdraw', e);
+    return false;
+  }
+};
+
+export const rejectDrop = async (dropperAddress, merkleRoot) => {
+  try {
+    const res = await axios.get(
+      `${BASE_URL}/dropper/reject_drop/${dropperAddress}?merkleRoot=${merkleRoot}`
+    );
+    logMessage('rejectDrop', res);
+  } catch (e) {
+    logError('rejectDrop', e);
     return false;
   }
 };

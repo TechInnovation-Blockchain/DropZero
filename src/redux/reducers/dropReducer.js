@@ -44,7 +44,9 @@ const dropReducer = (state = initialState, action) => {
     case dropTypes.CLEAR_DROPS:
       return { ...state, userDrops: null };
     case dropTypes.WITHDRAW_DROP:
-      const _tempDrops = state.userDrops.filter(({ _id }) => _id !== payload.id);
+      console.log('aa', payload);
+      const _tempDrops = state.userDrops.filter(({ _id }) => _id !== payload);
+      console.log('bb', _tempDrops);
       const __pausedDrops = _tempDrops.filter(({ pauseDrop }) => pauseDrop === true);
       return { ...state, userDrops: _tempDrops, dropsPausing: __pausedDrops.length > 0 };
     default:

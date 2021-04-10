@@ -109,9 +109,10 @@ const DropCSV = ({ setContent }) => {
     uploadingCSV(_file);
   };
 
-  const uploadCSVOnServer = () => {
+  const uploadCSVOnServer = async () => {
     setFormData({ ...formData, loadingContent: 'Uploading CSV', openDis: false });
-    const data = { file, account, token, startDate, endDate, tokenType };
+    const decimal = await getDecimal(token);
+    const data = { file, account, token, startDate, endDate, tokenType, decimal };
     uploadCSVF(data, () => {
       setFormData({ ...formData, loadingContent: '', open: false, openDis: false });
     });
@@ -133,10 +134,10 @@ const DropCSV = ({ setContent }) => {
     e.preventDefault();
   };
 
-  const createDrop = async merkleRoot => {
+  const createDrop = async (merkleRoot, dropperId) => {
     const decimal = await getDecimal(token);
     const dropData = {
-      tokenAmount: utils.parseUnits(totalAmount.toString(), decimal),
+      tokenAmount: utils.parseUnits(totalAmount.toString(), decimal).toString(),
       startDate: startDate
         ? Math.round(new Date(startDate).getTime() / 1000)
         : Math.round(Date.now() / 10000),
@@ -144,6 +145,7 @@ const DropCSV = ({ setContent }) => {
       merkleRoot,
       tokenAddress: token,
       walletAddress: account,
+      dropperId,
     };
 
     await addDropData(
@@ -162,8 +164,9 @@ const DropCSV = ({ setContent }) => {
 
   useEffect(() => {
     const merkleRoot = csv?.merkle_root;
+    const dropperId = csv?.dropper_id;
     if (merkleRoot) {
-      createDrop(merkleRoot);
+      createDrop(merkleRoot, dropperId);
     }
   }, [csv]);
 

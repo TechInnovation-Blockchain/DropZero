@@ -112,20 +112,14 @@ const DropToken = ({ setContent }) => {
     }, 500);
   };
 
-  // window.ethereum?.on('accountsChanged', () => {
-  //   setFormData({
-  //     ...formData,
-  //     validated: false,
-  //     error: '',
-  //     loading: false,
-  //   });
-
-  //   saveFieldsF({
-  //     dropExists: false,
-  //     approved: 0,
-  //     token: '',
-  //   });
-  // });
+  window.ethereum?.on('accountsChanged', () => {
+    setFormData({
+      ...formData,
+      validated: false,
+      error: '',
+      loading: false,
+    });
+  });
 
   // useEffect(() => {
   //   setFormData({

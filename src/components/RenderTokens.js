@@ -3,7 +3,6 @@ import { Box, TablePagination, Typography, Tooltip } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useWeb3React } from '@web3-react/core';
 import { utils } from 'ethers';
-import Web3 from 'web3';
 
 import PageAnimation from './PageAnimation';
 import ClaimTokenCard from './ClaimTokenCard';
@@ -14,7 +13,7 @@ import { useStyles } from '../theme/styles/components/renderTokensStyles';
 import { trunc } from '../utils/formattingFunctions';
 import { getName, getDecimal } from '../contracts/functions/erc20Functions';
 import { multipleClaims, singleClaim } from '../contracts/functions/dropFactoryFunctions';
-import { useClaims, useLoading } from '../hooks';
+import { useClaims, useLoading, useClaimsDashboard } from '../hooks';
 
 const RenderTokens = ({ tokens, goBack, unlocked }) => {
   const classes = useStyles();
@@ -23,6 +22,7 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
   const {
     loading: { dapp },
   } = useLoading();
+  const { getClaimsHistoryF } = useClaimsDashboard();
 
   const [formData, setFormData] = useState({
     open: false,
@@ -73,11 +73,13 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
       await multipleClaims(sendContractData, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
+        getClaimsHistoryF(account);
       });
     } else {
       await singleClaim(sendContractData, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
+        getClaimsHistoryF(account);
       });
     }
   };
@@ -92,11 +94,13 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
       await multipleClaims(sendContractData, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
+        getClaimsHistoryF(account);
       });
     } else {
       await singleClaim(sendContractData, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
+        getClaimsHistoryF(account);
       });
     }
   };
@@ -133,7 +137,10 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
       amount += Number(token.amount);
       data['id'] = [...data['id'], token._id];
       data['indexs'] = [...data['indexs'], token.index];
-      data['amounts'] = [...data['amounts'], utils.parseUnits(token.amount, decimal)];
+      data['amounts'] = [
+        ...data['amounts'],
+        utils.parseUnits(token.amount.toString(), decimal).toString(),
+      ];
       data['merkleRoots'] = [...data['merkleRoots'], token.csvId.merkleRoot];
       data['merkleProofs'] = [...data['merkleProofs'], token.proof];
     });
