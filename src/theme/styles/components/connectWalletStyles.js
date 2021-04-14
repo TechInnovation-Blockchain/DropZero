@@ -8,13 +8,13 @@ export const useStyles = makeStyles(theme => ({
     marginTop: '15px',
   },
   connectBtn: {
-    width: 'auto !important',
+    width: '230px !important',
     fontSize: '14px !important',
     margin: '8px auto !important',
   },
   bottomError: {
     color: theme.palette.error.main,
-    fontWeight: 700,
+    fontWeight: 500,
     fontSize: '11px',
     textAlign: 'center',
     textTransform: 'uppercase',
@@ -27,12 +27,30 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    color: theme.palette.text.primary,
-    '& p': {
-      letterSpacing: '3px',
+    '& p:first-child': {
+      letterSpacing: '0px',
       fontSize: '12px',
-      '@media (max-width:330px)': {
-        fontSize: '12px',
+      color: '#74747B',
+    },
+    '& p:last-child': {
+      letterSpacing: '0px',
+      fontWeight: 600,
+      color: theme.palette.text.title,
+      fontSize: '14px',
+    },
+    '& img': {
+      marginBottom: '5px',
+    },
+  },
+  social: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '10px',
+    '& a': {
+      color: theme.palette.text.title,
+      margin: theme.spacing(0, 0.6),
+      '&:hover': {
+        color: theme.palette.primary.main,
       },
     },
   },

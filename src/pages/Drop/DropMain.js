@@ -1,43 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Box } from '@material-ui/core';
+import { useWeb3React } from '@web3-react/core';
 
 import { PageAnimation } from '../../components';
 import DropToken from './DropToken';
 import DropDates from './DropDates';
 import DropCSV from './DropCSV';
-import { useDropInputs, useWeb3 } from '../../hooks';
+import { useDropInputs } from '../../hooks';
 
 const DropMain = () => {
-  const [content, setContent] = useState('token');
-
-  const { clearFieldsF, clearCSVF } = useDropInputs();
-  const { account } = useWeb3();
-
-  // window.ethereum?.on('accountsChanged', () => {
-  //   setContent('token');
-  //   clearFieldsF();
-  //   clearCSVF();
-  // });
+  const { currentTab, currentAccount, clearFieldsF } = useDropInputs();
+  const { account } = useWeb3React();
 
   useEffect(() => {
-    clearFieldsF();
-    clearCSVF();
-    setContent('token');
-
-    return () => {
-      clearFieldsF();
-    };
+    if (currentAccount !== account && account) {
+      clearFieldsF(account);
+    }
   }, [account]);
 
   return (
     <PageAnimation in={true} reverse={0}>
       <Box style={{ textAlign: 'center' }}>
-        {content === 'token' ? (
-          <DropToken setContent={setContent} />
-        ) : content === 'dates' ? (
-          <DropDates setContent={setContent} />
-        ) : content === 'uploadCSV' ? (
-          <DropCSV setContent={setContent} />
+        {currentTab === 'token' ? (
+          <DropToken />
+        ) : currentTab === 'dates' ? (
+          <DropDates />
+        ) : currentTab === 'uploadCSV' ? (
+          <DropCSV />
         ) : null}
       </Box>
     </PageAnimation>

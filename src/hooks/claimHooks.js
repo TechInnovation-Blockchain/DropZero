@@ -6,6 +6,8 @@ import {
   resetLockAndUnlockClaims,
   getClaimsHistory,
   removeClaim,
+  resetClaims,
+  resetClaimsHistory,
 } from '../redux';
 import { useDispatchWrap } from './utilHooks';
 
@@ -15,6 +17,7 @@ export const useClaims = () => {
   const setLockAndUnlockClaimsF = useDispatchWrap(setLockAndUnlockClaims);
   const resetLockAndUnlockClaimsF = useDispatchWrap(resetLockAndUnlockClaims);
   const removeClaimF = useDispatchWrap(removeClaim);
+  const resetClaimsF = useDispatchWrap(resetClaims);
 
   return {
     availableClaims,
@@ -24,12 +27,14 @@ export const useClaims = () => {
     setLockAndUnlockClaimsF,
     resetLockAndUnlockClaimsF,
     removeClaimF,
+    resetClaimsF,
   };
 };
 
 export const useClaimsDashboard = () => {
   const { claimsHistory } = useSelector(state => state.claim);
   const getClaimsHistoryF = useDispatchWrap(getClaimsHistory);
+  const resetClaimsHistoryF = useDispatchWrap(resetClaimsHistory);
 
-  return { claimsHistory, getClaimsHistoryF };
+  return { claimsHistory, getClaimsHistoryF, resetClaimsHistoryF };
 };

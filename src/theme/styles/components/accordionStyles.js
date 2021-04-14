@@ -68,4 +68,18 @@ export const useStyles = makeStyles(theme => ({
       },
     },
   },
+  btnLoading: {
+    '& button': {
+      padding: theme.spacing(1, 0),
+      '& div': {
+        marginRight: '5px',
+      },
+    },
+    '& span': {
+      fontSize: '12px !important',
+      '@media(max-width:550px)': {
+        margin: 0,
+      },
+    },
+  },
 }));

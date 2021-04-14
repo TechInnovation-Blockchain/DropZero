@@ -5,11 +5,12 @@ import { useWeb3React } from '@web3-react/core';
 import { useStyles } from '../../theme/styles/pages/claim/claimStyles';
 import { useClaimsDashboard } from '../../hooks';
 import { Accordion, PageAnimation } from '../../components';
+import { VALID_CHAIN } from '../../config/constants';
 
 const ClaimDashboard = () => {
   const classes = useStyles();
-  const { account } = useWeb3React();
-  const { claimsHistory, getClaimsHistoryF } = useClaimsDashboard();
+  const { account, chainId } = useWeb3React();
+  const { claimsHistory, getClaimsHistoryF, resetClaimsHistoryF } = useClaimsDashboard();
 
   const [formData, setFormData] = useState({
     page: 0,
@@ -33,8 +34,12 @@ const ClaimDashboard = () => {
   };
 
   useEffect(() => {
-    getClaimsHistoryF(account);
-  }, [account]);
+    if (chainId === VALID_CHAIN) {
+      getClaimsHistoryF(account);
+    } else {
+      resetClaimsHistoryF();
+    }
+  }, [account, chainId]);
 
   return claimsHistory ? (
     <Box style={{ paddingBottom: '20px' }}>

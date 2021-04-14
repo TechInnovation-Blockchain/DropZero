@@ -58,3 +58,15 @@ export const removeClaim = (claims, address) => {
     dispatch({ type: claimTypes.REMOVE_CLAIMS, payload: { claims, address } });
   };
 };
+
+export const resetClaims = () => {
+  return async dispatch => {
+    dispatch({ type: claimTypes.RESET_CLAIMS });
+  };
+};
+
+export const resetClaimsHistory = () => {
+  return async dispatch => {
+    dispatch({ type: claimTypes.RESET_CLAIMS_HISTORY });
+  };
+};

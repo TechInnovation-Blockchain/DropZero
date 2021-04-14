@@ -18,7 +18,7 @@ const Layout = () => {
     localStorage.setItem('initail', true);
   };
 
-  return (
+  return !open ? (
     <Box className={`${classes.mainContainer} ${theme === 'light' ? classes.lightMainBox : ''}`}>
       <Container className={classes.container} maxWidth='xs'>
         <Routes />
@@ -26,14 +26,15 @@ const Layout = () => {
       <ConnectWallet />
       <Snackbar />
       <ActionDialog {...modalProps} />
-      <DisclaimerDialog
-        heading='Disclaimer'
-        type='main'
-        open={open}
-        handleClose={handleClose}
-        btnOnClick={handleClose}
-      />
     </Box>
+  ) : (
+    <DisclaimerDialog
+      heading='Disclaimer'
+      type='main'
+      open={open}
+      handleClose={handleClose}
+      btnOnClick={handleClose}
+    />
   );
 };
 

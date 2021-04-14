@@ -9,23 +9,29 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import { isMobile } from 'react-device-detect';
 import { Typography, Box } from '@material-ui/core';
+import { Facebook, Twitter, Telegram, YouTube } from '@material-ui/icons';
 
 import { useStyles } from '../theme/styles/components/connectWalletStyles';
 import Button from './Button';
 import WalletDialog from './WalletDialog';
 import { walletList } from '../utils/web3Connectors';
 import { conciseAddress } from '../utils/formattingFunctions';
-import { useSnackbar, useLoading, useWeb3 } from '../hooks';
-import Blockzero from '../assets/blockzerologo.png';
+import { useSnackbar, useLoading, useDropInputs, useWeb3, useTheme } from '../hooks';
 import { setWeb3Provider } from '../contracts/getContract';
+import { VALID_CHAIN } from '../config/constants';
+import WhiteLogo from '../assets/logoWhite.png';
+import DarkLogo from '../assets/logoDark.png';
 
 const ConnectWallet = () => {
   const classes = useStyles();
   const web3context = useWeb3React();
-  const [open, setOpen] = useState(false);
   const { showSnackbarF } = useSnackbar();
   const { setLoadingF, loading } = useLoading();
   const { storeWeb3ContextF } = useWeb3();
+  const { currentAccount, clearFieldsF } = useDropInputs();
+  const { theme } = useTheme();
+
+  const [open, setOpen] = useState(false);
 
   const getErrorMessage = e => {
     if (e instanceof UnsupportedChainIdError) {
@@ -86,6 +92,7 @@ const ConnectWallet = () => {
   useEffect(() => {
     storeWeb3ContextF(web3context);
     if (web3context?.library?._provider) {
+      //console.log(web3context.library._provider);
       setWeb3Provider(web3context.library._provider);
     }
     if (web3context?.error) {
@@ -93,10 +100,12 @@ const ConnectWallet = () => {
     }
     if (web3context.active || web3context.account) {
       setOpen(false);
+      currentAccount === '' && clearFieldsF(web3context.account);
     }
   }, [web3context]);
 
   window.ethereum?.on('networkChanged', function (networkId) {
+    clearFieldsF();
     if (networkId) {
       let msg = 'Network changed to ';
       if (networkId === '1') {
@@ -119,7 +128,7 @@ const ConnectWallet = () => {
       <Box className={classes.connectWrapper}>
         {web3context.active && (
           <Typography variant='body2' className={classes.bottomError}>
-            {web3context.chainId !== 1 && 'Change network to mainnet'}
+            {web3context.chainId !== VALID_CHAIN && 'Change network to rinkeby'}
           </Typography>
         )}
         <Box className={classes.btnWrapper}>
@@ -133,9 +142,23 @@ const ConnectWallet = () => {
           <a href='https://blockzerolabs.io/' target='_blank'>
             <Box className={classes.bottomPara}>
               <Typography variant='body2'>Created By </Typography>
-              <img src={Blockzero} alt='logo' width='35px' />
-              <Typography variant='body2'>Blockzero Labs</Typography>
+              <img src={theme === 'dark' ? WhiteLogo : DarkLogo} alt='logo' width='35px' />
+              <Typography variant='body2'>blockzero</Typography>
             </Box>
+          </a>
+        </Box>
+        <Box className={classes.social}>
+          <a href='https://www.facebook.com/groups/xionetwork' target='_blank'>
+            <Facebook />
+          </a>
+          <a href='https://twitter.com/blockzerolabs' target='_blank'>
+            <Twitter />
+          </a>
+          <a href='https://t.me/xio_network' target='_blank'>
+            <Telegram />
+          </a>
+          <a href='https://www.youtube.com/channel/UCiOjFfIi1-jjQbRjJkJas2Q' target='_blank'>
+            <YouTube />
           </a>
         </Box>
       </Box>

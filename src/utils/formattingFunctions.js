@@ -11,7 +11,7 @@ export const ogTrunc = (val, test) => {
   if (!Number(val)) {
     return 0;
   }
-  const _val = val - Math.trunc(val);
+  const _val = (val * 100 - Math.trunc(val) * 100) / 100;
   if (!_val) {
     return Math.trunc(val);
   }
@@ -37,26 +37,6 @@ export const ogTrunc = (val, test) => {
     parseFloat(_val.toString().match(new RegExp('^-?\\d+(?:.\\d{0,' + decimal + '})?'))[0])
   ).toFixed(decimal);
 };
-
-// export const trunc = (val, test) => {
-//   // let _val = val.toString();
-//   let _val = ogTrunc(val).toString();
-//   const _val2 = _val.split('.');
-//   if (_val2[0].length > 8) {
-//     const _val = _val2[0].slice(0, 4);
-//     const __val = _val2[0].slice(_val2.length - 4, val.length);
-//     let joined = [_val, __val].join('..');
-//     if (_val2[1]) {
-//       joined += '.' + _val2[1].slice(0, 2);
-//     }
-//     return joined;
-//   } else if (_val2[1]) {
-//     const pointValue = _val2[0] + '.' + _val2[1].slice(0, 2);
-//     return Number(pointValue).toLocaleString();
-//   } else {
-//     return Number(_val).toLocaleString();
-//   }
-// };
 
 export const trunc = (val, test) => {
   let _val = ogTrunc(val, test).toString();

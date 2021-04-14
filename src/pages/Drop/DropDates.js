@@ -2,15 +2,15 @@ import { Box, Typography } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { DATE_FORMAT } from '../../config/constants';
 
 import { Button } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
 import { useDropInputs } from '../../hooks';
+import { DATE_FORMAT } from '../../config/constants';
 
-const DropDates = ({ setContent }) => {
+const DropDates = () => {
   const classes = useStyles();
-  const { startDate, endDate, saveFieldsF } = useDropInputs();
+  const { startDate, endDate, saveFieldsF, changeTabF } = useDropInputs();
 
   const handleDateTimeChange = (date, key) => {
     saveFieldsF({ [key]: date });
@@ -29,7 +29,7 @@ const DropDates = ({ setContent }) => {
       saveFieldsF({ endDate: _endDate.toISOString() });
     }
 
-    setContent('uploadCSV');
+    changeTabF('uploadCSV');
   };
 
   const setStartMaxDate = date => {
@@ -40,7 +40,7 @@ const DropDates = ({ setContent }) => {
 
   const setEndMinDate = date => {
     let tempDate;
-    if (date) {
+    if (date && date != 'Invalid Date') {
       tempDate = new Date(date);
       tempDate.setDate(tempDate.getDate() + 1);
     } else {
@@ -50,9 +50,21 @@ const DropDates = ({ setContent }) => {
     return tempDate;
   };
 
+  const handleKeyDown = (e, key) => {
+    if (e.keyCode === 8) {
+      saveFieldsF({ [key]: null });
+    } else {
+      e.preventDefault();
+    }
+  };
+
   return (
     <Box className={classes.mainContainer}>
-      <Typography variant='body2' className={classes.para}>
+      <Typography
+        variant='body2'
+        className={classes.para}
+        style={{ width: '100%', fontSize: '13px', wordSpacing: '0px', letterSpacing: '1px' }}
+      >
         Enter Start and End dates for token claims
       </Typography>
 
@@ -65,7 +77,9 @@ const DropDates = ({ setContent }) => {
         InputProps={{ disableUnderline: true }}
         disablePast
         autoComplete='off'
-        maxDate={endDate ? setStartMaxDate(endDate) : ''}
+        maxDate={endDate ? setStartMaxDate(endDate) : undefined}
+        onKeyDown={e => handleKeyDown(e, 'startDate')}
+        //rifmFormatter={str => str}
       />
 
       <KeyboardDatePicker
@@ -78,10 +92,11 @@ const DropDates = ({ setContent }) => {
         disablePast
         autoComplete='off'
         minDate={startDate ? setEndMinDate(startDate) : setEndMinDate()}
+        onKeyDown={e => handleKeyDown(e, 'endDate')}
       />
 
       <Box className={classes.btnContainer}>
-        <Button onClick={() => setContent('token')}>
+        <Button onClick={() => changeTabF('token')}>
           <ArrowBackIcon />
           <span>Back</span>
         </Button>

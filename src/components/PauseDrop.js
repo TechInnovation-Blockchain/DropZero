@@ -6,7 +6,7 @@ import Dialog from './Dialog';
 import { useDropDashboard } from '../hooks';
 import { pauseDrop, unpauseDrop } from '../contracts/functions/dropFactoryFunctions';
 
-const PauseDrop = ({ value, tokenAddress, merkleRoot, dropId }) => {
+const PauseDrop = ({ value, tokenAddress, merkleRoot, dropId, disabled }) => {
   const { pauseDropF } = useDropDashboard();
   const { account } = useWeb3React();
 
@@ -58,7 +58,7 @@ const PauseDrop = ({ value, tokenAddress, merkleRoot, dropId }) => {
         handleClose={() => setFormData({ ...formData, open: false })}
         btnOnClick={check ? handleUnPause : handlePause}
       />
-      <Switch checked={check} onChange={handleChange} color='primary' />
+      <Switch disabled={disabled} checked={check} onChange={handleChange} color='primary' />
     </Fragment>
   );
 };

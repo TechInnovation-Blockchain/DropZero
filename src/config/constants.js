@@ -33,3 +33,5 @@ export const ETHERSCAN_ADDRESS_BASE_URL =
   process.env.REACT_APP_ENVIRONMENT === 'PRODUCTION'
     ? 'https://etherscan.io/address/'
     : 'https://rinkeby.etherscan.io/address/';
+
+export const VALID_CHAIN = process.env.REACT_APP_ENVIRONMENT === 'PRODUCTION' ? 1 : 4;

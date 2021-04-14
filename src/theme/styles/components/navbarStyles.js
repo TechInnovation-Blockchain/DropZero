@@ -10,15 +10,22 @@ export const useStyles = makeStyles(theme => ({
   },
   navlink: {
     textDecoration: 'none',
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.disabled,
     padding: theme.spacing(0, 1.5),
     textTransform: 'uppercase',
     '& .MuiTypography-body2': {
       letterSpacing: 5,
     },
+    '& p': {
+      opacity: '0.7',
+    },
   },
   activeNavlink: {
     color: theme.palette.text.primary,
+    '& p': {
+      fontWeight: 'bold',
+      opacity: '1',
+    },
   },
   navTypography: {
     fontWeight: 600,

@@ -22,6 +22,10 @@ const claimReducer = (state = initialState, action) => {
       return { ...state, unlockedClaims: [], lockedClaims: [] };
     case claimTypes.GET_CLAIMS_HISTORY:
       return { ...state, claimsHistory: payload };
+    case claimTypes.RESET_CLAIMS:
+      return { ...state, availableClaims: [], unlockedClaims: [], lockedClaims: [] };
+    case claimTypes.RESET_CLAIMS_HISTORY:
+      return { ...state, claimsHistory: [] };
     case claimTypes.REMOVE_CLAIMS:
       const newUnlockedClaims = state.unlockedClaims.filter(
         ({ _id }) => !payload.claims.includes(_id)

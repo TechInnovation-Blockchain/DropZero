@@ -31,9 +31,9 @@ export const getTokenLogo = async tokenAddress => {
 };
 
 //clear all drop inputs
-export const clearFields = () => {
+export const clearFields = account => {
   return dispatch => {
-    dispatch({ type: dropTypes.CLEAR_FIELDS });
+    dispatch({ type: dropTypes.CLEAR_FIELDS, payload: account });
   };
 };
 
@@ -46,7 +46,7 @@ export const clearCSV = () => {
 
 //uploading csv on server
 export const uploadCSV = (
-  { file, account, token, startDate, endDate, tokenType, decimal },
+  { file, account, token, startDate, endDate, dropName, decimal },
   onError
 ) => {
   return async dispatch => {
@@ -56,7 +56,7 @@ export const uploadCSV = (
       formData.append('walletAddress', account);
       formData.append('tokenAddress', token);
       formData.append('decimal', decimal);
-      tokenType && formData.append('tokenType', tokenType);
+      dropName && formData.append('dropName', dropName);
       startDate && formData.append('startDate', new Date(startDate).getTime());
       endDate && formData.append('endDate', new Date(endDate).getTime());
 
@@ -213,4 +213,32 @@ export const rejectDrop = async (dropperAddress, merkleRoot) => {
     logError('rejectDrop', e);
     return false;
   }
+};
+
+export const resetDrops = () => {
+  return async dispatch => {
+    dispatch({ type: dropTypes.RESET_DROPS });
+  };
+};
+
+export const checkDropName = async (dropName, tokenAddress) => {
+  try {
+    const body = { dropName, tokenAddress };
+    const res = await axios.post(`${BASE_URL}/dropper/check_drop`, body, config);
+    logMessage('checkDropName', res);
+    if (res?.data?.responseCode) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    logError('checkDropName', e);
+    return false;
+  }
+};
+
+export const changeTab = tab => {
+  return async dispatch => {
+    dispatch({ type: dropTypes.CHANGE_TAB, payload: tab });
+  };
 };

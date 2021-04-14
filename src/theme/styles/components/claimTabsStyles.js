@@ -32,9 +32,12 @@ export const useStyles = makeStyles(theme => ({
       cursor: 'pointer',
       color: theme.palette.text.secondary,
       fontWeight: 500,
+      opacity: '0.7',
     },
   },
   activeTab: {
     color: `${theme.palette.text.primary} !important`,
+    fontWeight: 'bold !important',
+    opacity: '1 !important',
   },
 }));

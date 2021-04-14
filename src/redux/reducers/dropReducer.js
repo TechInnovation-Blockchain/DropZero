@@ -5,12 +5,25 @@ const initialState = {
     tokenName: '',
     tokenLogo: '',
     token: '',
-    tokenType: '',
-    startDate: null,
-    endDate: null,
+    dropName: '',
     dropExists: false,
     approved: 0,
+
+    startDate: null,
+    endDate: null,
+
+    validated: false,
+    loading: false,
+    error: '',
+
+    file: null,
+    totalAmount: 0,
+    totalAddress: 0,
+    balance: 0,
+    csvError: '',
   },
+  currentAccount: '',
+  currentTab: 'token',
   csv: null,
   userDrops: null,
   dropsPausing: false,
@@ -22,14 +35,24 @@ const dropReducer = (state = initialState, action) => {
     case dropTypes.SAVE_FIELDS:
       return { ...state, fields: { ...state.fields, ...payload } };
     case dropTypes.CLEAR_FIELDS:
-      return { ...state, fields: initialState.fields };
+      return {
+        ...state,
+        fields: initialState.fields,
+        csv: null,
+        currentTab: 'token',
+        currentAccount: payload ? payload : state.currentAccount,
+      };
     case dropTypes.UPLOAD_CSV:
       return { ...state, csv: payload };
     case dropTypes.GET_DROPS:
       const pausedDrops = payload.filter(({ pauseDrop }) => pauseDrop === true);
       return { ...state, userDrops: payload, dropsPausing: pausedDrops.length > 0 };
+    case dropTypes.RESET_DROPS:
+      return { ...state, userDrops: [], dropsPausing: false };
     case dropTypes.CLEAR_CSV:
       return { ...state, csv: null };
+    case dropTypes.CHANGE_TAB:
+      return { ...state, currentTab: payload };
     case dropTypes.PAUSE_DROP:
       const tempDrops = state.userDrops;
       let targetData = tempDrops.filter(({ _id }) => _id === payload.id)[0];

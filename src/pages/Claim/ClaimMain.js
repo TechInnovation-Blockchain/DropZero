@@ -5,15 +5,17 @@ import { useWeb3React } from '@web3-react/core';
 import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
 import { PageAnimation, ClaimTabs, ClaimTokenCard } from '../../components';
 import { useClaims } from '../../hooks';
+import { VALID_CHAIN } from '../../config/constants';
 
 const ClaimMain = () => {
   const classes = useStyles();
-  const { account } = useWeb3React();
+  const { account, chainId } = useWeb3React();
   const {
     availableClaims,
     getAvailableClaimsF,
     setLockAndUnlockClaimsF,
     resetLockAndUnlockClaimsF,
+    resetClaimsF,
   } = useClaims();
 
   const [formData, setFormData] = useState({
@@ -62,9 +64,13 @@ const ClaimMain = () => {
 
   useEffect(() => {
     setFormData({ ...formData, initial: false });
-    getAvailableClaimsF(account);
-    resetLockAndUnlockClaimsF();
-  }, [account]);
+    if (chainId === VALID_CHAIN) {
+      getAvailableClaimsF(account);
+      resetLockAndUnlockClaimsF();
+    } else {
+      resetClaimsF();
+    }
+  }, [account, chainId]);
 
   return availableClaims ? (
     <PageAnimation in={true} reverse={1}>

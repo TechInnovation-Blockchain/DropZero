@@ -39,14 +39,14 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
     tokenSymbol: '',
     tokenName: '',
     open: false,
-    csvFile: '',
+    loadingCSVFile: false,
   });
-  const { open, tokenLogo, tokenSymbol, tokenName, csvFile } = formData;
+  const { open, tokenLogo, tokenSymbol, tokenName, loadingCSVFile } = formData;
   const {
     _id,
     dropperAddress,
     tokenAddress,
-    tokenType,
+    dropName,
     endDate,
     amount,
     totalAmount,
@@ -67,21 +67,26 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
     });
   };
 
+  const handleCSVDownload = async e => {
+    setFormData({ ...formData, loadingCSVFile: true });
+    const fileURL = await getCSVFile(data?._id, tokenName);
+    console.log(fileURL);
+    // if (fileURL) {
+    //   window.location.href = fileURL;
+    // }
+    setFormData({ ...formData, loadingCSVFile: false });
+  };
+
   useEffect(() => {
     if (tokenAddress) {
       const fetchAPI = async () => {
         const logo = await getTokenLogo(Web3.utils.toChecksumAddress(tokenAddress));
         const symbol = await getSymbol(tokenAddress);
         const name = await getName(tokenAddress);
-        let _csvFile = '';
-        if (!claim) {
-          _csvFile = await getCSVFile(data?._id, name);
-        }
         setFormData({
           tokenLogo: logo,
           tokenSymbol: symbol ? symbol : 'Unknown',
           tokenName: name ? name : '',
-          csvFile: _csvFile,
         });
       };
       fetchAPI();
@@ -134,7 +139,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
           <Box className={classes.accordianContent}>
             <Typography variant='body2'>Token</Typography>
             {tokenName ? (
-              (isMobile && tokenName.length > 14) || tokenName.length > 19 ? (
+              (isMobile && tokenName.length >= 14) || tokenName.length >= 19 ? (
                 <Tooltip title={tokenName}>
                   <Typography variant='body2'>
                     {truncFileName(tokenName, isMobile ? 14 : 19)}
@@ -147,13 +152,13 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
               <Skeleton animation='wave' width='80px' height='30px' />
             )}
           </Box>
-          {tokenType && (
+          {dropName && (
             <Box
               className={classes.accordianContent}
               style={{ alignItems: 'flex-start', minHeight: '20px', height: 'auto' }}
             >
-              <Typography variant='body2'>Token type</Typography>
-              <Typography variant='body2'>{tokenType}</Typography>
+              <Typography variant='body2'>Drop Name</Typography>
+              <Typography variant='body2'>{dropName}</Typography>
             </Box>
           )}
           {claim && (
@@ -174,7 +179,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
                     Please confirm you are withdrawing{' '}
                     <Tooltip title={totalAmount}>
                       <Typography variant='body2' component='span'>
-                        {trunc(totalAmount)}{' '}
+                        {trunc(totalAmount - totalClaimed)}{' '}
                       </Typography>
                     </Tooltip>
                     tokens from Dropzero to be returned to your connected wallet
@@ -208,10 +213,11 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
                   dropId={_id}
                   merkleRoot={merkleRoot}
                   tokenAddress={tokenAddress}
+                  disabled={totalAmount - totalClaimed === 0}
                 />
               </Box>
 
-              <Box className={classes.btnWrapper}>
+              <Box className={`${classes.btnWrapper} ${loadingCSVFile ? classes.btnLoading : ''}`}>
                 <Button
                   loading={dapp === 'withdraw'}
                   onClick={() => setFormData({ ...formData, open: true })}
@@ -219,10 +225,12 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
                 >
                   <span>Withdraw</span>
                 </Button>
-                <Button disabled={csvFile === ''} className={classes.accordionBtn}>
-                  <a href={csvFile} target='_blank'>
-                    <span>Claim Status</span>
-                  </a>
+                <Button
+                  onClick={handleCSVDownload}
+                  loading={loadingCSVFile}
+                  className={classes.accordionBtn}
+                >
+                  <span>Claim Status</span>
                 </Button>
               </Box>
             </Fragment>

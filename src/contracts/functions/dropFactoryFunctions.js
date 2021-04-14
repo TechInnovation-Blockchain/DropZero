@@ -12,11 +12,10 @@ import {
   rejectDrop,
 } from '../../redux';
 
-const contract = dropFactoryContract();
-
 //check drop exists or not
 export const isDropCreated = async tokenAddress => {
   try {
+    const contract = dropFactoryContract();
     const res = await contract.methods.drops(tokenAddress).call();
     logMessage('isDropCreated', res);
     return res !== '0x0000000000000000000000000000000000000000';
@@ -28,6 +27,7 @@ export const isDropCreated = async tokenAddress => {
 //create drop
 export const createDrop = async (tokenAddress, walletAddress, callback) => {
   try {
+    const contract = dropFactoryContract();
     transactionPending({}, { text: 'Creating Drop' }, 'drop');
     await contract.methods
       .createDrop(tokenAddress)
@@ -86,6 +86,7 @@ export const addDropData = async (
   callback
 ) => {
   try {
+    const contract = dropFactoryContract();
     transactionPending({}, { text: 'Drop Pending' }, 'upload');
     onload();
     await contract.methods
@@ -118,6 +119,7 @@ export const addDropData = async (
 //pause claims of drop
 export const pauseDrop = async (dropId, tokenAddress, walletAddress, merkleRoot, callback) => {
   try {
+    const contract = dropFactoryContract();
     transactionPending({}, { text: 'Pausing Drop' });
     const res = await startpause(dropId, true);
     if (res) {
@@ -151,6 +153,7 @@ export const pauseDrop = async (dropId, tokenAddress, walletAddress, merkleRoot,
 //unpause claims of drop
 export const unpauseDrop = async (dropId, tokenAddress, walletAddress, merkleRoot, callback) => {
   try {
+    const contract = dropFactoryContract();
     transactionPending({}, { text: 'Unpausing Drop' });
     const res = await startpause(dropId, false);
     if (res) {
@@ -194,6 +197,7 @@ export const withdraw = async (
   callback
 ) => {
   try {
+    const contract = dropFactoryContract();
     transactionPending({}, { text: 'Withdraw Pending' }, 'withdraw');
     const res = await startWithdraw(dropperAddress, dropId);
     if (res) {
@@ -236,6 +240,7 @@ export const multipleClaims = async (
   callback
 ) => {
   try {
+    const contract = dropFactoryContract();
     transactionPending({}, { text: 'Claim Pending' }, 'claim');
     const res = await withdrawMultipleClaimedToken(walletAddress, merkleRoots);
     if (res) {
@@ -274,7 +279,7 @@ export const singleClaim = async (
   callback
 ) => {
   try {
-    console.log('single claim');
+    const contract = dropFactoryContract();
     transactionPending({}, { text: 'Claim Pending' }, 'claim');
     const res = await withdrawClaimedToken(id[0]);
     if (res) {

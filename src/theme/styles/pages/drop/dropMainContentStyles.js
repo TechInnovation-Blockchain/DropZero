@@ -22,6 +22,9 @@ export const useStyles = makeStyles(theme => ({
     width: '90%',
     margin: '8px auto',
     height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     '@media(max-width:550px)': {
       width: '100%',
     },
@@ -30,6 +33,7 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     width: '90%',
+    // margin: theme.spacing(1, 0),
     '@media(max-width:550px)': {
       width: '100%',
     },
@@ -60,8 +64,11 @@ export const useStyles = makeStyles(theme => ({
     },
     '& .MuiFormHelperText-root': {
       position: 'absolute',
+      width: '95%',
+      textAlign: 'center',
       bottom: -20,
-      fontWeight: 700,
+      fontWeight: 500,
+      fontSize: '10px',
     },
   },
   timePicker: {
@@ -74,11 +81,11 @@ export const useStyles = makeStyles(theme => ({
   },
   error: {
     color: theme.palette.error.main,
-    fontWeight: 700,
+    fontWeight: 500,
     position: 'absolute',
-    left: 12,
-    top: '48%',
-    fontSize: '12px',
+    // left: 12,
+    top: '49%',
+    fontSize: '10px',
     '@media(max-width:550px)': {
       fontSize: '10px',
     },
@@ -142,8 +149,8 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     color: theme.palette.text.secondary,
     position: 'absolute',
-    left: 15,
-    top: '48%',
+    // left: 15,
+    top: '49%',
     '& p': {
       marginLeft: 5,
       fontSize: '12px',

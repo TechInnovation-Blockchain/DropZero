@@ -89,7 +89,7 @@ export const transactionRejected = (snackBar, modal) => {
 
   store.dispatch({
     type: uiTypes.SHOW_MODAL,
-    payload: { variant: 'error', open: true, showCloseBtn: true, btnText: 'Dismiss', ...modal },
+    payload: { variant: 'blocked', open: true, showCloseBtn: true, btnText: 'Dismiss', ...modal },
   });
 
   store.dispatch({

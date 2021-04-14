@@ -66,8 +66,6 @@ const WalletDialog = ({ open, setOpen, address, items = [], activate = () => {} 
           ) : null}
         </Box>
 
-        {}
-
         {filteredData().length ? (
           <List className={classes.list}>
             {filteredData().map(({ name, connector, connectorType, logo }) => (

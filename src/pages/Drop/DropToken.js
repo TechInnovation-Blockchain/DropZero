@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Box, Typography, CircularProgress, Tooltip } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
@@ -9,35 +9,38 @@ import { InputField, Button } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
 import { getName, getAllowance, approve } from '../../contracts/functions/erc20Functions';
 import { createDrop, isDropCreated } from '../../contracts/functions/dropFactoryFunctions';
-import { useDropInputs, useLoading, useWeb3 } from '../../hooks';
-import { getTokenLogo } from '../../redux';
+import { useDropInputs, useLoading } from '../../hooks';
+import { getTokenLogo, checkDropName } from '../../redux';
 
 const tokenRegex = /^[a-zA-Z0-9]*$/;
-const tokenTypeRegex = /^[a-zA-Z ']*$/;
+const dropNameRegex = /^[a-zA-Z0-9 ]*$/;
 
-const DropToken = ({ setContent }) => {
+const DropToken = () => {
   const classes = useStyles();
   const {
     token,
-    tokenType,
+    dropName,
     tokenName,
     tokenLogo,
     dropExists,
     approved,
+    validated,
+    loading,
+    error,
+    changeTabF,
     saveFieldsF,
   } = useDropInputs();
-  // const { account } = useWeb3React();
-  const { account } = useWeb3();
+  const { account } = useWeb3React();
   const {
     loading: { dapp },
   } = useLoading();
 
-  const [formData, setFormData] = useState({
-    validated: token ? true : false,
-    error: '',
-    loading: false,
-  });
-  const { validated, error, loading } = formData;
+  // const [formData, setFormData] = useState({
+  //   validated: token ? true : false,
+  //   error: '',
+  //   loading: false,
+  // });
+  // const { validated, error, loading } = formData;
 
   const handleTokenChange = ({ target }) => {
     const token = target?.value;
@@ -47,17 +50,19 @@ const DropToken = ({ setContent }) => {
     }
   };
 
-  const handleTypeChange = ({ target }) => {
-    const type = target?.value;
-    if (tokenTypeRegex.test(type)) {
-      saveFieldsF({ tokenType: type });
+  const handleDropNameChange = async ({ target }) => {
+    const _dropName = target?.value;
+    if (dropNameRegex.test(_dropName)) {
+      saveFieldsF({ dropName: _dropName });
+      // await checkDropName(_dropName, token);
     }
   };
 
   const handleClick = async () => {
-    setFormData({ ...formData, dropExists: false });
+    //setFormData({ ...formData, dropExists: false });
     saveFieldsF({ token: web3.utils.toChecksumAddress(token) });
-    setContent('dates');
+    //setContent('dates');
+    changeTabF('dates');
   };
 
   const handleDropCreate = async () => {
@@ -71,15 +76,19 @@ const DropToken = ({ setContent }) => {
   const validateAddress = token => {
     setTimeout(async () => {
       if (token) {
-        setFormData({
-          ...formData,
-          validated: false,
-          loading: true,
-          error: '',
-        });
+        // setFormData({
+        //   ...formData,
+        //   validated: false,
+        //   loading: true,
+        //   error: '',
+        // });
         saveFieldsF({
           dropExists: false,
           approved: 0,
+
+          validated: false,
+          loading: true,
+          error: '',
         });
 
         const _tokenName = await getName(token);
@@ -89,63 +98,49 @@ const DropToken = ({ setContent }) => {
             tokenLogo: await getTokenLogo(web3.utils.toChecksumAddress(token)),
             dropExists: await isDropCreated(token),
             approved: await getAllowance(token, account),
-          });
-          setFormData({
-            ...formData,
+
             validated: true,
             loading: false,
             error: '',
           });
+          // setFormData({
+          //   ...formData,
+          //   validated: true,
+          //   loading: false,
+          //   error: '',
+          // });
         } else {
-          saveFieldsF({ tokenName: 'Unknown', dropExists: false, approved: 0 });
-          setFormData({
-            ...formData,
+          saveFieldsF({
+            tokenName: 'Unknown',
+            dropExists: false,
+            approved: 0,
+
             validated: false,
             error: 'Please enter a correct Token Address',
             loading: false,
           });
+          // setFormData({
+          //   ...formData,
+          //   validated: false,
+          //   error: 'Please enter a correct Token Address',
+          //   loading: false,
+          // });
         }
       } else {
-        saveFieldsF({ dropExists: false, approved: 0 });
-        setFormData({ ...formData, validated: false, error: '' });
+        saveFieldsF({ dropExists: false, approved: 0, validated: false, error: '' });
+        //setFormData({ ...formData, validated: false, error: '' });
       }
     }, 500);
   };
 
-  window.ethereum?.on('accountsChanged', () => {
-    setFormData({
-      ...formData,
-      validated: false,
-      error: '',
-      loading: false,
-    });
-  });
-
-  // useEffect(() => {
+  // window.ethereum?.on('accountsChanged', () => {
   //   setFormData({
   //     ...formData,
   //     validated: false,
   //     error: '',
   //     loading: false,
   //   });
-
-  //   saveFieldsF({
-  //     dropExists: false,
-  //     approved: 0,
-  //     token: '',
-  //   });
-  //   console.log('hello');
-  // }, [account]);
-
-  // console.log(token);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     console.log('Token => ', token);
-  //   }, 5000);
-  // }, [account]);
-
-  // console.log(formData);
+  // });
 
   return (
     <Box className={classes.mainContainer}>
@@ -161,7 +156,7 @@ const DropToken = ({ setContent }) => {
       )}
 
       <InputField
-        placeholder='Token Address*'
+        placeholder='Token Address'
         name='token'
         value={token}
         onChange={handleTokenChange}
@@ -180,12 +175,13 @@ const DropToken = ({ setContent }) => {
       </Typography>
 
       <InputField
-        placeholder='Token Type'
-        name='tokenType'
-        value={tokenType}
-        onChange={handleTypeChange}
+        placeholder='Name This Drop'
+        name='dropName'
+        value={dropName}
+        onChange={handleDropNameChange}
         autoComplete='off'
-        inputProps={{ maxLength: 20 }}
+        inputProps={{ maxLength: 15 }}
+        // disabled={!validated}
       />
 
       <Tooltip title='Example: "Early Birds"'>
@@ -212,11 +208,11 @@ const DropToken = ({ setContent }) => {
         </Button>
       </Box>
 
-      {validated && dropExists && (
+      {/* {validated && dropExists && (
         <Typography variant='body2' className={classes.dropExist}>
           Drop already exists
         </Typography>
-      )}
+      )} */}
     </Box>
   );
 };

@@ -70,13 +70,17 @@ const Disclaimer = ({
               pausing, stopping and withdrawing airdrops will be owned and managed by the project
               <br />
               <br />
-              <span className={classes.colored}>5) </span> YAll airdrops through Dropzero are
+              <span className={classes.colored}>5) </span> All airdrops through Dropzero are
               on-chain and Blockzero Labs do not own or manage any airdrop data or mainnet
               performance
             </Typography>
           ) : (
             type === 'main' && (
-              <Typography variant='body2' className={classes.content}>
+              <Typography
+                variant='body2'
+                className={classes.content}
+                style={{ textAlign: 'center' }}
+              >
                 Dropzero is in beta and has not been formally audited. While the smart contracts and
                 code are publicly available, we highly encourage caution during these early days of
                 the Dapp. Use at your own discretion.

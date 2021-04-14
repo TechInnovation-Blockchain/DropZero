@@ -4,7 +4,6 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PublishIcon from '@material-ui/icons/Publish';
 import { useWeb3React } from '@web3-react/core';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import Web3 from 'web3';
 import { utils } from 'ethers';
 
 import { Button, Dialog, ActionDialog, DisclaimerDialog } from '../../components';
@@ -17,19 +16,28 @@ import { logMessage } from '../../utils/log';
 import { validateCSV } from '../../utils/validatingFunctions';
 import TempCSV from '../../assets/temp.csv';
 
-const fileNameRegex = /^[A-Z]{1,15}.csv$/i;
+const fileNameRegex = /^[a-zA-Z0-9]{1,15}.csv$/i;
 
-const DropCSV = ({ setContent }) => {
+const DropCSV = () => {
   const classes = useStyles();
   const {
     token,
     startDate,
     endDate,
-    tokenType,
+    dropName,
     csv,
+
+    // file,
+    // csvError,
+    // totalAmount,
+    // totalAddress,
+    // balance,
+
     clearFieldsF,
     uploadCSVF,
     clearCSVF,
+    changeTabF,
+    saveFieldsF,
   } = useDropInputs();
   const { account } = useWeb3React();
   const { getUserDropsF } = useDropDashboard();
@@ -39,7 +47,7 @@ const DropCSV = ({ setContent }) => {
 
   const [formData, setFormData] = useState({
     file: null,
-    error: '',
+    csvError: '',
     open: false,
     openDis: false,
     loadingContent: '',
@@ -50,7 +58,7 @@ const DropCSV = ({ setContent }) => {
 
   const {
     file,
-    error,
+    csvError,
     open,
     openDis,
     totalAmount,
@@ -62,8 +70,10 @@ const DropCSV = ({ setContent }) => {
   const uploadingCSV = _file => {
     if (_file) {
       if (fileNameRegex.test(_file.name)) {
+        //saveFieldsF({ csvError: '', totalAmount: 0, totalAddress: 0 });
         setFormData({
           ...formData,
+          csvError: '',
           loadingContent: 'Validating CSV',
           totalAmount: 0,
           totalAddress: 0,
@@ -75,21 +85,34 @@ const DropCSV = ({ setContent }) => {
           const { validCSV, _totalAmount, _totalAddress } = validateCSV(content.split('\n'));
           if (validCSV) {
             const balance = await getBalance(token, account);
+            const decimal = await getDecimal(token);
             setFormData({
               ...formData,
               file: _file,
-              error: '',
+              csvError: '',
               loadingContent: '',
               totalAmount: _totalAmount,
               totalAddress: _totalAddress,
-              balance: Number(balance),
+              balance: Number(utils.formatUnits(balance.toString(), decimal).toString()),
             });
+            // saveFieldsF({
+            //   file: _file,
+            //   csvError: '',
+            //   totalAmount: _totalAmount,
+            //   totalAddress: _totalAddress,
+            //   balance: Number(utils.formatUnits(balance.toString(), decimal).toString()),
+            // });
           } else {
             setFormData({
               ...formData,
               file: _file,
-              error: 'Invalid CSV',
+              csvError: 'Invalid CSV',
+              loadingContent: '',
             });
+            // saveFieldsF({
+            //   file: _file,
+            //   csvError: 'Invalid CSV',
+            // });
           }
         };
         fileReader.readAsText(_file);
@@ -97,8 +120,12 @@ const DropCSV = ({ setContent }) => {
         setFormData({
           ...formData,
           file: _file,
-          error: 'Invalid filename',
+          csvError: 'Invalid filename',
         });
+        // saveFieldsF({
+        //   file: _file,
+        //   csvError: 'Invalid filename',
+        // });
       }
     }
   };
@@ -112,7 +139,7 @@ const DropCSV = ({ setContent }) => {
   const uploadCSVOnServer = async () => {
     setFormData({ ...formData, loadingContent: 'Uploading CSV', openDis: false });
     const decimal = await getDecimal(token);
-    const data = { file, account, token, startDate, endDate, tokenType, decimal };
+    const data = { file, account, token, startDate, endDate, dropName, decimal };
     uploadCSVF(data, () => {
       setFormData({ ...formData, loadingContent: '', open: false, openDis: false });
     });
@@ -156,7 +183,7 @@ const DropCSV = ({ setContent }) => {
       },
       () => {
         clearFieldsF();
-        setContent('token');
+        //changeTabF('token');
         getUserDropsF(account);
       }
     );
@@ -209,7 +236,7 @@ const DropCSV = ({ setContent }) => {
       />
 
       <Typography variant='body2' className={classes.para}>
-        Who would you like to drop these tokens to ?
+        Who would you like to drop these tokens to?
       </Typography>
 
       <label className={classes.fileUploader} onDrop={handleDrop} onDragOver={handleAllowDrop}>
@@ -218,7 +245,7 @@ const DropCSV = ({ setContent }) => {
           <Typography variant='body2'>
             {file ? truncFileName(file.name, 20) : 'Choose or drag file'}
           </Typography>
-          {error === 'Invalid filename' && (
+          {csvError === 'Invalid filename' && (
             <Tooltip title='Example: "filename.csv" upto 15 characters are allowed'>
               <HelpOutlineIcon className={classes.help} style={{ top: '32%', right: 10 }} />
             </Tooltip>
@@ -234,16 +261,16 @@ const DropCSV = ({ setContent }) => {
       )}
 
       <Typography variant='body2' className={classes.error} style={{ top: '58%' }}>
-        {error}
+        {csvError}
       </Typography>
 
       <Box className={classes.btnContainer}>
-        <Button onClick={() => setContent('dates')}>
+        <Button onClick={() => changeTabF('dates')}>
           <ArrowBackIcon />
           <span>Back</span>
         </Button>
         <Button
-          disabled={file && error === '' ? false : true}
+          disabled={file && csvError === '' ? false : true}
           onClick={() => setFormData({ ...formData, open: true })}
           loading={dapp === 'upload'}
         >

@@ -30,7 +30,12 @@ const Snackbar = () => {
         </IconButton>
       }
     >
-      <Alert onClose={hideSnackbarF} severity={severity} className={classes.snackbarStyles}>
+      <Alert
+        onClose={hideSnackbarF}
+        severity={severity}
+        className={classes.snackbarStyles}
+        style={open ? {} : { display: 'none' }}
+      >
         {message}
         {transactionHash && (
           <a

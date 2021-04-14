@@ -52,6 +52,8 @@ export const getBalance = async (tokenAddress, walletAddress) => {
 
 export const getAllowance = async (tokenAddress, walletAddress) => {
   try {
+    console.log('Token Address =>', tokenAddress);
+    console.log('Wallet Address =>', walletAddress);
     const contract = erc20TokenContract(tokenAddress);
     const allowance = await contract.methods
       .allowance(walletAddress, CONTRACT_ADDRESSES.dropFactory)
@@ -66,8 +68,6 @@ export const approve = async (tokenAddress, walletAddress, callback) => {
   try {
     transactionPending({}, { text: 'Approval Pending' }, 'drop');
     const contract = erc20TokenContract(tokenAddress);
-    console.log(contract);
-
     await contract.methods
       .approve(CONTRACT_ADDRESSES.dropFactory, MaxUint256._hex)
       .send({ from: walletAddress })
