@@ -3,18 +3,17 @@ import { makeStyles } from '@material-ui/styles';
 export const useStyles = makeStyles(theme => ({
   mainContainer: {
     background: '#000',
+    height: 'auto !important',
   },
   innerContainer: {
     backgroundColor: theme.palette.background.dialog,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   heading: {
     fontWeight: 'bold',
     marginBottom: '10px',
     textTransform: 'uppercase',
+    width: '100%',
+    textAlign: 'center',
   },
   content: {
     color: theme.palette.text.primary,
@@ -38,5 +37,9 @@ export const useStyles = makeStyles(theme => ({
       letterSpacing: '1px',
       fontFamily: 'Montserrat',
     },
+  },
+  btnContainer: {
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));

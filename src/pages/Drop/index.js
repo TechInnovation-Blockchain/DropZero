@@ -33,6 +33,12 @@ const Drop = () => {
     }
   }, []);
 
+  // const temp = async () => {
+  //   console.log(await window?.ethereum?._metamask?.isUnlocked());
+  // };
+
+  // temp();
+
   return account ? (
     <Fragment>
       <Collapse in={expand}>

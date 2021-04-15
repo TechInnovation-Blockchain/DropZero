@@ -11,16 +11,7 @@ import {
 
 import { useStyles } from '../theme/styles/components/disclaimerStyles';
 
-const Disclaimer = ({
-  open,
-  handleClose,
-  heading,
-  check,
-  handleChange,
-  btnOnClick,
-  disableBackdrop,
-  type,
-}) => {
+const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClick, type }) => {
   const classes = useStyles();
 
   return (
@@ -49,6 +40,10 @@ const Disclaimer = ({
               <br />
               All queries relating to claimable tokens are to be directed to the project, not
               Blockzero Labs.
+              <br />
+              <br />
+              Dropzero is in beta and has not been formally audited. We highly encourage caution
+              during these early days of the Dapp. Use at your own discretion.
             </Typography>
           ) : type === 'drop' ? (
             <Typography variant='body2' className={classes.content}>
@@ -73,6 +68,10 @@ const Disclaimer = ({
               <span className={classes.colored}>5) </span> All airdrops through Dropzero are
               on-chain and Blockzero Labs do not own or manage any airdrop data or mainnet
               performance
+              <br />
+              <br />
+              Dropzero is in beta and has not been formally audited. We highly encourage caution
+              during these early days of the Dapp. Use at your own discretion.
             </Typography>
           ) : (
             type === 'main' && (
@@ -98,9 +97,11 @@ const Disclaimer = ({
             </Box>
           )}
 
-          <Button color='primary' onClick={btnOnClick} style={{ marginTop: '10px' }}>
-            I Understand
-          </Button>
+          <Box className={classes.btnContainer}>
+            <Button color='primary' onClick={btnOnClick} style={{ marginTop: '10px' }}>
+              I Understand
+            </Button>
+          </Box>
         </DialogContent>
       </DialogMui>
     </Fragment>

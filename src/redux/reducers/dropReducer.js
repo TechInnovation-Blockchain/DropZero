@@ -45,7 +45,9 @@ const dropReducer = (state = initialState, action) => {
     case dropTypes.UPLOAD_CSV:
       return { ...state, csv: payload };
     case dropTypes.GET_DROPS:
-      const pausedDrops = payload.filter(({ pauseDrop }) => pauseDrop === true);
+      const pausedDrops = payload.filter(
+        ({ pauseDrop, withDraw }) => pauseDrop === true && withDraw === false
+      );
       return { ...state, userDrops: payload, dropsPausing: pausedDrops.length > 0 };
     case dropTypes.RESET_DROPS:
       return { ...state, userDrops: [], dropsPausing: false };
@@ -67,11 +69,15 @@ const dropReducer = (state = initialState, action) => {
     case dropTypes.CLEAR_DROPS:
       return { ...state, userDrops: null };
     case dropTypes.WITHDRAW_DROP:
-      console.log('aa', payload);
-      const _tempDrops = state.userDrops.filter(({ _id }) => _id !== payload);
-      console.log('bb', _tempDrops);
+      const _tempDrops = state.userDrops;
+      const _index = _tempDrops.findIndex(({ _id }) => _id === payload._id);
+      _tempDrops[_index] = { ...payload, pauseDrop: false, withDraw: true };
       const __pausedDrops = _tempDrops.filter(({ pauseDrop }) => pauseDrop === true);
-      return { ...state, userDrops: _tempDrops, dropsPausing: __pausedDrops.length > 0 };
+      return {
+        ...state,
+        userDrops: _tempDrops,
+        dropsPausing: __pausedDrops.length > 0,
+      };
     default:
       return state;
   }

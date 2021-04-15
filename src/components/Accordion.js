@@ -40,8 +40,9 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
     tokenName: '',
     open: false,
     loadingCSVFile: false,
+    _withdraw: false,
   });
-  const { open, tokenLogo, tokenSymbol, tokenName, loadingCSVFile } = formData;
+  const { open, tokenLogo, tokenSymbol, tokenName, _withdraw, loadingCSVFile } = formData;
   const {
     _id,
     dropperAddress,
@@ -63,7 +64,8 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
   const handleWithdrawConfirm = async () => {
     setFormData({ ...formData, open: false });
     await withdraw(_id, dropperAddress, tokenAddress, account, merkleRoot, () => {
-      withdrawDropsF(_id);
+      withdrawDropsF(data);
+      setFormData({ ...formData, _withdraw: true, open: false });
     });
   };
 
@@ -71,9 +73,9 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
     setFormData({ ...formData, loadingCSVFile: true });
     const fileURL = await getCSVFile(data?._id, tokenName);
     console.log(fileURL);
-    // if (fileURL) {
-    //   window.location.href = fileURL;
-    // }
+    if (fileURL) {
+      window.location.href = fileURL;
+    }
     setFormData({ ...formData, loadingCSVFile: false });
   };
 
@@ -87,6 +89,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
           tokenLogo: logo,
           tokenSymbol: symbol ? symbol : 'Unknown',
           tokenName: name ? name : '',
+          _withdraw: data.withDraw,
         });
       };
       fetchAPI();
@@ -157,7 +160,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
               className={classes.accordianContent}
               style={{ alignItems: 'flex-start', minHeight: '20px', height: 'auto' }}
             >
-              <Typography variant='body2'>Drop Name</Typography>
+              <Typography variant='body2'>Drop name</Typography>
               <Typography variant='body2'>{dropName}</Typography>
             </Box>
           )}
@@ -206,25 +209,29 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
                 </Box>
               )}
 
-              <Box className={classes.accordianContent}>
-                <Typography variant='body2'>Pause Claims</Typography>
-                <PauseDrop
-                  value={pauseDrop}
-                  dropId={_id}
-                  merkleRoot={merkleRoot}
-                  tokenAddress={tokenAddress}
-                  disabled={totalAmount - totalClaimed === 0}
-                />
-              </Box>
+              {_withdraw !== true && (
+                <Box className={classes.accordianContent}>
+                  <Typography variant='body2'>Pause claims</Typography>
+                  <PauseDrop
+                    value={pauseDrop}
+                    dropId={_id}
+                    merkleRoot={merkleRoot}
+                    tokenAddress={tokenAddress}
+                    disabled={totalAmount - totalClaimed === 0}
+                  />
+                </Box>
+              )}
 
               <Box className={`${classes.btnWrapper} ${loadingCSVFile ? classes.btnLoading : ''}`}>
-                <Button
-                  loading={dapp === 'withdraw'}
-                  onClick={() => setFormData({ ...formData, open: true })}
-                  className={classes.accordionBtn}
-                >
-                  <span>Withdraw</span>
-                </Button>
+                {_withdraw !== true && (
+                  <Button
+                    loading={dapp === 'withdraw'}
+                    onClick={() => setFormData({ ...formData, open: true })}
+                    className={classes.accordionBtn}
+                  >
+                    <span>Withdraw</span>
+                  </Button>
+                )}
                 <Button
                   onClick={handleCSVDownload}
                   loading={loadingCSVFile}

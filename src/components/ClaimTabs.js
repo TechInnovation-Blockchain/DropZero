@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, Tooltip } from '@material-ui/core';
 
 import { useStyles } from '../theme/styles/components/claimTabsStyles';
 import RenderTokens from './RenderTokens';
@@ -31,8 +31,14 @@ const ClaimTabs = ({ goBack }) => {
             onClick={() => setTab('lock')}
             className={tab === 'lock' ? classes.activeTab : ''}
             variant='body2'
+            style={{ position: 'relative' }}
           >
             UPCOMING
+            {lockedClaims.length > 0 && (
+              <Tooltip title='You have upcoming claims' arrow>
+                <span className={classes.upcoming}></span>
+              </Tooltip>
+            )}
           </Typography>
         </Box>
 

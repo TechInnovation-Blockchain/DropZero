@@ -40,4 +40,13 @@ export const useStyles = makeStyles(theme => ({
     fontWeight: 'bold !important',
     opacity: '1 !important',
   },
+  upcoming: {
+    width: '10px',
+    height: '10px',
+    backgroundColor: '#f6c343 !important',
+    borderRadius: '50%',
+    position: 'absolute',
+    top: '21px',
+    marginLeft: '5px',
+  },
 }));

@@ -108,9 +108,9 @@ export const getUserDrops = walletAddress => {
 };
 
 //remove drop from redux
-export const withdrawDrops = dropId => {
+export const withdrawDrops = drop => {
   return async dispatch => {
-    dispatch({ type: dropTypes.WITHDRAW_DROP, payload: dropId });
+    dispatch({ type: dropTypes.WITHDRAW_DROP, payload: drop });
   };
 };
 
@@ -134,7 +134,7 @@ export const getCSVFile = async (dropId, tokenName) => {
   }
 };
 
-export const withdrawClaimedToken = async claimId => {
+export const withdrawClaimedToken = async (claimId, merkleRoot) => {
   try {
     const res = await axios.post(`${BASE_URL}/user/withdraw_claimed_token/${claimId}?claim=single`);
     logMessage('withdrawClaimedToken', res);

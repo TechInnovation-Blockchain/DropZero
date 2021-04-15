@@ -281,7 +281,7 @@ export const singleClaim = async (
   try {
     const contract = dropFactoryContract();
     transactionPending({}, { text: 'Claim Pending' }, 'claim');
-    const res = await withdrawClaimedToken(id[0]);
+    const res = await withdrawClaimedToken(id[0], merkleRoots[0]);
     if (res) {
       await contract.methods
         .claimFromDrop(tokenAddress, indexs[0], amounts[0], merkleRoots[0], merkleProofs[0])
