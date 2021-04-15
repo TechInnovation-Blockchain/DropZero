@@ -74,7 +74,8 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
     const fileURL = await getCSVFile(data?._id, tokenName);
     console.log(fileURL);
     if (fileURL) {
-      window.location.href = fileURL;
+      window.location.assign(fileURL);
+      //window.location.href = fileURL;
     }
     setFormData({ ...formData, loadingCSVFile: false });
   };

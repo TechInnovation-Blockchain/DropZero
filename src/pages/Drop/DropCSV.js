@@ -5,6 +5,7 @@ import PublishIcon from '@material-ui/icons/Publish';
 import { useWeb3React } from '@web3-react/core';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import { utils } from 'ethers';
+import { BigNumber } from 'bignumber.js';
 
 import { Button, Dialog, ActionDialog, DisclaimerDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
@@ -66,6 +67,8 @@ const DropCSV = () => {
     balance,
     loadingContent,
   } = formData;
+
+  //console.log(BigNumber(0.1) + BigNumber(0.2));
 
   const uploadingCSV = _file => {
     if (_file) {

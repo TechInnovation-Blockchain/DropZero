@@ -35,13 +35,6 @@ const DropToken = () => {
     loading: { dapp },
   } = useLoading();
 
-  // const [formData, setFormData] = useState({
-  //   validated: token ? true : false,
-  //   error: '',
-  //   loading: false,
-  // });
-  // const { validated, error, loading } = formData;
-
   const handleTokenChange = ({ target }) => {
     const token = target?.value;
     if (tokenRegex.test(token)) {
@@ -54,14 +47,11 @@ const DropToken = () => {
     const _dropName = target?.value;
     if (dropNameRegex.test(_dropName)) {
       saveFieldsF({ dropName: _dropName });
-      // await checkDropName(_dropName, token);
     }
   };
 
   const handleClick = async () => {
-    //setFormData({ ...formData, dropExists: false });
     saveFieldsF({ token: web3.utils.toChecksumAddress(token) });
-    //setContent('dates');
     changeTabF('dates');
   };
 
@@ -76,12 +66,6 @@ const DropToken = () => {
   const validateAddress = token => {
     setTimeout(async () => {
       if (token) {
-        // setFormData({
-        //   ...formData,
-        //   validated: false,
-        //   loading: true,
-        //   error: '',
-        // });
         saveFieldsF({
           dropExists: false,
           approved: 0,
@@ -103,12 +87,6 @@ const DropToken = () => {
             loading: false,
             error: '',
           });
-          // setFormData({
-          //   ...formData,
-          //   validated: true,
-          //   loading: false,
-          //   error: '',
-          // });
         } else {
           saveFieldsF({
             tokenName: 'Unknown',
@@ -119,28 +97,12 @@ const DropToken = () => {
             error: 'Please enter a correct Token Address',
             loading: false,
           });
-          // setFormData({
-          //   ...formData,
-          //   validated: false,
-          //   error: 'Please enter a correct Token Address',
-          //   loading: false,
-          // });
         }
       } else {
         saveFieldsF({ dropExists: false, approved: 0, validated: false, error: '' });
-        //setFormData({ ...formData, validated: false, error: '' });
       }
     }, 500);
   };
-
-  // window.ethereum?.on('accountsChanged', () => {
-  //   setFormData({
-  //     ...formData,
-  //     validated: false,
-  //     error: '',
-  //     loading: false,
-  //   });
-  // });
 
   return (
     <Box className={classes.mainContainer}>
@@ -181,7 +143,6 @@ const DropToken = () => {
         onChange={handleDropNameChange}
         autoComplete='off'
         inputProps={{ maxLength: 15 }}
-        // disabled={!validated}
       />
 
       <Tooltip title='Example: "Early Birds"'>

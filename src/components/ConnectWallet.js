@@ -154,7 +154,7 @@ const ConnectWallet = () => {
           <a href='https://twitter.com/blockzerolabs' target='_blank'>
             <Twitter />
           </a>
-          <a href='https://t.me/xio_network' target='_blank'>
+          <a href='https://t.me/blockzerolabs' target='_blank'>
             <Telegram />
           </a>
           <a href='https://www.youtube.com/channel/UCiOjFfIi1-jjQbRjJkJas2Q' target='_blank'>
