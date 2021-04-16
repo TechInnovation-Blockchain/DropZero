@@ -27,14 +27,24 @@ export const useStyles = makeStyles(theme => ({
     letterSpacing: 5,
   },
   noWallet: {
-    height: 80,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
+    height: '100px',
     '& p': {
       color: theme.palette.error.main,
       fontWeight: 700,
       fontSize: '14px',
+    },
+  },
+  noData: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100px',
+    '& p': {
+      color: theme.palette.text.secondary,
     },
   },
 }));

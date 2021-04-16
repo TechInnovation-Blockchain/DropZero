@@ -19,12 +19,14 @@ export const darkTheme = createMuiTheme({
       dialog: '#1A1A1A',
       disabled: '#2F2F2F',
       hover: '#000',
+      overlay: 'rgba(0,0,0,0.6)',
     },
     text: {
       primary: '#fff',
       secondary: '#C5C5C5',
       disabled: '#C5C5C5',
       placeholder: '#606060',
+      title: '#fff',
     },
     border: {
       lightBorder: '#333',
@@ -53,12 +55,14 @@ export const lightTheme = createMuiTheme({
       secondary2: '#fff',
       disabled: '#E2E2E2',
       hover: '#E5E5E5',
+      overlay: 'rgba(0,0,0,0.6)',
     },
     text: {
       primary: '#000',
       secondary: '#666',
       disabled: '#B2B2B2',
       placeholder: '#B8B8B8',
+      title: '#787A97',
     },
     border: {
       lightBorder: '#E7E8EA',

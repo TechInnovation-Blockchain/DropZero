@@ -1,79 +1,122 @@
-import { useState } from 'react';
-import { Box, Typography, CircularProgress } from '@material-ui/core';
+import { Box, Typography, CircularProgress, Tooltip } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import web3 from 'web3';
+import { useWeb3React } from '@web3-react/core';
 
 import { InputField, Button } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
-import { name } from '../../contracts/functions/erc20Functions';
-import { useDropInputs } from '../../hooks';
-import { getTokenLogo } from '../../redux';
+import { getName, getAllowance, approve } from '../../contracts/functions/erc20Functions';
+import { createDrop, isDropCreated } from '../../contracts/functions/dropFactoryFunctions';
+import { useDropInputs, useLoading } from '../../hooks';
+import { getTokenLogo, checkDropName } from '../../redux';
 
-const DropToken = ({ setContent }) => {
+const tokenRegex = /^[a-zA-Z0-9]*$/;
+const dropNameRegex = /^[a-zA-Z0-9 ]*$/;
+
+const DropToken = () => {
   const classes = useStyles();
-  const { token, tokenName, tokenLogo, date, saveFieldsF } = useDropInputs();
-  const [formData, setFormData] = useState({
-    validated: token ? true : false,
-    error: '',
-    loading: false,
-  });
-  const [dateError, setDateError] = useState(false);
-  const { validated, error, loading } = formData;
+  const {
+    token,
+    dropName,
+    tokenName,
+    tokenLogo,
+    dropExists,
+    approved,
+    validated,
+    loading,
+    error,
+    dropNameError,
+    changeTabF,
+    saveFieldsF,
+  } = useDropInputs();
+  const { account } = useWeb3React();
+  const {
+    loading: { dapp },
+  } = useLoading();
 
-  const handleChange = e => {
-    if (e?.target) {
-      saveFieldsF({ token: e.target.value });
-      setFormData({ ...formData, error: '' });
-    } else {
-      saveFieldsF({ date: e });
-      if (e == 'Invalid Date') {
-        setDateError(true);
-      } else {
-        setDateError(false);
+  const handleTokenChange = ({ target }) => {
+    const token = target?.value;
+    if (tokenRegex.test(token)) {
+      saveFieldsF({ token, dropName: '', dropNameError: '' });
+      validateAddress(token);
+    }
+  };
+
+  const handleDropNameChange = ({ target }) => {
+    const _dropName = target?.value;
+    if (dropNameRegex.test(_dropName)) {
+      saveFieldsF({
+        dropName: _dropName,
+        dropNameError: '',
+      });
+      if (_dropName.trim() !== '') {
+        saveFieldsF({ loading: 'dropName' });
+        setTimeout(async () => {
+          const res = await checkDropName(_dropName, token);
+          saveFieldsF({ dropNameError: res ? '' : 'Drop already exists', loading: '' });
+        }, 500);
       }
     }
   };
 
   const handleClick = async () => {
     saveFieldsF({ token: web3.utils.toChecksumAddress(token) });
-    setContent('uploadCSV');
+    changeTabF('dates');
   };
 
-  const validateAddress = () => {
+  const handleDropCreate = async () => {
+    await createDrop(token, account, () => saveFieldsF({ dropExists: true }));
+  };
+
+  const handleApprove = async () => {
+    await approve(token, account, () => saveFieldsF({ approved: 1 }));
+  };
+
+  const validateAddress = token => {
     setTimeout(async () => {
       if (token) {
-        setFormData({
-          ...formData,
-          loading: true,
+        saveFieldsF({
+          dropExists: false,
+          approved: 0,
+
+          validated: false,
+          loading: 'token',
+          error: '',
         });
-        const _tokenName = await name(token);
+
+        const _tokenName = await getName(token);
         if (web3.utils.isAddress(token) && _tokenName) {
           saveFieldsF({
-            ...formData,
             tokenName: _tokenName,
             tokenLogo: await getTokenLogo(web3.utils.toChecksumAddress(token)),
-          });
-          setFormData({ ...formData, validated: true, loading: false });
-        } else {
-          saveFieldsF({ tokenName: 'Unknown' });
-          setFormData({
-            ...formData,
-            validated: false,
-            error: 'Invalid Token Address',
+            dropExists: await isDropCreated(token),
+            approved: await getAllowance(token, account),
+
+            validated: true,
             loading: false,
+            error: '',
+          });
+        } else {
+          saveFieldsF({
+            tokenName: 'Unknown',
+            dropExists: false,
+            approved: 0,
+
+            validated: false,
+            error: 'Please enter a correct Token Address',
+            loading: '',
           });
         }
       } else {
-        setFormData({ ...formData, validated: false, error: '' });
+        saveFieldsF({ dropExists: false, approved: 0, validated: false, error: '' });
       }
     }, 500);
   };
 
   return (
     <Box className={classes.mainContainer}>
-      {validated && web3.utils.isAddress(token) ? (
+      {validated ? (
         <Box className={classes.tokenInfo}>
           <img src={tokenLogo} alt='logo' width='30px' />
           <Typography variant='body2'>{tokenName}</Typography>
@@ -85,15 +128,15 @@ const DropToken = ({ setContent }) => {
       )}
 
       <InputField
-        placeholder='Token Address*'
+        placeholder='Token Address'
         name='token'
         value={token}
-        onChange={handleChange}
+        onChange={handleTokenChange}
         autoComplete='off'
-        onKeyUp={validateAddress}
-        id='abx'
+        inputProps={{ maxLength: 42 }}
+        className={token.length === 42 ? classes.smallerField : ''}
       />
-      {loading && (
+      {loading === 'token' && (
         <Box className={classes.loading}>
           <CircularProgress size={12} color='inherit' />
           <Typography variant='body2'>Verifying</Typography>
@@ -103,25 +146,54 @@ const DropToken = ({ setContent }) => {
         {error}
       </Typography>
 
-      <MuiPickersUtilsProvider value={token} utils={DateFnsUtils}>
-        <KeyboardDatePicker
-          className={classes.datePicker}
-          margin='normal'
-          id='date-picker-dialog'
-          placeholder='MM/dd/yyyy'
-          InputProps={{ disableUnderline: true }}
-          format='MM/dd/yyyy'
-          value={date}
-          onChange={handleChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-          disablePast
-          autoComplete='off'
-        />
-      </MuiPickersUtilsProvider>
-      <Box>
-        <Button disabled={!validated || dateError} onClick={handleClick}>
+      <InputField
+        placeholder='Name This Drop'
+        name='dropName'
+        value={dropName}
+        onChange={handleDropNameChange}
+        autoComplete='off'
+        inputProps={{ maxLength: 15 }}
+        disabled={!validated}
+      />
+      {loading === 'dropName' && (
+        <Box className={classes.loading} style={{ top: '67%' }}>
+          <CircularProgress size={12} color='inherit' />
+          <Typography variant='body2'>Verifying</Typography>
+        </Box>
+      )}
+      <Typography variant='body2' className={classes.error} style={{ top: '67%' }}>
+        {dropNameError}
+      </Typography>
+
+      <Tooltip title='Example: "Early Birds"'>
+        <HelpOutlineIcon className={classes.help} />
+      </Tooltip>
+
+      <Box className={classes.btnContainer}>
+        {dropExists && approved <= 0 ? (
+          <Button loading={dapp === 'drop'} disabled={approved > 0} onClick={handleApprove}>
+            <span>Approve</span>
+          </Button>
+        ) : (
+          <Button
+            loading={dapp === 'drop'}
+            disabled={!validated || dropExists}
+            onClick={handleDropCreate}
+          >
+            <span>Create</span>
+          </Button>
+        )}
+        <Button
+          disabled={
+            !validated ||
+            !dropExists ||
+            approved <= 0 ||
+            loading !== '' ||
+            dropNameError !== '' ||
+            dropName === ''
+          }
+          onClick={handleClick}
+        >
           <span>Next</span>
           <ArrowForwardIcon />
         </Button>

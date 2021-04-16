@@ -8,20 +8,20 @@ export const useStyles = makeStyles(theme => ({
     color: '#fff',
     borderRadius: 2,
     width: '150px',
+    // padding: '8px 0',
     '& svg': {
-      // color: '#fff',
       color: `${theme.palette.text.primary}`,
-      width: '20px',
+      fontSize: '20px',
     },
     '& span': {
       margin: '0 10px',
-      // color: '#fff',
       color: `${theme.palette.text.primary}`,
       fontSize: '14px',
       letterSpacing: '1.5px',
     },
     '@media(max-width:550px)': {
-      width: '120px',
+      width: '130px',
+      padding: '6px 0',
       '& span': {
         margin: '0 5px',
       },

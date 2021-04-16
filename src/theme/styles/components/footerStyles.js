@@ -4,27 +4,18 @@ export const useStyles = makeStyles(theme => ({
   footer: {
     display: 'flex',
     alignItems: 'center',
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
-    '& a': {
+    justifyContent: 'center',
+    marginTop: '20px',
+    '& p': {
+      fontSize: '10px',
+      cursor: 'pointer',
       color: theme.palette.text.secondary,
-      marginRight: '15px',
       '&:hover': {
         color: theme.palette.text.primary,
       },
     },
-    '@media(max-width:550px)': {
-      width: '100%',
-      //   position: 'static',
-      justifyContent: 'space-around',
-      bottom: 10,
-      right: 0,
-      left: 0,
-      '& a': {
-        margin: 0,
-        fontSize: '12px',
-      },
+    '& p:first-child': {
+      marginRight: '15px',
     },
   },
 }));

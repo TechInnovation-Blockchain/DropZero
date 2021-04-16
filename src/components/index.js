@@ -7,7 +7,11 @@ import PageAnimation from './PageAnimation';
 import Snackbar from './Snackbar';
 import Dialog from './Dialog';
 import Footer from './Footer';
-import LoadingDialog from './LoadingDialog';
+import ActionDialog from './ActionDialog';
+import DisclaimerDialog from './DIsclaimerDialog';
+import Counter from './Counter';
+import ClaimTabs from './ClaimTabs';
+import ClaimTokenCard from './ClaimTokenCard';
 
 export {
   Navbar,
@@ -19,5 +23,9 @@ export {
   Snackbar,
   Dialog,
   Footer,
-  LoadingDialog,
+  ActionDialog,
+  DisclaimerDialog,
+  Counter,
+  ClaimTabs,
+  ClaimTokenCard,
 };

@@ -25,16 +25,36 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
     textTransform: 'uppercase',
     letterSpacing: 5,
+    position: 'relative',
   },
   noWallet: {
-    height: 80,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
+    height: '100px',
     '& p': {
       color: theme.palette.error.main,
       fontWeight: 700,
       fontSize: '14px',
+    },
+  },
+  paused: {
+    width: '10px',
+    height: '10px',
+    backgroundColor: '#f6c343',
+    borderRadius: '50%',
+    position: 'absolute',
+    top: '4px',
+    right: '-16px',
+  },
+  noData: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100px',
+    '& p': {
+      color: theme.palette.text.secondary,
     },
   },
 }));

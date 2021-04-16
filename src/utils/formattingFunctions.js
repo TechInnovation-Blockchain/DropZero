@@ -11,7 +11,7 @@ export const ogTrunc = (val, test) => {
   if (!Number(val)) {
     return 0;
   }
-  const _val = val - Math.trunc(val);
+  const _val = (val * 100 - Math.trunc(val) * 100) / 100;
   if (!_val) {
     return Math.trunc(val);
   }
@@ -41,7 +41,7 @@ export const ogTrunc = (val, test) => {
 export const trunc = (val, test) => {
   let _val = ogTrunc(val, test).toString();
   const _val2 = _val.split('.');
-  if (_val2[0].length >= 8) {
+  if (_val2[0].length > 8) {
     const _val = _val2[0].slice(0, 4);
     const __val = _val2[0].slice(_val2.length - 4, -1);
     const joined = [_val, __val].join('..');
@@ -54,16 +54,14 @@ export const trunc = (val, test) => {
     }
     return [splitedVal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','), splitedVal[1]].join('.');
   } else {
-    return _val;
+    return Number(_val).toLocaleString();
   }
 };
 
-// export const debounce = (callback, wait) => {
-//   let timeout = null;
-
-//   return (...args) => {
-//     const next = () => callback(...args);
-//     clearTimeout(timeout);
-//     timeout = setTimeout(next, wait);
-//   };
-// };
+export const truncFileName = (fileName, acceptedLength) => {
+  if (fileName.length > acceptedLength) {
+    return `${fileName.substring(0, acceptedLength - 4)}...`;
+  } else {
+    return fileName;
+  }
+};

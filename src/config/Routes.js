@@ -16,7 +16,7 @@ const routes = [
   },
 ];
 
-const redirectRoute = '/drop';
+const redirectRoute = '/claim';
 
 const Routes = () => {
   const classes = useStyles();

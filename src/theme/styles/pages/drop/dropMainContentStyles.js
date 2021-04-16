@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles(theme => ({
   mainContainer: {
-    height: '350px',
+    height: '370px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -21,6 +21,10 @@ export const useStyles = makeStyles(theme => ({
     fontWeight: 'bolder',
     width: '90%',
     margin: '8px auto',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     '@media(max-width:550px)': {
       width: '100%',
     },
@@ -29,8 +33,9 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     width: '90%',
-    '@media(max-width:330px)': {
-      width: '95%',
+    margin: theme.spacing(1, 0),
+    '@media(max-width:550px)': {
+      width: '100%',
     },
   },
   datePicker: {
@@ -59,24 +64,41 @@ export const useStyles = makeStyles(theme => ({
     },
     '& .MuiFormHelperText-root': {
       position: 'absolute',
+      width: '95%',
+      textAlign: 'center',
       bottom: -20,
-      fontWeight: 700,
+      fontWeight: 500,
+      fontSize: '10px',
+    },
+  },
+  timePicker: {
+    width: 'auto',
+    '& .MuiInputBase-input': {
+      textAlign: 'start',
+      fontSize: '13px',
+      height: '20px',
     },
   },
   error: {
     color: theme.palette.error.main,
-    fontWeight: 700,
+    fontWeight: 500,
     position: 'absolute',
-    left: 15,
-    fontSize: '12px',
+    //top: '49%',
+    top: '47%',
+    fontSize: '10px',
+    '@media(max-width:550px)': {
+      fontSize: '10px',
+    },
     '@media(max-width:330px)': {
-      top: '50%',
+      top: '51%',
     },
   },
   fileUploader: {
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
+    position: 'relative',
+
     '& input[type=file]': {
       display: 'none',
     },
@@ -84,8 +106,8 @@ export const useStyles = makeStyles(theme => ({
       backgroundColor: theme.palette.background.input,
       border: `1px solid ${theme.palette.primary.main}`,
       borderRadius: 10,
-      padding: theme.spacing(1.1, 1),
-      margin: theme.spacing(1.8, 0),
+      padding: theme.spacing(1, 1),
+      margin: theme.spacing(2, 0),
       width: '100%',
       cursor: 'pointer',
       '& p': {
@@ -116,7 +138,7 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacing(1, 0),
-    height: '40px',
+    height: '50px',
     '& p': {
       fontWeight: 700,
       marginLeft: 10,
@@ -127,10 +149,23 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     color: theme.palette.text.secondary,
     position: 'absolute',
-    left: 15,
+    //top: '49%',
+    top: '47%',
     '& p': {
       marginLeft: 5,
       fontSize: '12px',
     },
+  },
+  smallerField: {
+    '& .MuiInputBase-input': {
+      fontSize: '11px',
+    },
+  },
+  help: {
+    position: 'absolute',
+    //top: '58.5%',
+    top: '56%',
+    right: 15,
+    color: theme.palette.text.placeholder,
   },
 }));

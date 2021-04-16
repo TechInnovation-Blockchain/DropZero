@@ -1,43 +1,30 @@
-import { useState, Fragment } from 'react';
-import { Box, TablePagination } from '@material-ui/core';
+import { useState, useEffect } from 'react';
+import { Box, TablePagination, CircularProgress, Typography } from '@material-ui/core';
+import { useWeb3React } from '@web3-react/core';
+
+import { useStyles } from '../../theme/styles/pages/claim/claimStyles';
+import { useClaimsDashboard } from '../../hooks';
 import { Accordion, PageAnimation } from '../../components';
-
-import Aqua from '../../assets/Aqua.png';
-import Flash from '../../assets/FLASH.png';
-
-const tokens = [
-  {
-    name: 'Aqua',
-    img: Aqua,
-  },
-  {
-    name: 'Flash',
-    img: Flash,
-  },
-  {
-    name: 'XIO',
-    img: Flash,
-  },
-  {
-    name: 'DAI',
-    img: Flash,
-  },
-];
+import { VALID_CHAIN } from '../../config/constants';
 
 const ClaimDashboard = () => {
+  const classes = useStyles();
+  const { account, chainId } = useWeb3React();
+  const { claimsHistory, getClaimsHistoryF, resetClaimsHistoryF } = useClaimsDashboard();
+
   const [formData, setFormData] = useState({
     page: 0,
     rowsPerPage: 3,
-    reverse: false,
   });
-  const { page, rowsPerPage, reverse } = formData;
-  const [expanded, setExpanded] = useState(false);
+  const [reverse, setReverse] = useState(false);
+  const [expanded, setExpanded] = useState('');
+  const { page, rowsPerPage } = formData;
 
   const handleChangePage = (event, newPage) => {
     if (page > newPage) {
-      setFormData({ ...formData, reverse: true });
+      setReverse(true);
     } else {
-      setFormData({ ...formData, reverse: false });
+      setReverse(false);
     }
     setFormData({ ...formData, page: newPage });
   };
@@ -46,26 +33,42 @@ const ClaimDashboard = () => {
     setFormData({ ...formData, page: 0, rowsPerPage: +event.target.value });
   };
 
-  return (
-    <Fragment>
+  useEffect(() => {
+    if (chainId === VALID_CHAIN) {
+      getClaimsHistoryF(account);
+    } else {
+      resetClaimsHistoryF();
+    }
+  }, [account, chainId]);
+
+  return claimsHistory ? (
+    <Box style={{ paddingBottom: '20px' }}>
       <PageAnimation in={page} key={page} reverse={reverse}>
-        <Box style={{ paddingBottom: '20px' }}>
-          {tokens.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(token => (
-            <Accordion
-              key={token.name}
-              data={token}
-              expanded={expanded}
-              setExpanded={setExpanded}
-              claim
-            />
-          ))}
+        <Box>
+          {claimsHistory.length > 0 ? (
+            claimsHistory
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map(token => (
+                <Accordion
+                  key={token._id}
+                  data={token}
+                  expanded={expanded}
+                  setExpanded={setExpanded}
+                  claim
+                />
+              ))
+          ) : (
+            <Box className={classes.noData}>
+              <Typography variant='body2'>No Tokens Available</Typography>
+            </Box>
+          )}
         </Box>
       </PageAnimation>
-      {tokens.length > 3 && (
+      {claimsHistory.length > 3 && (
         <TablePagination
           component='div'
-          style={{ display: 'flex', justifyContent: 'center', paddingBottom: '30px' }}
-          count={tokens.length}
+          style={{ display: 'flex', justifyContent: 'center' }}
+          count={claimsHistory.length}
           page={page}
           onChangePage={handleChangePage}
           rowsPerPage={rowsPerPage}
@@ -74,7 +77,11 @@ const ClaimDashboard = () => {
           rowsPerPageOptions={[]}
         />
       )}
-    </Fragment>
+    </Box>
+  ) : (
+    <Box className={classes.noData}>
+      <CircularProgress size={50} />
+    </Box>
   );
 };
 
