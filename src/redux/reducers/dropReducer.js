@@ -61,7 +61,9 @@ const dropReducer = (state = initialState, action) => {
       const index = tempDrops.findIndex(({ _id }) => _id === payload.id);
       targetData = { ...targetData, pauseDrop: payload.pause };
       tempDrops[index] = targetData;
-      const _pausedDrops = tempDrops.filter(({ pauseDrop }) => pauseDrop === true);
+      const _pausedDrops = tempDrops.filter(
+        ({ pauseDrop, withDraw }) => pauseDrop === true && withDraw === false
+      );
       return {
         ...state,
         dropsPausing: !payload.pause && _pausedDrops.length === 0 ? false : true,
@@ -72,7 +74,9 @@ const dropReducer = (state = initialState, action) => {
       const _tempDrops = state.userDrops;
       const _index = _tempDrops.findIndex(({ _id }) => _id === payload._id);
       _tempDrops[_index] = { ...payload, pauseDrop: false, withDraw: true };
-      const __pausedDrops = _tempDrops.filter(({ pauseDrop }) => pauseDrop === true);
+      const __pausedDrops = _tempDrops.filter(
+        ({ pauseDrop, withDraw }) => pauseDrop === true && withDraw === false
+      );
       return {
         ...state,
         userDrops: _tempDrops,
