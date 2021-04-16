@@ -10,6 +10,7 @@ import {
   startWithdraw,
   withdrawMultipleClaimedToken,
   rejectDrop,
+  saveTxnHash,
 } from '../../redux';
 
 //check drop exists or not
@@ -54,31 +55,6 @@ export const createDrop = async (tokenAddress, walletAddress, callback) => {
   }
 };
 
-// //create drop
-// export const createDrop = async (tokenAddress, walletAddress, callback) => {
-//   try {
-//     transactionPending({}, { text: 'Creating Drop' }, 'drop');
-//     await contract.methods
-//       .createDrop(tokenAddress)
-//       .send({ from: walletAddress })
-//       .on('transactionHash', txnHash => {
-//         console.log('transactionHash');
-//       })
-//       .on('confirmation', () => {
-//         console.log('confirmation');
-//       })
-//       .on('recipt', () => {
-//         console.log('recipt');
-//       })
-//       .on('error', () => {
-//         console.log('error');
-//       });
-//   } catch (e) {
-//     logError('createDrop', e);
-//     transactionFailed({}, { text: 'Drop Failed' });
-//   }
-// };
-
 //add csv data in drop
 export const addDropData = async (
   { tokenAmount, startDate, endDate, merkleRoot, tokenAddress, walletAddress, dropperId },
@@ -94,6 +70,7 @@ export const addDropData = async (
       .send({ from: walletAddress })
       .on('transactionHash', txnHash => {
         transactionPending({ transactionHash: txnHash }, { text: 'Drop Pending' }, 'upload');
+        saveTxnHash(merkleRoot, txnHash);
       })
       .then(receipt => {
         transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Created' });

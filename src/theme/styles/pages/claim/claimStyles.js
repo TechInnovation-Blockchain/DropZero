@@ -27,7 +27,6 @@ export const useStyles = makeStyles(theme => ({
     letterSpacing: 5,
   },
   noWallet: {
-    height: 80,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

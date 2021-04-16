@@ -51,7 +51,7 @@ const ClaimTokenCard = ({
         onClick={onArrowClick ? onArrowClick : onClick}
       >
         <Grid item xs={2} className={classes.tokenImg}>
-          <a href={ETHERSCAN_ADDRESS_BASE_URL + tokenAddress} target='_blank'>
+          <a href={ETHERSCAN_ADDRESS_BASE_URL + tokenAddress} target='_blank' rel='noreferrer'>
             <img src={tokenLogo} alt={NoLogo} />
           </a>
         </Grid>

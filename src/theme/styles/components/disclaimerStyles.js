@@ -4,13 +4,13 @@ export const useStyles = makeStyles(theme => ({
   mainContainer: {
     background: '#000',
     height: 'auto !important',
-  },
-  innerContainer: {
     backgroundColor: theme.palette.background.dialog,
+    '& .MuiDialogActions-root': {
+      justifyContent: 'center',
+    },
   },
   heading: {
     fontWeight: 'bold',
-    marginBottom: '10px',
     textTransform: 'uppercase',
     width: '100%',
     textAlign: 'center',
@@ -37,9 +37,5 @@ export const useStyles = makeStyles(theme => ({
       letterSpacing: '1px',
       fontFamily: 'Montserrat',
     },
-  },
-  btnContainer: {
-    display: 'flex',
-    justifyContent: 'center',
   },
 }));

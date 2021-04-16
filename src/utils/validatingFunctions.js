@@ -1,7 +1,7 @@
 import web3 from 'web3';
 
-export const validateCSV = data => {
-  let validCSV = true;
+export const validateCSV = (data, decimal) => {
+  let validCSVError = '';
   const header = data[0].split(',');
   let _totalAmount = 0;
   let endNull = 1;
@@ -21,9 +21,14 @@ export const validateCSV = data => {
           rowData[1].trim() !== '' &&
           Number(rowData[1].trim()) > 0
         ) {
+          const splitedData = rowData[1].split('.');
+          if (splitedData.length === 2 && splitedData[1].length > decimal) {
+            validCSVError = 'Invalid number of decimals';
+            break;
+          }
           _totalAmount += Number(rowData[1]);
         } else {
-          validCSV = false;
+          validCSVError = 'Invalid CSV';
           break;
         }
       } else {
@@ -31,7 +36,7 @@ export const validateCSV = data => {
       }
     }
   } else {
-    validCSV = false;
+    validCSVError = 'Invalid CSV';
   }
-  return { validCSV, _totalAmount, _totalAddress: data.length - endNull };
+  return { validCSVError, _totalAmount, _totalAddress: data.length - endNull };
 };

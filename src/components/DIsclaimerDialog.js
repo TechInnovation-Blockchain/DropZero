@@ -7,6 +7,8 @@ import {
   FormControlLabel,
   Checkbox,
   Box,
+  DialogTitle,
+  DialogActions,
 } from '@material-ui/core';
 
 import { useStyles } from '../theme/styles/components/disclaimerStyles';
@@ -22,11 +24,12 @@ const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClic
         onClose={handleClose}
         aria-labelledby='form-dialog-title'
       >
-        <DialogContent className={classes.innerContainer}>
+        <DialogTitle>
           <Typography variant='body2' className={classes.heading}>
             {heading}
           </Typography>
-
+        </DialogTitle>
+        <DialogContent>
           {type === 'claim' ? (
             <Typography variant='body2' className={classes.content}>
               <span className={classes.colored}> Claim at your own risk</span> <br /> <br />
@@ -96,13 +99,12 @@ const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClic
               />
             </Box>
           )}
-
-          <Box className={classes.btnContainer}>
-            <Button color='primary' onClick={btnOnClick} style={{ marginTop: '10px' }}>
-              I Understand
-            </Button>
-          </Box>
         </DialogContent>
+        <DialogActions>
+          <Button color='primary' onClick={btnOnClick}>
+            I Understand
+          </Button>
+        </DialogActions>
       </DialogMui>
     </Fragment>
   );

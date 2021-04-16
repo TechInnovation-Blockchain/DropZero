@@ -82,4 +82,25 @@ export const useStyles = makeStyles(theme => ({
       },
     },
   },
+  etherscan: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: theme.palette.primary.main,
+    fontSize: '12px',
+    '& svg': {
+      marginRight: '4px',
+      marginBottom: '2px',
+      color: theme.palette.primary.main,
+    },
+  },
+  paused: {
+    width: '10px',
+    height: '10px',
+    backgroundColor: '#f6c343 !important',
+    borderRadius: '50%',
+    position: 'absolute',
+    top: '4px',
+    marginLeft: '5px',
+  },
 }));

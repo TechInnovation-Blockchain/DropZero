@@ -5,7 +5,6 @@ import PublishIcon from '@material-ui/icons/Publish';
 import { useWeb3React } from '@web3-react/core';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import { utils } from 'ethers';
-import { BigNumber } from 'bignumber.js';
 
 import { Button, Dialog, ActionDialog, DisclaimerDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
@@ -27,18 +26,10 @@ const DropCSV = () => {
     endDate,
     dropName,
     csv,
-
-    // file,
-    // csvError,
-    // totalAmount,
-    // totalAddress,
-    // balance,
-
     clearFieldsF,
     uploadCSVF,
     clearCSVF,
     changeTabF,
-    saveFieldsF,
   } = useDropInputs();
   const { account } = useWeb3React();
   const { getUserDropsF } = useDropDashboard();
@@ -68,12 +59,9 @@ const DropCSV = () => {
     loadingContent,
   } = formData;
 
-  //console.log(BigNumber(0.1) + BigNumber(0.2));
-
   const uploadingCSV = _file => {
     if (_file) {
       if (fileNameRegex.test(_file.name)) {
-        //saveFieldsF({ csvError: '', totalAmount: 0, totalAddress: 0 });
         setFormData({
           ...formData,
           csvError: '',
@@ -85,10 +73,13 @@ const DropCSV = () => {
         fileReader.onloadend = async e => {
           const content = e.target.result;
           logMessage('CSV Content', content);
-          const { validCSV, _totalAmount, _totalAddress } = validateCSV(content.split('\n'));
-          if (validCSV) {
+          const decimal = await getDecimal(token);
+          const { validCSVError, _totalAmount, _totalAddress } = validateCSV(
+            content.split('\n'),
+            decimal
+          );
+          if (validCSVError === '') {
             const balance = await getBalance(token, account);
-            const decimal = await getDecimal(token);
             setFormData({
               ...formData,
               file: _file,
@@ -98,24 +89,13 @@ const DropCSV = () => {
               totalAddress: _totalAddress,
               balance: Number(utils.formatUnits(balance.toString(), decimal).toString()),
             });
-            // saveFieldsF({
-            //   file: _file,
-            //   csvError: '',
-            //   totalAmount: _totalAmount,
-            //   totalAddress: _totalAddress,
-            //   balance: Number(utils.formatUnits(balance.toString(), decimal).toString()),
-            // });
           } else {
             setFormData({
               ...formData,
               file: _file,
-              csvError: 'Invalid CSV',
+              csvError: validCSVError,
               loadingContent: '',
             });
-            // saveFieldsF({
-            //   file: _file,
-            //   csvError: 'Invalid CSV',
-            // });
           }
         };
         fileReader.readAsText(_file);
@@ -125,10 +105,6 @@ const DropCSV = () => {
           file: _file,
           csvError: 'Invalid filename',
         });
-        // saveFieldsF({
-        //   file: _file,
-        //   csvError: 'Invalid filename',
-        // });
       }
     }
   };
@@ -166,8 +142,13 @@ const DropCSV = () => {
 
   const createDrop = async (merkleRoot, dropperId) => {
     const decimal = await getDecimal(token);
+    const regex = new RegExp('^-?\\d+(?:.\\d{0,' + decimal + '})?');
+    const tokenAmount =
+      totalAmount.toString().split('.').length > 1
+        ? totalAmount.toString().match(regex)[0]
+        : totalAmount.toString();
     const dropData = {
-      tokenAmount: utils.parseUnits(totalAmount.toString(), decimal).toString(),
+      tokenAmount: utils.parseUnits(tokenAmount, decimal).toString(),
       startDate: startDate
         ? Math.round(new Date(startDate).getTime() / 1000)
         : Math.round(Date.now() / 10000),
@@ -186,7 +167,6 @@ const DropCSV = () => {
       },
       () => {
         clearFieldsF();
-        //changeTabF('token');
         getUserDropsF(account);
       }
     );
@@ -257,13 +237,13 @@ const DropCSV = () => {
       </label>
 
       {loadingContent === 'Validating CSV' && (
-        <Box className={classes.loading} style={{ top: '58%' }}>
+        <Box className={classes.loading} style={{ top: '57%' }}>
           <CircularProgress size={12} color='inherit' />
           <Typography variant='body2'>Validating CSV</Typography>
         </Box>
       )}
 
-      <Typography variant='body2' className={classes.error} style={{ top: '58%' }}>
+      <Typography variant='body2' className={classes.error} style={{ top: '57%' }}>
         {csvError}
       </Typography>
 

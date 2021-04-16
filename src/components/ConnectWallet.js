@@ -139,7 +139,7 @@ const ConnectWallet = () => {
                 : 'CONNECT WALLET'}
             </span>
           </Button>
-          <a href='https://blockzerolabs.io/' target='_blank'>
+          <a href='https://blockzerolabs.io/' target='_blank' rel='noreferrer'>
             <Box className={classes.bottomPara}>
               <Typography variant='body2'>Created By </Typography>
               <img src={theme === 'dark' ? WhiteLogo : DarkLogo} alt='logo' width='35px' />
@@ -148,16 +148,20 @@ const ConnectWallet = () => {
           </a>
         </Box>
         <Box className={classes.social}>
-          <a href='https://www.facebook.com/groups/xionetwork' target='_blank'>
+          <a href='https://www.facebook.com/groups/xionetwork' target='_blank' rel='noreferrer'>
             <Facebook />
           </a>
-          <a href='https://twitter.com/blockzerolabs' target='_blank'>
+          <a href='https://twitter.com/blockzerolabs' target='_blank' rel='noreferrer'>
             <Twitter />
           </a>
-          <a href='https://t.me/blockzerolabs' target='_blank'>
+          <a href='https://t.me/blockzerolabs' target='_blank' rel='noreferrer'>
             <Telegram />
           </a>
-          <a href='https://www.youtube.com/channel/UCiOjFfIi1-jjQbRjJkJas2Q' target='_blank'>
+          <a
+            href='https://www.youtube.com/channel/UCiOjFfIi1-jjQbRjJkJas2Q'
+            target='_blank'
+            rel='noreferrer'
+          >
             <YouTube />
           </a>
         </Box>

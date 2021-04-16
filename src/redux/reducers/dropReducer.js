@@ -8,13 +8,13 @@ const initialState = {
     dropName: '',
     dropExists: false,
     approved: 0,
+    validated: false,
+    loading: '',
+    error: '',
+    dropNameError: '',
 
     startDate: null,
     endDate: null,
-
-    validated: false,
-    loading: false,
-    error: '',
 
     file: null,
     totalAmount: 0,

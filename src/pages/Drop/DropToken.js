@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Box, Typography, CircularProgress, Tooltip } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
@@ -27,6 +26,7 @@ const DropToken = () => {
     validated,
     loading,
     error,
+    dropNameError,
     changeTabF,
     saveFieldsF,
   } = useDropInputs();
@@ -38,15 +38,25 @@ const DropToken = () => {
   const handleTokenChange = ({ target }) => {
     const token = target?.value;
     if (tokenRegex.test(token)) {
-      saveFieldsF({ token });
+      saveFieldsF({ token, dropName: '', dropNameError: '' });
       validateAddress(token);
     }
   };
 
-  const handleDropNameChange = async ({ target }) => {
+  const handleDropNameChange = ({ target }) => {
     const _dropName = target?.value;
     if (dropNameRegex.test(_dropName)) {
-      saveFieldsF({ dropName: _dropName });
+      saveFieldsF({
+        dropName: _dropName,
+        dropNameError: '',
+      });
+      if (_dropName.trim() !== '') {
+        saveFieldsF({ loading: 'dropName' });
+        setTimeout(async () => {
+          const res = await checkDropName(_dropName, token);
+          saveFieldsF({ dropNameError: res ? '' : 'Drop already exists', loading: '' });
+        }, 500);
+      }
     }
   };
 
@@ -71,7 +81,7 @@ const DropToken = () => {
           approved: 0,
 
           validated: false,
-          loading: true,
+          loading: 'token',
           error: '',
         });
 
@@ -95,7 +105,7 @@ const DropToken = () => {
 
             validated: false,
             error: 'Please enter a correct Token Address',
-            loading: false,
+            loading: '',
           });
         }
       } else {
@@ -126,7 +136,7 @@ const DropToken = () => {
         inputProps={{ maxLength: 42 }}
         className={token.length === 42 ? classes.smallerField : ''}
       />
-      {loading && (
+      {loading === 'token' && (
         <Box className={classes.loading}>
           <CircularProgress size={12} color='inherit' />
           <Typography variant='body2'>Verifying</Typography>
@@ -143,7 +153,17 @@ const DropToken = () => {
         onChange={handleDropNameChange}
         autoComplete='off'
         inputProps={{ maxLength: 15 }}
+        disabled={!validated}
       />
+      {loading === 'dropName' && (
+        <Box className={classes.loading} style={{ top: '67%' }}>
+          <CircularProgress size={12} color='inherit' />
+          <Typography variant='body2'>Verifying</Typography>
+        </Box>
+      )}
+      <Typography variant='body2' className={classes.error} style={{ top: '67%' }}>
+        {dropNameError}
+      </Typography>
 
       <Tooltip title='Example: "Early Birds"'>
         <HelpOutlineIcon className={classes.help} />
@@ -163,17 +183,21 @@ const DropToken = () => {
             <span>Create</span>
           </Button>
         )}
-        <Button disabled={!validated || !dropExists || approved <= 0} onClick={handleClick}>
+        <Button
+          disabled={
+            !validated ||
+            !dropExists ||
+            approved <= 0 ||
+            loading !== '' ||
+            dropNameError !== '' ||
+            dropName === ''
+          }
+          onClick={handleClick}
+        >
           <span>Next</span>
           <ArrowForwardIcon />
         </Button>
       </Box>
-
-      {/* {validated && dropExists && (
-        <Typography variant='body2' className={classes.dropExist}>
-          Drop already exists
-        </Typography>
-      )} */}
     </Box>
   );
 };

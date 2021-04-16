@@ -42,6 +42,7 @@ const Snackbar = () => {
             className={classes.etherscan}
             href={ETHERSCAN_TX_BASE_URL + transactionHash}
             target='_blank'
+            rel='noreferrer'
           >
             <LinkOutlined /> <span>View on etherscan</span>
           </a>

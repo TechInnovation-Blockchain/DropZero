@@ -14,6 +14,7 @@ import { Skeleton } from '@material-ui/lab';
 import Web3 from 'web3';
 import { useWeb3React } from '@web3-react/core';
 import { isMobile } from 'react-device-detect';
+import { LinkOutlined } from '@material-ui/icons';
 
 import { useStyles } from '../theme/styles/components/accordionStyles';
 import Button from './Button';
@@ -55,6 +56,8 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
     pauseDrop,
     merkleRoot,
     claimedDate,
+    txnHash,
+    createdAt,
   } = data;
 
   const handleChange = panel => (event, isExpanded) => {
@@ -75,7 +78,6 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
     console.log(fileURL);
     if (fileURL) {
       window.location.assign(fileURL);
-      //window.location.href = fileURL;
     }
     setFormData({ ...formData, loadingCSVFile: false });
   };
@@ -117,14 +119,15 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
             </Tooltip>
           </Grid>
           <Grid item xs={2} style={{ textAlign: 'center' }}>
-            <a href={ETHERSCAN_ADDRESS_BASE_URL + tokenAddress} target='_blank'>
+            <a href={ETHERSCAN_ADDRESS_BASE_URL + tokenAddress} target='_blank' rel='noreferrer'>
               <img src={tokenLogo} alt={tokenSymbol} width='30px' />
             </a>
           </Grid>
           <Grid item xs={5}>
             {tokenSymbol ? (
-              <Typography style={{ textAlign: 'left' }} variant='body2'>
+              <Typography style={{ textAlign: 'left', position: 'relative' }} variant='body2'>
                 {tokenSymbol}
+                {pauseDrop && <span className={classes.paused}></span>}
               </Typography>
             ) : (
               <Skeleton animation='wave' width='80px' height='30px' />
@@ -203,14 +206,20 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
                   <Typography variant='body2'>{trunc(totalAmount - totalClaimed)}</Typography>
                 </Tooltip>
               </Box>
+              <Box className={classes.accordianContent}>
+                <Typography variant='body2'>Created</Typography>
+                <Typography variant='body2'>{format(new Date(createdAt), DATE_FORMAT)}</Typography>
+              </Box>
               {endDate && (
                 <Box className={classes.accordianContent}>
                   <Typography variant='body2'>Expiry</Typography>
-                  <Typography variant='body2'>{format(new Date(endDate), DATE_FORMAT)}</Typography>
+                  <Typography variant='body2'>
+                    {_withdraw !== true ? format(new Date(endDate), DATE_FORMAT) : 'Withdrawn'}
+                  </Typography>
                 </Box>
               )}
 
-              {_withdraw !== true && (
+              {_withdraw !== true && totalAmount - totalClaimed !== 0 && (
                 <Box className={classes.accordianContent}>
                   <Typography variant='body2'>Pause claims</Typography>
                   <PauseDrop
@@ -224,7 +233,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
               )}
 
               <Box className={`${classes.btnWrapper} ${loadingCSVFile ? classes.btnLoading : ''}`}>
-                {_withdraw !== true && (
+                {_withdraw !== true && totalAmount - totalClaimed !== 0 && (
                   <Button
                     loading={dapp === 'withdraw'}
                     onClick={() => setFormData({ ...formData, open: true })}
@@ -241,6 +250,17 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
                   <span>Claim Status</span>
                 </Button>
               </Box>
+
+              {txnHash && (
+                <Typography
+                  component='a'
+                  className={classes.etherscan}
+                  href={txnHash}
+                  target='_blank'
+                >
+                  <LinkOutlined /> <span>View on etherscan</span>
+                </Typography>
+              )}
             </Fragment>
           ) : null}
         </Box>

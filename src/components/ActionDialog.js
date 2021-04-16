@@ -76,7 +76,7 @@ const ActionDialog = ({
           )}
 
           {link && (
-            <a href={link} target='_blank'>
+            <a href={link} target='_blank' rel='noreferrer'>
               <Box className={classes.externalLink}>
                 <LinkOutlined />
                 <Typography varaint='body2'>View on etherscan</Typography>

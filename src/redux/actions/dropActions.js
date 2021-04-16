@@ -107,7 +107,7 @@ export const getUserDrops = walletAddress => {
   };
 };
 
-//remove drop from redux
+//update withdrawed drop
 export const withdrawDrops = drop => {
   return async dispatch => {
     dispatch({ type: dropTypes.WITHDRAW_DROP, payload: drop });
@@ -134,7 +134,8 @@ export const getCSVFile = async (dropId, tokenName) => {
   }
 };
 
-export const withdrawClaimedToken = async (claimId, merkleRoot) => {
+//start single claim
+export const withdrawClaimedToken = async claimId => {
   try {
     const res = await axios.post(`${BASE_URL}/user/withdraw_claimed_token/${claimId}?claim=single`);
     logMessage('withdrawClaimedToken', res);
@@ -149,6 +150,7 @@ export const withdrawClaimedToken = async (claimId, merkleRoot) => {
   }
 };
 
+//start multiple claim
 export const withdrawMultipleClaimedToken = async (walletAddress, merkleRoot) => {
   try {
     const body = { merkleRoot };
@@ -203,6 +205,7 @@ export const startWithdraw = async (dropperAddress, dropId) => {
   }
 };
 
+//remove users data from server on rejection
 export const rejectDrop = async (dropperAddress, merkleRoot) => {
   try {
     const res = await axios.get(
@@ -215,12 +218,14 @@ export const rejectDrop = async (dropperAddress, merkleRoot) => {
   }
 };
 
+//clear user drops from redux
 export const resetDrops = () => {
   return async dispatch => {
     dispatch({ type: dropTypes.RESET_DROPS });
   };
 };
 
+//validate dropName
 export const checkDropName = async (dropName, tokenAddress) => {
   try {
     const body = { dropName, tokenAddress };
@@ -237,8 +242,19 @@ export const checkDropName = async (dropName, tokenAddress) => {
   }
 };
 
+//change drop tabs from token=>dates=>uploadCSV
 export const changeTab = tab => {
   return async dispatch => {
     dispatch({ type: dropTypes.CHANGE_TAB, payload: tab });
   };
+};
+
+export const saveTxnHash = async (merkle_root, txn_hash) => {
+  try {
+    const body = { txn_hash, merkle_root };
+    const res = await axios.post(`${BASE_URL}/dropper/etherscan_link`, body, config);
+    logMessage('saveTxnHash', res);
+  } catch (e) {
+    logError('saveTxnHash', e);
+  }
 };

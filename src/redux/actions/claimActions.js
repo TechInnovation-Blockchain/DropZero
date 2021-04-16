@@ -5,6 +5,7 @@ import { logError, logMessage } from '../../utils/log';
 import { BASE_URL } from '../../config/constants';
 import { showSnackbar } from './uiActions';
 
+//all claims of user
 export const getAvailableClaims = walletAddress => {
   return async dispatch => {
     try {
@@ -24,18 +25,21 @@ export const getAvailableClaims = walletAddress => {
   };
 };
 
+//split user claims into lock and unlocked claims
 export const setLockAndUnlockClaims = data => {
   return dispatch => {
     dispatch({ type: claimTypes.SET_LOCK_UNLOCK_CLAIMS, payload: data });
   };
 };
 
+//clear locked and unlocked claims
 export const resetLockAndUnlockClaims = () => {
   return dispatch => {
     dispatch({ type: claimTypes.RESET_LOCK_UNLOCK_CLAIMS });
   };
 };
 
+//get user claimes history
 export const getClaimsHistory = walletAddress => {
   return async dispatch => {
     try {
@@ -53,18 +57,21 @@ export const getClaimsHistory = walletAddress => {
   };
 };
 
+//remove claim from redux after claiming
 export const removeClaim = (claims, address) => {
   return async dispatch => {
     dispatch({ type: claimTypes.REMOVE_CLAIMS, payload: { claims, address } });
   };
 };
 
+//clear user claims from redux
 export const resetClaims = () => {
   return async dispatch => {
     dispatch({ type: claimTypes.RESET_CLAIMS });
   };
 };
 
+//clear users claims history from redux
 export const resetClaimsHistory = () => {
   return async dispatch => {
     dispatch({ type: claimTypes.RESET_CLAIMS_HISTORY });

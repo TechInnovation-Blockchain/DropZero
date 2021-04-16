@@ -33,7 +33,7 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     width: '90%',
-    // margin: theme.spacing(1, 0),
+    margin: theme.spacing(1, 0),
     '@media(max-width:550px)': {
       width: '100%',
     },
@@ -83,8 +83,8 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.error.main,
     fontWeight: 500,
     position: 'absolute',
-    // left: 12,
-    top: '49%',
+    //top: '49%',
+    top: '47%',
     fontSize: '10px',
     '@media(max-width:550px)': {
       fontSize: '10px',
@@ -149,8 +149,8 @@ export const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     color: theme.palette.text.secondary,
     position: 'absolute',
-    // left: 15,
-    top: '49%',
+    //top: '49%',
+    top: '47%',
     '& p': {
       marginLeft: 5,
       fontSize: '12px',
@@ -163,13 +163,9 @@ export const useStyles = makeStyles(theme => ({
   },
   help: {
     position: 'absolute',
-    top: '58.5%',
+    //top: '58.5%',
+    top: '56%',
     right: 15,
     color: theme.palette.text.placeholder,
-  },
-  dropExist: {
-    position: 'absolute',
-    bottom: 10,
-    color: theme.palette.text.secondary,
   },
 }));
