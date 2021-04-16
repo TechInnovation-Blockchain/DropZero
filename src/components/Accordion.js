@@ -127,7 +127,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
             {tokenSymbol ? (
               <Typography style={{ textAlign: 'left', position: 'relative' }} variant='body2'>
                 {tokenSymbol}
-                {pauseDrop && <span className={classes.paused}></span>}
+                {pauseDrop && _withdraw !== true && <span className={classes.paused}></span>}
               </Typography>
             ) : (
               <Skeleton animation='wave' width='80px' height='30px' />

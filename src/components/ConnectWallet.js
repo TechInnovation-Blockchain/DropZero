@@ -16,7 +16,7 @@ import Button from './Button';
 import WalletDialog from './WalletDialog';
 import { walletList } from '../utils/web3Connectors';
 import { conciseAddress } from '../utils/formattingFunctions';
-import { useSnackbar, useLoading, useDropInputs, useWeb3, useTheme } from '../hooks';
+import { useSnackbar, useLoading, useDropInputs, useWeb3, useTheme, useJWT } from '../hooks';
 import { setWeb3Provider } from '../contracts/getContract';
 import { VALID_CHAIN } from '../config/constants';
 import WhiteLogo from '../assets/logoWhite.png';
@@ -30,6 +30,8 @@ const ConnectWallet = () => {
   const { storeWeb3ContextF } = useWeb3();
   const { currentAccount, clearFieldsF } = useDropInputs();
   const { theme } = useTheme();
+
+  //const { getJWTF } = useJWT();
 
   const [open, setOpen] = useState(false);
 
@@ -101,6 +103,7 @@ const ConnectWallet = () => {
     if (web3context.active || web3context.account) {
       setOpen(false);
       currentAccount === '' && clearFieldsF(web3context.account);
+      //getJWTF(web3context.account, Date.now())
     }
   }, [web3context]);
 
