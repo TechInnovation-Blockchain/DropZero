@@ -3,6 +3,7 @@ import axios from 'axios';
 import * as authTypes from '../types/authTypes';
 import { logError, logMessage } from '../../utils/log';
 import { BASE_URL, config } from '../../config/constants';
+import { store } from '../store';
 
 //get jwt web token
 export const getJWT = (wallet_address, time_stamp) => {
@@ -18,4 +19,19 @@ export const getJWT = (wallet_address, time_stamp) => {
       logError('getJWT', e);
     }
   };
+};
+
+export const authorize = () => {
+  return async dispatch => {
+    dispatch({ type: authTypes.AUTHORIZED });
+  };
+};
+
+export const authError = error => {
+  if (error.message === 'Request failed with status code 403') {
+    console.log(error.message);
+    store.dispatch({
+      type: authTypes.UN_AUTHORIZED,
+    });
+  }
 };

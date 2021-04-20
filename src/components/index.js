@@ -12,6 +12,7 @@ import DisclaimerDialog from './DIsclaimerDialog';
 import Counter from './Counter';
 import ClaimTabs from './ClaimTabs';
 import ClaimTokenCard from './ClaimTokenCard';
+import AquaAccordian from './AquaAccordian';
 
 export {
   Navbar,
@@ -28,4 +29,5 @@ export {
   Counter,
   ClaimTabs,
   ClaimTokenCard,
+  AquaAccordian,
 };

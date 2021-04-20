@@ -25,7 +25,7 @@ import { getTokenLogo, getCSVFile } from '../redux';
 import { getSymbol, getName } from '../contracts/functions/erc20Functions';
 import { withdraw } from '../contracts/functions/dropFactoryFunctions';
 import { trunc, truncFileName } from '../utils/formattingFunctions';
-import { useDropDashboard, useLoading } from '../hooks';
+import { useDropDashboard, useLoading, useJWT } from '../hooks';
 
 const Accordion = ({ data, expanded, setExpanded, claim }) => {
   const classes = useStyles();
@@ -34,6 +34,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
   const {
     loading: { dapp },
   } = useLoading();
+  const { jwt } = useJWT();
 
   const [formData, setFormData] = useState({
     tokenLogo: NoLogo,
@@ -66,7 +67,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
 
   const handleWithdrawConfirm = async () => {
     setFormData({ ...formData, open: false });
-    await withdraw(_id, dropperAddress, tokenAddress, account, merkleRoot, () => {
+    await withdraw(_id, dropperAddress, tokenAddress, account, merkleRoot, jwt, () => {
       withdrawDropsF(data);
       setFormData({ ...formData, _withdraw: true, open: false });
     });
@@ -74,8 +75,8 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
 
   const handleCSVDownload = async e => {
     setFormData({ ...formData, loadingCSVFile: true });
-    const fileURL = await getCSVFile(data?._id, tokenName);
-    console.log(fileURL);
+    const fileURL = await getCSVFile(data?._id, tokenName, jwt);
+    console.log('File URL =>', fileURL);
     if (fileURL) {
       window.location.assign(fileURL);
     }

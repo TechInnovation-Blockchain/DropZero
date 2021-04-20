@@ -8,7 +8,7 @@ import { utils } from 'ethers';
 
 import { Button, Dialog, ActionDialog, DisclaimerDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
-import { useDropInputs, useLoading, useDropDashboard } from '../../hooks';
+import { useDropInputs, useLoading, useDropDashboard, useJWT } from '../../hooks';
 import { getBalance, getDecimal } from '../../contracts/functions/erc20Functions';
 import { addDropData } from '../../contracts/functions/dropFactoryFunctions';
 import { truncFileName, trunc } from '../../utils/formattingFunctions';
@@ -36,6 +36,7 @@ const DropCSV = () => {
   const {
     loading: { dapp },
   } = useLoading();
+  const { jwt } = useJWT();
 
   const [formData, setFormData] = useState({
     file: null,
@@ -119,7 +120,7 @@ const DropCSV = () => {
     setFormData({ ...formData, loadingContent: 'Uploading CSV', openDis: false });
     const decimal = await getDecimal(token);
     const data = { file, account, token, startDate, endDate, dropName, decimal };
-    uploadCSVF(data, () => {
+    uploadCSVF(data, jwt, () => {
       setFormData({ ...formData, loadingContent: '', open: false, openDis: false });
     });
   };
@@ -161,13 +162,14 @@ const DropCSV = () => {
 
     await addDropData(
       dropData,
+      jwt,
       () => {
         setFormData({ ...formData, loadingContent: '', open: false });
         clearCSVF();
       },
       () => {
         clearFieldsF();
-        getUserDropsF(account);
+        getUserDropsF(jwt);
       }
     );
   };

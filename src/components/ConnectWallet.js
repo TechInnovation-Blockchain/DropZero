@@ -30,8 +30,7 @@ const ConnectWallet = () => {
   const { storeWeb3ContextF } = useWeb3();
   const { currentAccount, clearFieldsF } = useDropInputs();
   const { theme } = useTheme();
-
-  //const { getJWTF } = useJWT();
+  const { getJWTF } = useJWT();
 
   const [open, setOpen] = useState(false);
 
@@ -74,6 +73,7 @@ const ConnectWallet = () => {
         )
         .then(() => {
           setLoadingF({ walletConnection: false });
+          //getJWTF(web3context.account, Date.now());
         })
         .catch(e => {
           const err = getErrorMessage(e);
@@ -102,8 +102,10 @@ const ConnectWallet = () => {
     }
     if (web3context.active || web3context.account) {
       setOpen(false);
-      currentAccount === '' && clearFieldsF(web3context.account);
-      //getJWTF(web3context.account, Date.now())
+      if (currentAccount === '') {
+        clearFieldsF(web3context.account);
+        //getJWTF(web3context.account, Date.now());
+      }
     }
   }, [web3context]);
 

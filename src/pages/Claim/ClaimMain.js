@@ -3,8 +3,8 @@ import { Box, Typography, TablePagination, CircularProgress } from '@material-ui
 import { useWeb3React } from '@web3-react/core';
 
 import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
-import { PageAnimation, ClaimTabs, ClaimTokenCard } from '../../components';
-import { useClaims } from '../../hooks';
+import { PageAnimation, ClaimTabs, ClaimTokenCard, AquaAccordian } from '../../components';
+import { useClaims, useJWT, useAquaClaims } from '../../hooks';
 import { VALID_CHAIN } from '../../config/constants';
 
 const ClaimMain = () => {
@@ -17,6 +17,8 @@ const ClaimMain = () => {
     resetLockAndUnlockClaimsF,
     resetClaimsF,
   } = useClaims();
+  const { jwt } = useJWT();
+  const { aquaClaims, getAquaClaimsF } = useAquaClaims();
 
   const [formData, setFormData] = useState({
     page: 0,
@@ -64,13 +66,15 @@ const ClaimMain = () => {
 
   useEffect(() => {
     setFormData({ ...formData, initial: false });
-    if (chainId === VALID_CHAIN) {
-      getAvailableClaimsF(account);
+    if (chainId === VALID_CHAIN && jwt) {
+      getAvailableClaimsF(jwt);
       resetLockAndUnlockClaimsF();
+      getAquaClaimsF(account);
+      //0x3A1776aD8Bd41c688019Cb586C6A1261Be49f8Bf
     } else {
       resetClaimsF();
     }
-  }, [account, chainId]);
+  }, [account, chainId, jwt]);
 
   return availableClaims ? (
     <PageAnimation in={true} reverse={1}>
@@ -78,13 +82,14 @@ const ClaimMain = () => {
         <ClaimTabs goBack={() => setFormData({ ...formData, activeTab: false })} />
       ) : (
         <Box className={classes.mainContainer}>
-          {availableClaims.length > 0 ? (
+          {availableClaims.length > 0 || aquaClaims ? (
             <>
               <Typography variant='body1' className={classes.heading}>
                 Available Tokens
               </Typography>
               <PageAnimation in={page} key={page} reverse={initial ? initial : reverse}>
                 <Box className={classes.tokenContainer}>
+                  {aquaClaims && <AquaAccordian data={aquaClaims} />}
                   {availableClaims
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(claim => (

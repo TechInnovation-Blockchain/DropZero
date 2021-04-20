@@ -5,6 +5,7 @@ const initialState = {
   unlockedClaims: [],
   lockedClaims: [],
   claimsHistory: null,
+  aquaClaims: null,
 };
 
 const claimReducer = (state = initialState, action) => {
@@ -53,6 +54,8 @@ const claimReducer = (state = initialState, action) => {
       }
 
       return { ...state, availableClaims: newAvailableClaims, unlockedClaims: newUnlockedClaims };
+    case claimTypes.GET_AQUA_CLAIMS:
+      return { ...state, aquaClaims: payload };
     default:
       return state;
   }

@@ -8,6 +8,7 @@ import {
   removeClaim,
   resetClaims,
   resetClaimsHistory,
+  getAquaClaims,
 } from '../redux';
 import { useDispatchWrap } from './utilHooks';
 
@@ -37,4 +38,11 @@ export const useClaimsDashboard = () => {
   const resetClaimsHistoryF = useDispatchWrap(resetClaimsHistory);
 
   return { claimsHistory, getClaimsHistoryF, resetClaimsHistoryF };
+};
+
+export const useAquaClaims = () => {
+  const { aquaClaims } = useSelector(state => state.claim);
+  const getAquaClaimsF = useDispatchWrap(getAquaClaims);
+
+  return { aquaClaims, getAquaClaimsF };
 };

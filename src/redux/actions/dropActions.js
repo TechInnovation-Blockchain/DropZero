@@ -2,8 +2,9 @@ import axios from 'axios';
 
 import * as dropTypes from '../types/dropTypes';
 import { logError, logMessage } from '../../utils/log';
-import { BASE_URL, formDataConfig, config } from '../../config/constants';
+import { BASE_URL } from '../../config/constants';
 import { showSnackbar } from './uiActions';
+import { authError } from './authActions';
 
 //save drop inputs
 export const saveFields = data => {
@@ -47,10 +48,17 @@ export const clearCSV = () => {
 //uploading csv on server
 export const uploadCSV = (
   { file, account, token, startDate, endDate, dropName, decimal },
+  jwt,
   onError
 ) => {
   return async dispatch => {
     try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          headers: { Authorization: `Bearer ${jwt}` },
+        },
+      };
       const formData = new FormData();
       formData.append('file', file);
       formData.append('walletAddress', account);
@@ -60,7 +68,7 @@ export const uploadCSV = (
       startDate && formData.append('startDate', new Date(startDate).getTime());
       endDate && formData.append('endDate', new Date(endDate).getTime());
 
-      const res = await axios.post(`${BASE_URL}/upload_csv/merkle_root`, formData, formDataConfig);
+      const res = await axios.post(`${BASE_URL}/upload_csv/merkle_root`, formData, config);
       logMessage('Upload CSV', res);
       if (res?.data?.responseCode === 200) {
         dispatch({
@@ -72,19 +80,23 @@ export const uploadCSV = (
         dispatch(showSnackbar({ message: 'CSV Upload Error', severity: 'error' }));
         onError();
       }
-    } catch (error) {
-      logError('Upload CSV', error);
+    } catch (e) {
+      logError('Upload CSV', e);
       dispatch(showSnackbar({ message: 'CSV Upload Error', severity: 'error' }));
       onError();
+      authError(e);
     }
   };
 };
 
 //get dropper drops
-export const getUserDrops = walletAddress => {
+export const getUserDrops = jwt => {
   return async dispatch => {
     try {
-      const res = await axios.get(`${BASE_URL}/dropper/get_drops/${walletAddress}`);
+      const config = {
+        headers: { Authorization: `Bearer ${jwt}` },
+      };
+      const res = await axios.get(`${BASE_URL}/dropper/get_drops`, config);
       logMessage('Get Drops', res);
       if (res?.data?.responseCode === 201) {
         dispatch({
@@ -103,6 +115,7 @@ export const getUserDrops = walletAddress => {
         payload: [],
       });
       logError('Get Drops', e);
+      authError(e);
     }
   };
 };
@@ -122,59 +135,32 @@ export const pauseDrop = (dropId, pause) => {
 };
 
 //get csv file from server
-export const getCSVFile = async (dropId, tokenName) => {
+export const getCSVFile = async (dropId, tokenName, jwt) => {
   try {
-    const res = await axios.get(`${BASE_URL}/dropper/get_csv/${dropId}?token_name=${tokenName}`);
+    const config = {
+      headers: { Authorization: `Bearer ${jwt}` },
+    };
+    const res = await axios.get(
+      `${BASE_URL}/dropper/get_csv/${dropId}?token_name=${tokenName}`,
+      config
+    );
     logMessage('getCSVFile', res);
     if (res?.data?.responseCode === 201) {
       return res.data.result;
     }
   } catch (e) {
     logError('getCSVFile', e);
-  }
-};
-
-//start single claim
-export const withdrawClaimedToken = async claimId => {
-  try {
-    const res = await axios.post(`${BASE_URL}/user/withdraw_claimed_token/${claimId}?claim=single`);
-    logMessage('withdrawClaimedToken', res);
-    if (res?.data?.responseCode === 201) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (e) {
-    logError('withdrawClaimedToken', e);
-    return false;
-  }
-};
-
-//start multiple claim
-export const withdrawMultipleClaimedToken = async (walletAddress, merkleRoot) => {
-  try {
-    const body = { merkleRoot };
-    const res = await axios.post(
-      `${BASE_URL}/user/withdraw_claimed_token/${walletAddress}?claim=multiple`,
-      body,
-      config
-    );
-    logMessage('withdrawMultipleClaimedToken', res);
-    if (res?.data?.responseCode === 201) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (e) {
-    logError('withdrawMultipleClaimedToken', e);
-    return false;
+    authError(e);
   }
 };
 
 //start cron job for pause/unpause on server
-export const startpause = async (dropId, action) => {
+export const startpause = async (dropId, action, jwt) => {
   try {
-    const res = await axios.get(`${BASE_URL}/dropper/pause_drop/${dropId}?pause=${action}`);
+    const config = {
+      headers: { Authorization: `Bearer ${jwt}` },
+    };
+    const res = await axios.get(`${BASE_URL}/dropper/pause_drop/${dropId}?pause=${action}`, config);
     logMessage('pause', res);
     if (res?.data?.responseCode === 201) {
       return true;
@@ -183,15 +169,20 @@ export const startpause = async (dropId, action) => {
     }
   } catch (e) {
     logError('pause', e);
+    authError(e);
     return false;
   }
 };
 
 //start withdraw cron job on server
-export const startWithdraw = async (dropperAddress, dropId) => {
+export const startWithdraw = async (dropperAddress, dropId, jwt) => {
   try {
+    const config = {
+      headers: { Authorization: `Bearer ${jwt}` },
+    };
     const res = await axios.get(
-      `${BASE_URL}/dropper/withdraw_drop/${dropperAddress}?csv_id=${dropId}`
+      `${BASE_URL}/dropper/withdraw_drop/${dropperAddress}?csv_id=${dropId}`,
+      config
     );
     logMessage('startWithdraw', res);
     if (res?.data?.responseCode === 201) {
@@ -201,19 +192,25 @@ export const startWithdraw = async (dropperAddress, dropId) => {
     }
   } catch (e) {
     logError('startWithdraw', e);
+    authError(e);
     return false;
   }
 };
 
 //remove users data from server on rejection
-export const rejectDrop = async (dropperAddress, merkleRoot) => {
+export const rejectDrop = async (dropperAddress, merkleRoot, jwt) => {
   try {
+    const config = {
+      headers: { Authorization: `Bearer ${jwt}` },
+    };
     const res = await axios.get(
-      `${BASE_URL}/dropper/reject_drop/${dropperAddress}?merkleRoot=${merkleRoot}`
+      `${BASE_URL}/dropper/reject_drop/${dropperAddress}?merkleRoot=${merkleRoot}`,
+      config
     );
     logMessage('rejectDrop', res);
   } catch (e) {
     logError('rejectDrop', e);
+    authError(e);
     return false;
   }
 };
@@ -229,7 +226,7 @@ export const resetDrops = () => {
 export const checkDropName = async (dropName, tokenAddress) => {
   try {
     const body = { dropName, tokenAddress };
-    const res = await axios.post(`${BASE_URL}/dropper/check_drop`, body, config);
+    const res = await axios.post(`${BASE_URL}/dropper/check_drop`, body);
     logMessage('checkDropName', res);
     if (res?.data?.responseCode) {
       return true;
@@ -249,12 +246,16 @@ export const changeTab = tab => {
   };
 };
 
-export const saveTxnHash = async (merkle_root, txn_hash) => {
+export const saveTxnHash = async (merkle_root, txn_hash, jwt) => {
   try {
+    const config = {
+      headers: { Authorization: `Bearer ${jwt}` },
+    };
     const body = { txn_hash, merkle_root };
     const res = await axios.post(`${BASE_URL}/dropper/etherscan_link`, body, config);
     logMessage('saveTxnHash', res);
   } catch (e) {
     logError('saveTxnHash', e);
+    authError(e);
   }
 };

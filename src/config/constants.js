@@ -1,22 +1,15 @@
-// export const CONTRACT_ADDRESSES = {
-//   dropFactory: '0xf913b2A5FeC65C237eEE959A34A0e5Ee81955fCC',
-// };
-
 export const CONTRACT_ADDRESSES = {
   dropFactory: '0x082046319ad7ddB5993F796FaFE6c0439c8fd5Fe',
 };
 
-//export const BASE_URL = 'https://dropzero.herokuapp.com';
+export const BASE_URL = 'https://drop-zero-test-server.herokuapp.com';
 
-export const BASE_URL = 'http://192.168.1.79:8000';
-
-//const jwt = localStorage.getItem('jwt');
+//export const BASE_URL = 'http://192.168.1.79:8000';
 
 export const config = {
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    //Authorization: `Bearer ${jwt}`,
   },
 };
 

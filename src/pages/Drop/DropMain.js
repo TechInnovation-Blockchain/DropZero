@@ -6,7 +6,7 @@ import { PageAnimation } from '../../components';
 import DropToken from './DropToken';
 import DropDates from './DropDates';
 import DropCSV from './DropCSV';
-import { useDropInputs } from '../../hooks';
+import { useDropInputs, useJWT } from '../../hooks';
 
 const DropMain = () => {
   const { currentTab, currentAccount, clearFieldsF } = useDropInputs();

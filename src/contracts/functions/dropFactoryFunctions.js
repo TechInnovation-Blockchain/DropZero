@@ -58,6 +58,7 @@ export const createDrop = async (tokenAddress, walletAddress, callback) => {
 //add csv data in drop
 export const addDropData = async (
   { tokenAmount, startDate, endDate, merkleRoot, tokenAddress, walletAddress, dropperId },
+  jwt,
   onload,
   callback
 ) => {
@@ -70,7 +71,7 @@ export const addDropData = async (
       .send({ from: walletAddress })
       .on('transactionHash', txnHash => {
         transactionPending({ transactionHash: txnHash }, { text: 'Drop Pending' }, 'upload');
-        saveTxnHash(merkleRoot, txnHash);
+        saveTxnHash(merkleRoot, txnHash, jwt);
       })
       .then(receipt => {
         transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Created' });
@@ -79,10 +80,10 @@ export const addDropData = async (
       .catch(e => {
         if (e.code === 4001) {
           transactionRejected({}, { text: 'Drop Rejected' });
-          rejectDrop(dropperId, merkleRoot);
+          rejectDrop(dropperId, merkleRoot, jwt);
         } else {
           transactionFailed({}, { text: 'Drop Failed' });
-          rejectDrop(dropperId, merkleRoot);
+          rejectDrop(dropperId, merkleRoot, jwt);
         }
         logError('createDrop', e);
       });
@@ -94,11 +95,11 @@ export const addDropData = async (
 };
 
 //pause claims of drop
-export const pauseDrop = async (dropId, tokenAddress, walletAddress, merkleRoot, callback) => {
+export const pauseDrop = async (dropId, tokenAddress, walletAddress, merkleRoot, jwt, callback) => {
   try {
     const contract = dropFactoryContract();
     transactionPending({}, { text: 'Pausing Drop' });
-    const res = await startpause(dropId, true);
+    const res = await startpause(dropId, true, jwt);
     if (res) {
       await contract.methods
         .pause(tokenAddress, merkleRoot)
@@ -128,11 +129,18 @@ export const pauseDrop = async (dropId, tokenAddress, walletAddress, merkleRoot,
 };
 
 //unpause claims of drop
-export const unpauseDrop = async (dropId, tokenAddress, walletAddress, merkleRoot, callback) => {
+export const unpauseDrop = async (
+  dropId,
+  tokenAddress,
+  walletAddress,
+  merkleRoot,
+  jwt,
+  callback
+) => {
   try {
     const contract = dropFactoryContract();
     transactionPending({}, { text: 'Unpausing Drop' });
-    const res = await startpause(dropId, false);
+    const res = await startpause(dropId, false, jwt);
     if (res) {
       await contract.methods
         .unpause(tokenAddress, merkleRoot)
@@ -171,12 +179,13 @@ export const withdraw = async (
   tokenAddress,
   walletAddress,
   merkleRoot,
+  jwt,
   callback
 ) => {
   try {
     const contract = dropFactoryContract();
     transactionPending({}, { text: 'Withdraw Pending' }, 'withdraw');
-    const res = await startWithdraw(dropperAddress, dropId);
+    const res = await startWithdraw(dropperAddress, dropId, jwt);
     if (res) {
       await contract.methods
         .withdraw(tokenAddress, merkleRoot)
@@ -214,12 +223,13 @@ export const withdraw = async (
 
 export const multipleClaims = async (
   { tokenAddress, walletAddress, indexs, amounts, merkleRoots, merkleProofs },
+  jwt,
   callback
 ) => {
   try {
     const contract = dropFactoryContract();
     transactionPending({}, { text: 'Claim Pending' }, 'claim');
-    const res = await withdrawMultipleClaimedToken(walletAddress, merkleRoots);
+    const res = await withdrawMultipleClaimedToken(walletAddress, merkleRoots, jwt);
     if (res) {
       await contract.methods
         .multipleClaimsFromDrop(tokenAddress, indexs, amounts, merkleRoots, merkleProofs)
@@ -253,12 +263,13 @@ export const multipleClaims = async (
 
 export const singleClaim = async (
   { tokenAddress, walletAddress, id, indexs, amounts, merkleRoots, merkleProofs },
+  jwt,
   callback
 ) => {
   try {
     const contract = dropFactoryContract();
     transactionPending({}, { text: 'Claim Pending' }, 'claim');
-    const res = await withdrawClaimedToken(id[0], merkleRoots[0]);
+    const res = await withdrawClaimedToken(id[0], jwt);
     if (res) {
       await contract.methods
         .claimFromDrop(tokenAddress, indexs[0], amounts[0], merkleRoots[0], merkleProofs[0])

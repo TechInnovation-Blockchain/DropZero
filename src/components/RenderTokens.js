@@ -13,7 +13,7 @@ import { useStyles } from '../theme/styles/components/renderTokensStyles';
 import { trunc } from '../utils/formattingFunctions';
 import { getName, getDecimal } from '../contracts/functions/erc20Functions';
 import { multipleClaims, singleClaim } from '../contracts/functions/dropFactoryFunctions';
-import { useClaims, useLoading, useClaimsDashboard } from '../hooks';
+import { useClaims, useLoading, useClaimsDashboard, useJWT } from '../hooks';
 
 const RenderTokens = ({ tokens, goBack, unlocked }) => {
   const classes = useStyles();
@@ -23,6 +23,7 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     loading: { dapp },
   } = useLoading();
   const { getClaimsHistoryF } = useClaimsDashboard();
+  const { jwt } = useJWT();
 
   const [formData, setFormData] = useState({
     open: false,
@@ -70,16 +71,16 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     }
 
     if (sendContractData.amounts?.length > 1) {
-      await multipleClaims(sendContractData, () => {
+      await multipleClaims(sendContractData, jwt, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
-        getClaimsHistoryF(account);
+        getClaimsHistoryF(jwt);
       });
     } else {
-      await singleClaim(sendContractData, () => {
+      await singleClaim(sendContractData, jwt, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
-        getClaimsHistoryF(account);
+        getClaimsHistoryF(jwt);
       });
     }
   };
@@ -91,16 +92,16 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     }
 
     if (sendContractData.amounts?.length > 1) {
-      await multipleClaims(sendContractData, () => {
+      await multipleClaims(sendContractData, jwt, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
-        getClaimsHistoryF(account);
+        getClaimsHistoryF(jwt);
       });
     } else {
-      await singleClaim(sendContractData, () => {
+      await singleClaim(sendContractData, jwt, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
-        getClaimsHistoryF(account);
+        getClaimsHistoryF(jwt);
       });
     }
   };

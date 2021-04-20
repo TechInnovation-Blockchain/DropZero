@@ -3,7 +3,7 @@ import { Box, TablePagination, CircularProgress, Typography } from '@material-ui
 import { useWeb3React } from '@web3-react/core';
 
 import { useStyles } from '../../theme/styles/pages/claim/claimStyles';
-import { useClaimsDashboard } from '../../hooks';
+import { useClaimsDashboard, useJWT } from '../../hooks';
 import { Accordion, PageAnimation } from '../../components';
 import { VALID_CHAIN } from '../../config/constants';
 
@@ -11,6 +11,7 @@ const ClaimDashboard = () => {
   const classes = useStyles();
   const { account, chainId } = useWeb3React();
   const { claimsHistory, getClaimsHistoryF, resetClaimsHistoryF } = useClaimsDashboard();
+  const { jwt } = useJWT();
 
   const [formData, setFormData] = useState({
     page: 0,
@@ -34,12 +35,12 @@ const ClaimDashboard = () => {
   };
 
   useEffect(() => {
-    if (chainId === VALID_CHAIN) {
-      getClaimsHistoryF(account);
+    if (chainId === VALID_CHAIN && jwt) {
+      getClaimsHistoryF(jwt);
     } else {
       resetClaimsHistoryF();
     }
-  }, [account, chainId]);
+  }, [account, chainId, jwt]);
 
   return claimsHistory ? (
     <Box style={{ paddingBottom: '20px' }}>
