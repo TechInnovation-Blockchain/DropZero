@@ -67,14 +67,38 @@ const ClaimMain = () => {
   useEffect(() => {
     setFormData({ ...formData, initial: false });
     if (chainId === VALID_CHAIN && jwt) {
+      getAquaClaimsF(account);
       getAvailableClaimsF(jwt);
       resetLockAndUnlockClaimsF();
-      getAquaClaimsF(account);
-      //0x3A1776aD8Bd41c688019Cb586C6A1261Be49f8Bf
     } else {
       resetClaimsF();
     }
   }, [account, chainId, jwt]);
+
+  const claimCount = () => {
+    let start;
+    let end;
+    if (aquaClaims) {
+      if (page === 0) {
+        start = 0;
+      } else {
+        start = page * rowsPerPage - 1;
+      }
+      end = page * rowsPerPage + rowsPerPage - 1;
+    } else {
+      start = page * rowsPerPage;
+      end = page * rowsPerPage + rowsPerPage;
+    }
+    return [start, end];
+  };
+
+  const totalClaimsCount = () => {
+    if (aquaClaims) {
+      return availableClaims.length + 1;
+    } else {
+      return availableClaims.length;
+    }
+  };
 
   return availableClaims ? (
     <PageAnimation in={true} reverse={1}>
@@ -89,19 +113,17 @@ const ClaimMain = () => {
               </Typography>
               <PageAnimation in={page} key={page} reverse={initial ? initial : reverse}>
                 <Box className={classes.tokenContainer}>
-                  {aquaClaims && <AquaAccordian data={aquaClaims} />}
-                  {availableClaims
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(claim => (
-                      <ClaimTokenCard
-                        key={claim.address}
-                        showArrow
-                        token={claim}
-                        tokenAddress={claim.address}
-                        amount={calculateTotalClaim(claim.data)}
-                        onArrowClick={() => handleArrowClick(claim.data)}
-                      />
-                    ))}
+                  {page === 0 && aquaClaims && <AquaAccordian data={aquaClaims} />}
+                  {availableClaims.slice(claimCount()[0], claimCount()[1]).map(claim => (
+                    <ClaimTokenCard
+                      key={claim.address}
+                      showArrow
+                      token={claim}
+                      tokenAddress={claim.address}
+                      amount={calculateTotalClaim(claim.data)}
+                      onArrowClick={() => handleArrowClick(claim.data)}
+                    />
+                  ))}
                 </Box>
               </PageAnimation>
             </>
@@ -111,11 +133,12 @@ const ClaimMain = () => {
             </Typography>
           )}
 
-          {availableClaims.length > rowsPerPage && (
+          {totalClaimsCount() > rowsPerPage && (
             <TablePagination
               component='div'
               style={{ display: 'flex', justifyContent: 'center' }}
-              count={availableClaims.length}
+              // count={aquaClaims ? availableClaims.length + 1 : availableClaims.length}
+              count={totalClaimsCount()}
               page={page}
               onChangePage={handleChangePage}
               rowsPerPage={rowsPerPage}

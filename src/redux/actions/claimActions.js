@@ -7,7 +7,7 @@ import { showSnackbar } from './uiActions';
 import { authError } from './authActions';
 
 //all claims of user
-export const getAvailableClaims = jwt => {
+export const getAvailableClaims = (jwt, walletAddress) => {
   return async dispatch => {
     try {
       const config = {
@@ -93,7 +93,6 @@ export const withdrawClaimedToken = async (claimId, jwt) => {
     const config = {
       headers: { Authorization: `Bearer ${jwt}` },
     };
-    console.log(config);
     const res = await axios.post(
       `${BASE_URL}/user/withdraw_claimed_token/${claimId}?claim=single`,
       {},
@@ -145,7 +144,11 @@ export const getAquaClaims = walletAddress => {
       if (res?.data?.status === 'success') {
         dispatch({
           type: claimTypes.GET_AQUA_CLAIMS,
-          payload: { amount: res.data.data.amount, multiplier: res.data.data.currentMultiplier },
+          payload: {
+            aqua: true,
+            amount: res.data.data.amount,
+            multiplier: res.data.data.currentMultiplier,
+          },
         });
       } else {
         dispatch({ type: claimTypes.GET_AQUA_CLAIMS, payload: null });
