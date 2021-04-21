@@ -78,7 +78,7 @@ const ClaimMain = () => {
   const claimCount = () => {
     let start;
     let end;
-    if (aquaClaims) {
+    if (aquaClaims && aquaClaims.hasOwnProperty('aqua')) {
       if (page === 0) {
         start = 0;
       } else {
@@ -93,27 +93,29 @@ const ClaimMain = () => {
   };
 
   const totalClaimsCount = () => {
-    if (aquaClaims) {
+    if (aquaClaims && aquaClaims.hasOwnProperty('aqua')) {
       return availableClaims.length + 1;
     } else {
       return availableClaims.length;
     }
   };
 
-  return availableClaims ? (
+  return availableClaims && aquaClaims ? (
     <PageAnimation in={true} reverse={1}>
       {activeTab ? (
         <ClaimTabs goBack={() => setFormData({ ...formData, activeTab: false })} />
       ) : (
         <Box className={classes.mainContainer}>
-          {availableClaims.length > 0 || aquaClaims ? (
+          {availableClaims.length > 0 || aquaClaims.hasOwnProperty('aqua') ? (
             <>
               <Typography variant='body1' className={classes.heading}>
                 Available Tokens
               </Typography>
               <PageAnimation in={page} key={page} reverse={initial ? initial : reverse}>
                 <Box className={classes.tokenContainer}>
-                  {page === 0 && aquaClaims && <AquaAccordian data={aquaClaims} />}
+                  {page === 0 && aquaClaims.hasOwnProperty('aqua') && (
+                    <AquaAccordian data={aquaClaims} />
+                  )}
                   {availableClaims.slice(claimCount()[0], claimCount()[1]).map(claim => (
                     <ClaimTokenCard
                       key={claim.address}

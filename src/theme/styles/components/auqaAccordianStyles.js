@@ -15,6 +15,7 @@ export const useStyles = makeStyles(theme => ({
   },
   summary: {
     height: '70px',
+    padding: theme.spacing(0, 1),
   },
   header: {
     alignItems: 'center',

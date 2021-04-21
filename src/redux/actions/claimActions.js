@@ -151,11 +151,11 @@ export const getAquaClaims = walletAddress => {
           },
         });
       } else {
-        dispatch({ type: claimTypes.GET_AQUA_CLAIMS, payload: null });
+        dispatch({ type: claimTypes.GET_AQUA_CLAIMS, payload: {} });
       }
     } catch (e) {
       logError('getAquaClaims', e);
-      dispatch({ type: claimTypes.GET_AQUA_CLAIMS, payload: null });
+      dispatch({ type: claimTypes.GET_AQUA_CLAIMS, payload: {} });
     }
   };
 };
