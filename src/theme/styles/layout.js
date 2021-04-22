@@ -27,7 +27,7 @@ export const useStyles = makeStyles(theme => ({
     background: theme.palette.background.primary,
     margin: theme.spacing(0, 0.5),
     borderRadius: 30,
-    border: `3px solid ${theme.palette.primary.main}`,
+    border: `2px solid ${theme.palette.primary.main}`,
     width: '450px',
     marginBottom: '20px',
     padding: 0,

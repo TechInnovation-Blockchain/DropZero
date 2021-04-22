@@ -6,19 +6,6 @@ export const BASE_URL = 'https://drop-zero-test-server.herokuapp.com';
 
 //export const BASE_URL = 'http://192.168.1.79:8000';
 
-export const config = {
-  headers: {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-  },
-};
-
-export const formDataConfig = {
-  headers: {
-    'Content-Type': 'multipart/form-data',
-  },
-};
-
 export const NoLogo =
   'https://gateway.pinata.cloud/ipfs/QmNX2QerTxTm1RThD7Dc9X5uS9VFnQxmMotaMFhK5GYbBk';
 
@@ -35,3 +22,5 @@ export const ETHERSCAN_ADDRESS_BASE_URL =
     : 'https://rinkeby.etherscan.io/address/';
 
 export const VALID_CHAIN = process.env.REACT_APP_ENVIRONMENT === 'PRODUCTION' ? 1 : 4;
+
+export const INDEX_FEE = 0.5 / 100;

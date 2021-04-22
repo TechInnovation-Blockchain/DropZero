@@ -24,7 +24,13 @@ const claimReducer = (state = initialState, action) => {
     case claimTypes.GET_CLAIMS_HISTORY:
       return { ...state, claimsHistory: payload };
     case claimTypes.RESET_CLAIMS:
-      return { ...state, availableClaims: [], unlockedClaims: [], lockedClaims: [] };
+      return {
+        ...state,
+        availableClaims: [],
+        unlockedClaims: [],
+        lockedClaims: [],
+        aquaClaims: {},
+      };
     case claimTypes.RESET_CLAIMS_HISTORY:
       return { ...state, claimsHistory: [] };
     case claimTypes.REMOVE_CLAIMS:

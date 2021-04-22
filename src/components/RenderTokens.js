@@ -14,6 +14,7 @@ import { trunc } from '../utils/formattingFunctions';
 import { getName, getDecimal } from '../contracts/functions/erc20Functions';
 import { multipleClaims, singleClaim } from '../contracts/functions/dropFactoryFunctions';
 import { useClaims, useLoading, useClaimsDashboard, useJWT } from '../hooks';
+import { INDEX_FEE } from '../config/constants';
 
 const RenderTokens = ({ tokens, goBack, unlocked }) => {
   const classes = useStyles();
@@ -31,6 +32,7 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     check: false,
     page: 0,
     rowsPerPage: 2,
+    totalAmountWithIndexFee: 0,
     totalAmount: 0,
     tokenName: '',
     sendContractData: {},
@@ -135,7 +137,7 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     };
 
     tokens.forEach(async token => {
-      amount += Number(token.amount);
+      amount += Number(token.amount) - Number(token.amount) * INDEX_FEE;
       data['id'] = [...data['id'], token._id];
       data['indexs'] = [...data['indexs'], token.index];
       data['amounts'] = [
@@ -146,7 +148,12 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
       data['merkleProofs'] = [...data['merkleProofs'], token.proof];
     });
     console.log(data);
-    setFormData({ ...formData, totalAmount: amount, open: true, sendContractData: data });
+    setFormData({
+      ...formData,
+      totalAmount: amount,
+      open: true,
+      sendContractData: data,
+    });
   };
 
   const handleClaimClick = () => {

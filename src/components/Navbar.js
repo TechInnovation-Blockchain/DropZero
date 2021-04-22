@@ -1,7 +1,7 @@
 import { Box, Typography, Grid } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 
-import BlockZeroLogo from '../assets/blockzerologo.png';
+import BlockZeroLogo from '../assets/blockzerologo1.png';
 import { useStyles } from '../theme/styles/components/navbarStyles';
 import { useTheme } from '../hooks';
 
