@@ -45,7 +45,7 @@ const DropToken = () => {
 
   const handleDropNameChange = ({ target }) => {
     const _dropName = target?.value;
-    if (dropNameRegex.test(_dropName)) {
+    if (dropNameRegex.test(_dropName) && _dropName !== ' ') {
       saveFieldsF({
         dropName: _dropName,
         dropNameError: '',
@@ -53,7 +53,7 @@ const DropToken = () => {
       if (_dropName.trim() !== '') {
         saveFieldsF({ loading: 'dropName' });
         setTimeout(async () => {
-          const res = await checkDropName(_dropName, token);
+          const res = await checkDropName(_dropName.trim(), token);
           saveFieldsF({ dropNameError: res ? '' : 'Drop already exists', loading: '' });
         }, 500);
       }

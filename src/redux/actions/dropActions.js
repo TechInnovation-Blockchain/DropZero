@@ -47,7 +47,7 @@ export const clearCSV = () => {
 
 //uploading csv on server
 export const uploadCSV = (
-  { file, account, token, startDate, endDate, dropName, decimal },
+  { file, account, token, startDate, endDate, dropName, decimal, totalAmount },
   jwt,
   onError
 ) => {
@@ -64,6 +64,7 @@ export const uploadCSV = (
       formData.append('walletAddress', account);
       formData.append('tokenAddress', token);
       formData.append('decimal', decimal);
+      formData.append('totalAmount', totalAmount);
       dropName && formData.append('dropName', dropName);
       startDate && formData.append('startDate', new Date(startDate).getTime());
       endDate && formData.append('endDate', new Date(endDate).getTime());

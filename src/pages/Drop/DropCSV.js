@@ -119,7 +119,16 @@ const DropCSV = () => {
   const uploadCSVOnServer = async () => {
     setFormData({ ...formData, loadingContent: 'Uploading CSV', openDis: false });
     const decimal = await getDecimal(token);
-    const data = { file, account, token, startDate, endDate, dropName, decimal };
+    const data = {
+      file,
+      account,
+      token,
+      startDate,
+      endDate,
+      dropName: dropName.trim(),
+      decimal,
+      totalAmount,
+    };
     uploadCSVF(data, jwt, () => {
       setFormData({ ...formData, loadingContent: '', open: false, openDis: false });
     });

@@ -26,6 +26,12 @@ export const validateCSV = (data, decimal) => {
             validCSVError = 'Invalid number of decimals';
             break;
           }
+
+          if (rowData[1].indexOf('e') !== -1 || rowData[1].indexOf('E') !== -1) {
+            validCSVError = 'Amount cannot be in exponentail';
+            break;
+          }
+
           _totalAmount += Number(rowData[1]);
         } else {
           validCSVError = 'Invalid CSV';
