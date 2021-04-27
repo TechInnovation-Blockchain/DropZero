@@ -68,9 +68,7 @@ const Drop = () => {
     </Fragment>
   ) : (
     <Box className={classes.noWallet}>
-      <Typography variant='body2'>
-        Connect your wallet to drop tokens and view and manage previous drops.
-      </Typography>
+      <Typography variant='body2'>Connect your wallet to drop</Typography>
     </Box>
   );
 };
