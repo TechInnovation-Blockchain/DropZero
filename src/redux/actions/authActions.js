@@ -29,7 +29,6 @@ export const authorize = () => {
 
 export const authError = error => {
   if (error.message === 'Request failed with status code 403') {
-    console.log(error.message);
     store.dispatch({
       type: authTypes.UN_AUTHORIZED,
     });

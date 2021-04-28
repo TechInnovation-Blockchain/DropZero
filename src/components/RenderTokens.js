@@ -11,6 +11,7 @@ import DisclaimerDialog from './DIsclaimerDialog';
 import Button from './Button';
 import { useStyles } from '../theme/styles/components/renderTokensStyles';
 import { trunc } from '../utils/formattingFunctions';
+import { logMessage } from '../utils/log';
 import { getName, getDecimal } from '../contracts/functions/erc20Functions';
 import { multipleClaims, singleClaim } from '../contracts/functions/dropFactoryFunctions';
 import { useClaims, useLoading, useClaimsDashboard, useJWT } from '../hooks';
@@ -147,7 +148,7 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
       data['merkleRoots'] = [...data['merkleRoots'], token.csvId.merkleRoot];
       data['merkleProofs'] = [...data['merkleProofs'], token.proof];
     });
-    console.log(data);
+    logMessage('Claim', data);
     setFormData({
       ...formData,
       totalAmount: amount,
