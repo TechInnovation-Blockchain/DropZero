@@ -10,7 +10,7 @@ import { trunc } from '../utils/formattingFunctions';
 import Counter from './Counter';
 import { getTokenLogo } from '../redux';
 import { getName, getSymbol } from '../contracts/functions/erc20Functions';
-import { DATE_FORMAT, ETHERSCAN_ADDRESS_BASE_URL, NoLogo } from '../config/constants';
+import { DATE_FORMAT, ETHERSCAN_ADDRESS_BASE_URL, NoLogo, INDEX_FEE } from '../config/constants';
 
 const ClaimTokenCard = ({
   token,
@@ -69,8 +69,8 @@ const ClaimTokenCard = ({
             </Typography>
           </Box>
           <Box className={classes.tokenAmount}>
-            <Tooltip title={amount}>
-              <Typography varaint='body2'>{trunc(amount)}</Typography>
+            <Tooltip title={amount - amount * INDEX_FEE}>
+              <Typography varaint='body2'>{trunc(amount - amount * INDEX_FEE)}</Typography>
             </Tooltip>
             {showArrow ? (
               <IconButton size='small' style={{ padding: 0 }} onClick={onArrowClick}>

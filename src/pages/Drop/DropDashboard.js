@@ -4,13 +4,14 @@ import { useWeb3React } from '@web3-react/core';
 
 import { useStyles } from '../../theme/styles/pages/drop/dropStyles';
 import { Accordion, PageAnimation } from '../../components';
-import { useDropDashboard } from '../../hooks';
+import { useDropDashboard, useJWT } from '../../hooks';
 import { VALID_CHAIN } from '../../config/constants';
 
 const DropDashboard = () => {
   const classes = useStyles();
   const { account, chainId } = useWeb3React();
   const { userDrops, getUserDropsF, resetDropsF } = useDropDashboard();
+  const { jwt } = useJWT();
 
   const [formData, setFormData] = useState({
     page: 0,
@@ -34,12 +35,12 @@ const DropDashboard = () => {
   };
 
   useEffect(() => {
-    if (chainId === VALID_CHAIN) {
-      getUserDropsF(account);
+    if (chainId === VALID_CHAIN && jwt) {
+      getUserDropsF(jwt);
     } else {
       resetDropsF();
     }
-  }, [account, chainId]);
+  }, [account, chainId, jwt]);
 
   return userDrops ? (
     <Box style={{ paddingBottom: '20px' }}>

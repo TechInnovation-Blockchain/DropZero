@@ -16,7 +16,7 @@ import Button from './Button';
 import WalletDialog from './WalletDialog';
 import { walletList } from '../utils/web3Connectors';
 import { conciseAddress } from '../utils/formattingFunctions';
-import { useSnackbar, useLoading, useDropInputs, useWeb3, useTheme } from '../hooks';
+import { useSnackbar, useLoading, useDropInputs, useWeb3, useTheme, useJWT } from '../hooks';
 import { setWeb3Provider } from '../contracts/getContract';
 import { VALID_CHAIN } from '../config/constants';
 import WhiteLogo from '../assets/logoWhite.png';
@@ -30,6 +30,7 @@ const ConnectWallet = () => {
   const { storeWeb3ContextF } = useWeb3();
   const { currentAccount, clearFieldsF } = useDropInputs();
   const { theme } = useTheme();
+  const { getJWTF } = useJWT();
 
   const [open, setOpen] = useState(false);
 
@@ -72,6 +73,7 @@ const ConnectWallet = () => {
         )
         .then(() => {
           setLoadingF({ walletConnection: false });
+          //getJWTF(web3context.account, Date.now());
         })
         .catch(e => {
           const err = getErrorMessage(e);
@@ -100,7 +102,10 @@ const ConnectWallet = () => {
     }
     if (web3context.active || web3context.account) {
       setOpen(false);
-      currentAccount === '' && clearFieldsF(web3context.account);
+      if (currentAccount === '') {
+        clearFieldsF(web3context.account);
+        //getJWTF(web3context.account, Date.now());
+      }
     }
   }, [web3context]);
 
@@ -128,7 +133,8 @@ const ConnectWallet = () => {
       <Box className={classes.connectWrapper}>
         {web3context.active && (
           <Typography variant='body2' className={classes.bottomError}>
-            {web3context.chainId !== VALID_CHAIN && 'Change network to rinkeby'}
+            {web3context.chainId !== VALID_CHAIN &&
+              `Change network to ${VALID_CHAIN === 1 ? 'mainnet' : 'rinkeby'}`}
           </Typography>
         )}
         <Box className={classes.btnWrapper}>

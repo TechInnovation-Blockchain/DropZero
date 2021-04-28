@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 
 import { abi as erc20Abi } from './abi/erc20Abi.json';
-import { abi as dropFactoryAbi } from './abi/dropFactoryAbi.json';
+import { abi as dropFactoryAbi } from './abi/_dropFactoryAbi.json';
 import { logError } from '../utils/log';
 import { CONTRACT_ADDRESSES } from '../config/constants';
 

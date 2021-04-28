@@ -8,6 +8,7 @@ export const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: theme.spacing(1, 0),
     '& button[disabled]': {
       color: theme.palette.text.secondary,
     },
@@ -22,7 +23,7 @@ export const useStyles = makeStyles(theme => ({
 
   tokenContainer: {
     width: '100%',
-    height: '230px',
+    minHeight: '250px',
   },
 
   secondaryText: {

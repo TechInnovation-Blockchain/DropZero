@@ -11,6 +11,7 @@ import injectedLogo from '../assets/wallets/injected.png';
 import metamaskLogo from '../assets/wallets/metamask.png';
 import portisLogo from '../assets/wallets/portis.png';
 import walletconnectLogo from '../assets/wallets/walletconnect.png';
+import { VALID_CHAIN } from '../config/constants';
 
 const REACT_APP_NETWORK_URL1 = `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
 const REACT_APP_NETWORK_URL4 = `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
@@ -27,14 +28,14 @@ export const injected = new InjectedConnector({
 });
 
 export const walletconnect = new WalletConnectConnector({
-  rpc: { 4: RPC_URLS[4] },
+  rpc: { 4: RPC_URLS[VALID_CHAIN] },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: POLLING_INTERVAL,
 });
 
 export const walletlink = new WalletLinkConnector({
-  url: RPC_URLS[4],
+  url: RPC_URLS[VALID_CHAIN],
   appName: 'Dropzero',
 });
 
@@ -50,12 +51,12 @@ const portisKey =
 
 export const fortmatic = new FortmaticConnector({
   apiKey: fortmaticKey,
-  chainId: 4,
+  chainId: VALID_CHAIN,
 });
 
 export const portis = new PortisConnector({
   dAppId: portisKey,
-  networks: [4],
+  networks: [VALID_CHAIN],
 });
 
 export const injectedConnectorList = [

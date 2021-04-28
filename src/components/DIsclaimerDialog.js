@@ -69,7 +69,7 @@ const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClic
               <br />
               <br />
               <span className={classes.colored}>5) </span> All airdrops through Dropzero are
-              on-chain and Blockzero Labs do not own or manage any airdrop data or mainnet
+              on-chain and Blockzero Labs does not own or manage any airdrop data or mainnet
               performance
               <br />
               <br />

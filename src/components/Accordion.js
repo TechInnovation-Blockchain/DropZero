@@ -20,12 +20,12 @@ import { useStyles } from '../theme/styles/components/accordionStyles';
 import Button from './Button';
 import Dialog from './Dialog';
 import PauseDrop from './PauseDrop';
-import { DATE_FORMAT, NoLogo, ETHERSCAN_ADDRESS_BASE_URL } from '../config/constants';
+import { DATE_FORMAT, NoLogo, ETHERSCAN_ADDRESS_BASE_URL, INDEX_FEE } from '../config/constants';
 import { getTokenLogo, getCSVFile } from '../redux';
 import { getSymbol, getName } from '../contracts/functions/erc20Functions';
 import { withdraw } from '../contracts/functions/dropFactoryFunctions';
 import { trunc, truncFileName } from '../utils/formattingFunctions';
-import { useDropDashboard, useLoading } from '../hooks';
+import { useDropDashboard, useLoading, useJWT } from '../hooks';
 
 const Accordion = ({ data, expanded, setExpanded, claim }) => {
   const classes = useStyles();
@@ -34,6 +34,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
   const {
     loading: { dapp },
   } = useLoading();
+  const { jwt } = useJWT();
 
   const [formData, setFormData] = useState({
     tokenLogo: NoLogo,
@@ -66,7 +67,7 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
 
   const handleWithdrawConfirm = async () => {
     setFormData({ ...formData, open: false });
-    await withdraw(_id, dropperAddress, tokenAddress, account, merkleRoot, () => {
+    await withdraw(_id, dropperAddress, tokenAddress, account, merkleRoot, jwt, () => {
       withdrawDropsF(data);
       setFormData({ ...formData, _withdraw: true, open: false });
     });
@@ -74,8 +75,8 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
 
   const handleCSVDownload = async e => {
     setFormData({ ...formData, loadingCSVFile: true });
-    const fileURL = await getCSVFile(data?._id, tokenName);
-    console.log(fileURL);
+    const fileURL = await getCSVFile(data?._id, tokenName, jwt);
+    console.log('File URL =>', fileURL);
     if (fileURL) {
       window.location.assign(fileURL);
     }
@@ -112,9 +113,12 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
       >
         <Grid container className={classes.accordianHeader}>
           <Grid item xs={5}>
-            <Tooltip title={claim ? amount : totalAmount} placement='bottom-end'>
+            <Tooltip
+              title={claim ? amount - amount * INDEX_FEE : totalAmount}
+              placement='bottom-end'
+            >
               <Typography style={{ textAlign: 'right' }} variant='body2'>
-                {trunc(claim ? amount : totalAmount)}
+                {trunc(claim ? amount - amount * INDEX_FEE : totalAmount)}
               </Typography>
             </Tooltip>
           </Grid>
@@ -139,8 +143,13 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
         <Box className={classes.accordianContentWrapper}>
           <Box className={classes.accordianContent}>
             <Typography variant='body2'>Total amount</Typography>
-            <Tooltip title={claim ? amount : totalAmount} placement='bottom-end'>
-              <Typography variant='body2'>{trunc(claim ? amount : totalAmount)}</Typography>
+            <Tooltip
+              title={claim ? amount - amount * INDEX_FEE : totalAmount}
+              placement='bottom-end'
+            >
+              <Typography variant='body2'>
+                {trunc(claim ? amount - amount * INDEX_FEE : totalAmount)}
+              </Typography>
             </Tooltip>
           </Box>
           <Box className={classes.accordianContent}>

@@ -3,8 +3,8 @@ import { Box, Typography, TablePagination, CircularProgress } from '@material-ui
 import { useWeb3React } from '@web3-react/core';
 
 import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
-import { PageAnimation, ClaimTabs, ClaimTokenCard } from '../../components';
-import { useClaims } from '../../hooks';
+import { PageAnimation, ClaimTabs, ClaimTokenCard, AquaAccordian } from '../../components';
+import { useClaims, useJWT, useAquaClaims } from '../../hooks';
 import { VALID_CHAIN } from '../../config/constants';
 
 const ClaimMain = () => {
@@ -17,6 +17,8 @@ const ClaimMain = () => {
     resetLockAndUnlockClaimsF,
     resetClaimsF,
   } = useClaims();
+  const { jwt } = useJWT();
+  const { aquaClaims, getAquaClaimsF } = useAquaClaims();
 
   const [formData, setFormData] = useState({
     page: 0,
@@ -64,39 +66,66 @@ const ClaimMain = () => {
 
   useEffect(() => {
     setFormData({ ...formData, initial: false });
-    if (chainId === VALID_CHAIN) {
-      getAvailableClaimsF(account);
+    if (chainId === VALID_CHAIN && jwt) {
+      getAquaClaimsF(account);
+      getAvailableClaimsF(jwt);
       resetLockAndUnlockClaimsF();
     } else {
       resetClaimsF();
     }
-  }, [account, chainId]);
+  }, [account, chainId, jwt]);
 
-  return availableClaims ? (
+  const claimCount = () => {
+    let start;
+    let end;
+    if (aquaClaims && aquaClaims.hasOwnProperty('aqua')) {
+      if (page === 0) {
+        start = 0;
+      } else {
+        start = page * rowsPerPage - 1;
+      }
+      end = page * rowsPerPage + rowsPerPage - 1;
+    } else {
+      start = page * rowsPerPage;
+      end = page * rowsPerPage + rowsPerPage;
+    }
+    return [start, end];
+  };
+
+  const totalClaimsCount = () => {
+    if (aquaClaims && aquaClaims.hasOwnProperty('aqua')) {
+      return availableClaims.length + 1;
+    } else {
+      return availableClaims.length;
+    }
+  };
+
+  return availableClaims && aquaClaims ? (
     <PageAnimation in={true} reverse={1}>
       {activeTab ? (
         <ClaimTabs goBack={() => setFormData({ ...formData, activeTab: false })} />
       ) : (
         <Box className={classes.mainContainer}>
-          {availableClaims.length > 0 ? (
+          {availableClaims.length > 0 || aquaClaims.hasOwnProperty('aqua') ? (
             <>
               <Typography variant='body1' className={classes.heading}>
                 Available Tokens
               </Typography>
               <PageAnimation in={page} key={page} reverse={initial ? initial : reverse}>
                 <Box className={classes.tokenContainer}>
-                  {availableClaims
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(claim => (
-                      <ClaimTokenCard
-                        key={claim.address}
-                        showArrow
-                        token={claim}
-                        tokenAddress={claim.address}
-                        amount={calculateTotalClaim(claim.data)}
-                        onArrowClick={() => handleArrowClick(claim.data)}
-                      />
-                    ))}
+                  {page === 0 && aquaClaims.hasOwnProperty('aqua') && (
+                    <AquaAccordian data={aquaClaims} />
+                  )}
+                  {availableClaims.slice(claimCount()[0], claimCount()[1]).map(claim => (
+                    <ClaimTokenCard
+                      key={claim.address}
+                      showArrow
+                      token={claim}
+                      tokenAddress={claim.address}
+                      amount={calculateTotalClaim(claim.data)}
+                      onArrowClick={() => handleArrowClick(claim.data)}
+                    />
+                  ))}
                 </Box>
               </PageAnimation>
             </>
@@ -106,11 +135,12 @@ const ClaimMain = () => {
             </Typography>
           )}
 
-          {availableClaims.length > rowsPerPage && (
+          {totalClaimsCount() > rowsPerPage && (
             <TablePagination
               component='div'
               style={{ display: 'flex', justifyContent: 'center' }}
-              count={availableClaims.length}
+              // count={aquaClaims ? availableClaims.length + 1 : availableClaims.length}
+              count={totalClaimsCount()}
               page={page}
               onChangePage={handleChangePage}
               rowsPerPage={rowsPerPage}

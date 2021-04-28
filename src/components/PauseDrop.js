@@ -3,12 +3,13 @@ import { Switch } from '@material-ui/core';
 import { useWeb3React } from '@web3-react/core';
 
 import Dialog from './Dialog';
-import { useDropDashboard } from '../hooks';
+import { useDropDashboard, useJWT } from '../hooks';
 import { pauseDrop, unpauseDrop } from '../contracts/functions/dropFactoryFunctions';
 
 const PauseDrop = ({ value, tokenAddress, merkleRoot, dropId, disabled }) => {
   const { pauseDropF } = useDropDashboard();
   const { account } = useWeb3React();
+  const { jwt } = useJWT();
 
   const [formData, setFormData] = useState({
     check: value,
@@ -35,7 +36,7 @@ const PauseDrop = ({ value, tokenAddress, merkleRoot, dropId, disabled }) => {
 
   const handlePause = async () => {
     setFormData({ ...formData, open: false });
-    await pauseDrop(dropId, tokenAddress, account, merkleRoot, () => {
+    await pauseDrop(dropId, tokenAddress, account, merkleRoot, jwt, () => {
       pauseDropF(dropId, true);
       setFormData({ ...formData, open: false, check: true });
     });
@@ -43,7 +44,7 @@ const PauseDrop = ({ value, tokenAddress, merkleRoot, dropId, disabled }) => {
 
   const handleUnPause = async () => {
     setFormData({ ...formData, open: false });
-    await unpauseDrop(dropId, tokenAddress, account, merkleRoot, () => {
+    await unpauseDrop(dropId, tokenAddress, account, merkleRoot, jwt, () => {
       pauseDropF(dropId, false);
       setFormData({ ...formData, open: false, check: false });
     });

@@ -33,9 +33,11 @@ export const useStyles = makeStyles(theme => ({
     textAlign: 'center',
     height: '100px',
     '& p': {
-      color: theme.palette.error.main,
+      color: theme.palette.text.disabled,
+      textTransform: 'uppercase',
       fontWeight: 700,
-      fontSize: '14px',
+      fontSize: '12px',
+      opacity: '0.8',
     },
   },
   noData: {

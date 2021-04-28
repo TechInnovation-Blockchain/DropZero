@@ -11,9 +11,11 @@ import DisclaimerDialog from './DIsclaimerDialog';
 import Button from './Button';
 import { useStyles } from '../theme/styles/components/renderTokensStyles';
 import { trunc } from '../utils/formattingFunctions';
+import { logMessage } from '../utils/log';
 import { getName, getDecimal } from '../contracts/functions/erc20Functions';
 import { multipleClaims, singleClaim } from '../contracts/functions/dropFactoryFunctions';
-import { useClaims, useLoading, useClaimsDashboard } from '../hooks';
+import { useClaims, useLoading, useClaimsDashboard, useJWT } from '../hooks';
+import { INDEX_FEE } from '../config/constants';
 
 const RenderTokens = ({ tokens, goBack, unlocked }) => {
   const classes = useStyles();
@@ -23,6 +25,7 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     loading: { dapp },
   } = useLoading();
   const { getClaimsHistoryF } = useClaimsDashboard();
+  const { jwt } = useJWT();
 
   const [formData, setFormData] = useState({
     open: false,
@@ -30,6 +33,7 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     check: false,
     page: 0,
     rowsPerPage: 2,
+    totalAmountWithIndexFee: 0,
     totalAmount: 0,
     tokenName: '',
     sendContractData: {},
@@ -70,16 +74,16 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     }
 
     if (sendContractData.amounts?.length > 1) {
-      await multipleClaims(sendContractData, () => {
+      await multipleClaims(sendContractData, jwt, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
-        getClaimsHistoryF(account);
+        getClaimsHistoryF(jwt);
       });
     } else {
-      await singleClaim(sendContractData, () => {
+      await singleClaim(sendContractData, jwt, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
-        getClaimsHistoryF(account);
+        getClaimsHistoryF(jwt);
       });
     }
   };
@@ -91,16 +95,16 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     }
 
     if (sendContractData.amounts?.length > 1) {
-      await multipleClaims(sendContractData, () => {
+      await multipleClaims(sendContractData, jwt, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
-        getClaimsHistoryF(account);
+        getClaimsHistoryF(jwt);
       });
     } else {
-      await singleClaim(sendContractData, () => {
+      await singleClaim(sendContractData, jwt, () => {
         removeClaimF(sendContractData.id, sendContractData.tokenAddress);
         setSelected([]);
-        getClaimsHistoryF(account);
+        getClaimsHistoryF(jwt);
       });
     }
   };
@@ -134,7 +138,7 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
     };
 
     tokens.forEach(async token => {
-      amount += Number(token.amount);
+      amount += Number(token.amount) - Number(token.amount) * INDEX_FEE;
       data['id'] = [...data['id'], token._id];
       data['indexs'] = [...data['indexs'], token.index];
       data['amounts'] = [
@@ -144,8 +148,13 @@ const RenderTokens = ({ tokens, goBack, unlocked }) => {
       data['merkleRoots'] = [...data['merkleRoots'], token.csvId.merkleRoot];
       data['merkleProofs'] = [...data['merkleProofs'], token.proof];
     });
-    console.log(data);
-    setFormData({ ...formData, totalAmount: amount, open: true, sendContractData: data });
+    logMessage('Claim', data);
+    setFormData({
+      ...formData,
+      totalAmount: amount,
+      open: true,
+      sendContractData: data,
+    });
   };
 
   const handleClaimClick = () => {
