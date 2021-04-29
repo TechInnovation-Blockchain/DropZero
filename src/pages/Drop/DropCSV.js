@@ -168,7 +168,6 @@ const DropCSV = () => {
       walletAddress: account,
       dropperId,
     };
-
     await addDropData(
       dropData,
       jwt,
