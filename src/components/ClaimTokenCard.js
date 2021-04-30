@@ -25,7 +25,7 @@ const ClaimTokenCard = ({
 
   const [formData, setFormData] = useState({ tokenLogo: NoLogo, tokenName: '', tokenSymbol: '' });
   const { tokenLogo, tokenName, tokenSymbol } = formData;
-  const { startDate, endDate, tokenType } = token;
+  const { startDate, endDate, dropName } = token;
 
   useEffect(() => {
     if (tokenAddress) {
@@ -77,7 +77,7 @@ const ClaimTokenCard = ({
                 <ExpandMoreIcon />
               </IconButton>
             ) : (
-              <Typography varaint='body2'>{tokenType}</Typography>
+              <Typography varaint='body2'>{dropName}</Typography>
             )}
           </Box>
         </Grid>
