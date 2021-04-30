@@ -1,5 +1,5 @@
 export const CONTRACT_ADDRESSES = {
-  dropFactory: '0x082046319ad7ddB5993F796FaFE6c0439c8fd5Fe',
+  dropFactory: '0x7E2b852Ab899AF20fb99e5DF322CCCE5f6491F8a',
 };
 
 //export const BASE_URL = 'https://drop-zero-test-server.herokuapp.com';
@@ -25,4 +25,4 @@ export const ETHERSCAN_ADDRESS_BASE_URL =
 
 export const VALID_CHAIN = process.env.REACT_APP_ENVIRONMENT === 'PRODUCTION' ? 1 : 4;
 
-export const INDEX_FEE = 0.5 / 100;
+export const INDEX_FEE = 0 / 100;
