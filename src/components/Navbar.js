@@ -1,39 +1,45 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, Grid } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
-import BlockZeroLogo from '../assets/blockzerologo.png';
+import BlockZeroLogo from '../assets/blockzerologo1.png';
 import { useStyles } from '../theme/styles/components/navbarStyles';
-import { toggleTheme } from '../redux';
+import { useTheme } from '../hooks';
 
 const Navbar = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-
-  const handleThemeToggle = () => {
-    dispatch(toggleTheme());
-  };
+  const { toggleThemeF } = useTheme();
 
   return (
     <Box className={classes.mainContainer}>
-      <NavLink to='/drop' className={classes.navlink} activeClassName={classes.activeNavlink} exact>
-        <Typography variant='body2' className={classes.navTypography}>
-          Drop
-        </Typography>
-      </NavLink>
-      <Box className={classes.logo} onClick={handleThemeToggle}>
-        <img src={BlockZeroLogo} alt='blockzero logo' width='50px' />
-      </Box>
-      <NavLink
-        to='/claim'
-        className={classes.navlink}
-        activeClassName={classes.activeNavlink}
-        exact
-      >
-        <Typography variant='body2' className={classes.navTypography}>
-          Claim
-        </Typography>
-      </NavLink>
+      <Grid item xs={4} style={{ textAlign: 'center' }}>
+        <NavLink
+          to='/claim'
+          className={classes.navlink}
+          activeClassName={classes.activeNavlink}
+          exact
+        >
+          <Typography variant='body2' className={classes.navTypography}>
+            Claim
+          </Typography>
+        </NavLink>
+      </Grid>
+      <Grid item xs={2} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+        <Box className={classes.logo} onClick={toggleThemeF}>
+          <img src={BlockZeroLogo} alt='blockzero logo' />
+        </Box>
+      </Grid>
+      <Grid item xs={4} style={{ textAlign: 'center' }}>
+        <NavLink
+          to='/drop'
+          className={classes.navlink}
+          activeClassName={classes.activeNavlink}
+          exact
+        >
+          <Typography variant='body2' className={classes.navTypography}>
+            Drop
+          </Typography>
+        </NavLink>
+      </Grid>
     </Box>
   );
 };
