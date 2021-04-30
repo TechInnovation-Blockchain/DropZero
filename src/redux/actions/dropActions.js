@@ -66,8 +66,9 @@ export const uploadCSV = (
       formData.append('decimal', decimal);
       formData.append('totalAmount', totalAmount);
       dropName && formData.append('dropName', dropName);
-      startDate && formData.append('startDate', new Date(startDate).getTime());
-      endDate && formData.append('endDate', new Date(endDate).getTime());
+      //startDate && formData.append('startDate', new Date(startDate).getTime());
+      startDate && formData.append('startDate', startDate);
+      endDate && formData.append('endDate', endDate);
 
       const res = await axios.post(`${BASE_URL}/upload_csv/merkle_root`, formData, config);
       logMessage('Upload CSV', res);

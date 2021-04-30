@@ -83,5 +83,12 @@ export const useStyles = makeStyles(theme => ({
     fontSize: '12px',
     fontWeight: 'bold',
     marginTop: '10px',
+    textTransform: 'uppercase',
+  },
+  infoPara: {
+    fontSize: '10px',
+    color: theme.palette.text.disabled,
+    opacity: '0.7',
+    margin: '8px 0 2px 0',
   },
 }));

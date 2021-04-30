@@ -83,6 +83,9 @@ const AquaAccordion = ({ data }) => {
             BECOME A LIQUIDITY PROVIDER ON XIO/ETH POOL TO EARN{' '}
             {trunc(100 / Math.pow(2, new Date().getMonth()))}x MULTIPLIER
           </Typography>
+          <Typography variant='body2' className={`${classes.lpPara} ${classes.infoPara}`}>
+            AquaFi is not claimable until launch
+          </Typography>
           <Button disabled={true} className={classes.accordionBtn}>
             <span>Claim</span>
           </Button>
