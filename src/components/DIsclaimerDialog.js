@@ -12,6 +12,10 @@ import {
 } from '@material-ui/core';
 
 import { useStyles } from '../theme/styles/components/disclaimerStyles';
+//import AuditReport from '../assets/Audit_Report.pdf';
+
+const AuditReport =
+  'https://github.com/solidified-platform/audits/blob/master/Audit%20Report%20-%20Blockzero%20%5B17.05.2021%5D.pdf';
 
 const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClick, type }) => {
   const classes = useStyles();
@@ -45,8 +49,14 @@ const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClic
               Blockzero Labs.
               <br />
               <br />
-              Dropzero is in beta and has not been formally audited. We highly encourage caution
-              during these early days of the Dapp. Use at your own discretion.
+              The Dropzero protocol has been audited by Solidified. We highly encourage careful use
+              during these early days of the dapp. Use at your own discretion.
+              <br />
+              <br />
+              You can view the audit{' '}
+              <a href={AuditReport} target='_blank' className={classes.colored} rel='noreferrer'>
+                here.
+              </a>
             </Typography>
           ) : type === 'drop' ? (
             <Typography variant='body2' className={classes.content}>
@@ -73,8 +83,14 @@ const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClic
               performance
               <br />
               <br />
-              Dropzero is in beta and has not been formally audited. We highly encourage caution
-              during these early days of the Dapp. Use at your own discretion.
+              The Dropzero protocol has been audited by Solidified. We highly encourage careful use
+              during these early days of the dapp. Use at your own discretion.
+              <br />
+              <br />
+              You can view the audit{' '}
+              <a href={AuditReport} target='_blank' className={classes.colored} rel='noreferrer'>
+                here.
+              </a>
             </Typography>
           ) : (
             type === 'main' && (
@@ -83,9 +99,16 @@ const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClic
                 className={classes.content}
                 style={{ textAlign: 'center' }}
               >
-                Dropzero is in beta and has not been formally audited. While the smart contracts and
-                code are publicly available, we highly encourage caution during these early days of
-                the Dapp. Use at your own discretion.
+                Dropzero by Blockzero Labs is a new dapp for permissionless token drops and claims.
+                The smart contract and code, available publicly, have been audited by Solidified. In
+                these early days of the dapp, we highly encourage careful use at your own
+                discretion.
+                <br />
+                <br />
+                You can view the audit{' '}
+                <a href={AuditReport} target='_blank' className={classes.colored} rel='noreferrer'>
+                  here.
+                </a>
               </Typography>
             )
           )}
