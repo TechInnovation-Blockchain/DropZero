@@ -12,7 +12,10 @@ import {
 } from '@material-ui/core';
 
 import { useStyles } from '../theme/styles/components/disclaimerStyles';
-import AuditReport from '../assets/Audit_Report.pdf';
+//import AuditReport from '../assets/Audit_Report.pdf';
+
+const AuditReport =
+  'https://github.com/solidified-platform/audits/blob/master/Audit%20Report%20-%20Blockzero%20%5B17.05.2021%5D.pdf';
 
 const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClick, type }) => {
   const classes = useStyles();
@@ -51,7 +54,7 @@ const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClic
               <br />
               <br />
               You can view the audit{' '}
-              <a href={AuditReport} target='_blank' className={classes.colored}>
+              <a href={AuditReport} target='_blank' className={classes.colored} rel='noreferrer'>
                 here.
               </a>
             </Typography>
@@ -85,7 +88,7 @@ const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClic
               <br />
               <br />
               You can view the audit{' '}
-              <a href={AuditReport} target='_blank' className={classes.colored}>
+              <a href={AuditReport} target='_blank' className={classes.colored} rel='noreferrer'>
                 here.
               </a>
             </Typography>
@@ -103,7 +106,7 @@ const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClic
                 <br />
                 <br />
                 You can view the audit{' '}
-                <a href={AuditReport} target='_blank' className={classes.colored}>
+                <a href={AuditReport} target='_blank' className={classes.colored} rel='noreferrer'>
                   here.
                 </a>
               </Typography>
