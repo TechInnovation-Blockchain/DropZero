@@ -3,14 +3,19 @@ import Web3 from 'web3';
 import { abi as erc20Abi } from './abi/erc20Abi.json';
 import { abi as dropFactoryAbi } from './abi/_dropFactoryAbi.json';
 import { logError } from '../utils/log';
-import { CONTRACT_ADDRESSES } from '../config/constants';
+import { CONTRACT_ADDRESSES, VALID_CHAIN } from '../config/constants';
 
 let web3;
 let web3Infura;
 
+const infuraUrl =
+  VALID_CHAIN === 1
+    ? `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`
+    : `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
+
 try {
   web3 = new Web3(window?.web3?.currentProvider);
-  web3Infura = new Web3(`https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`);
+  web3Infura = new Web3(infuraUrl);
 } catch (e) {
   logError('Connect Web3', e);
 }

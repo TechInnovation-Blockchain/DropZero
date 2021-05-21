@@ -1,12 +1,15 @@
 export const CONTRACT_ADDRESSES = {
-  dropFactory: '0x7E2b852Ab899AF20fb99e5DF322CCCE5f6491F8a',
+  dropFactory:
+    process.env.REACT_APP_ENVIRONMENT === 'PRODUCTION'
+      ? '0x7E2b852Ab899AF20fb99e5DF322CCCE5f6491F8a'
+      : '0x082046319ad7ddB5993F796FaFE6c0439c8fd5Fe',
 };
 
-//export const BASE_URL = 'https://drop-zero-test-server.herokuapp.com';
+//export const BASE_URL = 'https://server.dropzero.io';
 
-//export const BASE_URL = 'http://3.131.104.65:3000';
+export const BASE_URL = 'https://dropzero.herokuapp.com';
 
-export const BASE_URL = 'https://server.dropzero.io';
+//export const BASE_URL = 'http://192.168.1.180:8000';
 
 export const NoLogo =
   'https://gateway.pinata.cloud/ipfs/QmNX2QerTxTm1RThD7Dc9X5uS9VFnQxmMotaMFhK5GYbBk';

@@ -71,7 +71,7 @@ export const addDropData = async (
       .send({ from: walletAddress })
       .on('transactionHash', txnHash => {
         transactionPending({ transactionHash: txnHash }, { text: 'Drop Pending' }, 'upload');
-        saveTxnHash(merkleRoot, txnHash, jwt);
+        //saveTxnHash(merkleRoot, txnHash, jwt);
       })
       .then(receipt => {
         transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Created' });

@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 
 import { useStyles } from '../theme/styles/components/disclaimerStyles';
-//import AuditReport from '../assets/Audit_Report.pdf';
 
 const AuditReport =
   'https://github.com/solidified-platform/audits/blob/master/Audit%20Report%20-%20Blockzero%20%5B17.05.2021%5D.pdf';

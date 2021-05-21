@@ -45,6 +45,15 @@ export const clearCSV = () => {
   };
 };
 
+// const generateDate = min => {
+//   const currentDate = new Date();
+//   console.log('Current Date => ', currentDate.toISOString());
+//   currentDate.setMinutes(currentDate.getMinutes() + min);
+//   const newDate = new Date(currentDate);
+//   console.log('New Date => ', newDate.toISOString());
+//   return newDate.toISOString();
+// };
+
 //uploading csv on server
 export const uploadCSV = (
   { file, account, token, startDate, endDate, dropName, decimal, totalAmount },
@@ -69,6 +78,7 @@ export const uploadCSV = (
       //startDate && formData.append('startDate', new Date(startDate).getTime());
       startDate && formData.append('startDate', startDate);
       endDate && formData.append('endDate', endDate);
+      //formData.append('endDate', generateDate(3));
 
       const res = await axios.post(`${BASE_URL}/upload_csv/merkle_root`, formData, config);
       logMessage('Upload CSV', res);
