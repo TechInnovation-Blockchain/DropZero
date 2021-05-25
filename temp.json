@@ -1,0 +1,67 @@
+[
+  {
+    "index": 0,
+    "address": "0x4bf4e3a59add035c479cde89d98103cb65dca941",
+    "amount": "933",
+    "proof": [
+      "0x12c5eb218a0d47e4da4d53a0486b56294d34bd2a7078b70ca022e189b73898ce",
+      "0x3c7337185544b8e240ebc83012edf4ce5c0803c9c7fcdc5259c063d1690e28d0",
+      "0x690b604978adec39ea422fc6a5763ea5f1fec7aa45cb8f87a09c01193c5c9206"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 1,
+    "address": "0xb4ec3a8299aed31f327a3633854a6d6610434525",
+    "amount": "667",
+    "proof": [
+      "0x63bd39e7003ae96d328dfbaa5fbca566ad4babe08641045fbeec5145f1b47697",
+      "0x56d636e784f575a4dc95b78102027122654f36ca949a0912c1ee5a59ce59f4c6",
+      "0x690b604978adec39ea422fc6a5763ea5f1fec7aa45cb8f87a09c01193c5c9206"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 2,
+    "address": "0xc70b0b44e47e8604b4234f2d2d8e79540b0cf64b",
+    "amount": "3333",
+    "proof": [
+      "0x3d475765fe4d6623adcd226c1938e5072a97535408f0d3435fe0111d8c674f2d",
+      "0x56d636e784f575a4dc95b78102027122654f36ca949a0912c1ee5a59ce59f4c6",
+      "0x690b604978adec39ea422fc6a5763ea5f1fec7aa45cb8f87a09c01193c5c9206"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 3,
+    "address": "0xe73c98667c82bb76e58c0d9b065b6a0c9ea2d088",
+    "amount": "2000",
+    "proof": [
+      "0x5d1bc57ec5a781b05fc0c382adde7079dd1e44b153b5f3630d68940e662e5c44",
+      "0x3c75021b171ae8074c6126ade4d0862de7de2bb64a53f908deab45d881f8a457"
+    ],
+    "status": "Not claimed"
+  },
+  {
+    "index": 4,
+    "address": "0xd72dfebf190aad3b46936c9815ca849d59a81049",
+    "amount": "1333",
+    "proof": [
+      "0x933a51cc24658449d16dcff5c9a816d1947349d576eca273ea55b6aa1fe48bfa",
+      "0xf69baf05668b967a0cb7e4920bc08c33d2d05e22d1b6c7d8e009791eab11d5de",
+      "0x3c75021b171ae8074c6126ade4d0862de7de2bb64a53f908deab45d881f8a457"
+    ],
+    "status": "Not claimed"
+  },
+  {
+    "index": 5,
+    "address": "0x15586d3020c558017056cf7e218b7c5dec9dbcb7",
+    "amount": "1733",
+    "proof": [
+      "0x8d9d5e8bf16133bfa25d7eb2ea05f06e2de96ecf5f7d7fb3c97513f52cffb97d",
+      "0xf69baf05668b967a0cb7e4920bc08c33d2d05e22d1b6c7d8e009791eab11d5de",
+      "0x3c75021b171ae8074c6126ade4d0862de7de2bb64a53f908deab45d881f8a457"
+    ],
+    "status": "Claimed"
+  }
+]

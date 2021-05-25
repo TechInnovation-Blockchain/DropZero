@@ -9,8 +9,11 @@ import {
   ListItem,
   TextField,
   CircularProgress,
+  Tooltip,
 } from '@material-ui/core';
-import { ClearOutlined } from '@material-ui/icons';
+import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
+import { ClearOutlined, LinkOffOutlined } from '@material-ui/icons';
+import { useWeb3React } from '@web3-react/core';
 
 import { useStyles } from '../theme/styles/components/walletDialogStyles';
 import { useLoading, useWeb3 } from '../hooks';
@@ -20,6 +23,7 @@ const WalletDialog = ({ open, setOpen, address, items = [], activate = () => {} 
   const [search, setSearch] = useState('');
   const { loading } = useLoading();
   const { web3context } = useWeb3();
+  const { deactivate } = useWeb3React();
 
   const onChangeSearch = ({ target: { value } }) => {
     setSearch(value.toUpperCase());
@@ -32,6 +36,11 @@ const WalletDialog = ({ open, setOpen, address, items = [], activate = () => {} 
   const onClose = useCallback(() => {
     setOpen(false);
   }, [setOpen]);
+
+  const handleDisconnect = connectorType => {
+    deactivate();
+    connectorType instanceof WalletConnectConnector && localStorage.removeItem('walletconnect');
+  };
 
   return (
     <MuiDialog open={open} onClose={onClose} PaperProps={{ className: classes.dialogPaper }}>
@@ -87,6 +96,11 @@ const WalletDialog = ({ open, setOpen, address, items = [], activate = () => {} 
                   ) : null}
                   <img src={logo} alt={name} srcSet='' width={20} style={{ marginRight: 5 }} />
                   {name}
+                  {web3context?.connector instanceof connectorType ? (
+                    <Tooltip title='Disconnect' onClick={handleDisconnect}>
+                      <LinkOffOutlined className={classes.disconnect} />
+                    </Tooltip>
+                  ) : null}
                 </Typography>
               </ListItem>
             ))}

@@ -1,0 +1,182 @@
+[
+  {
+    "index": 0,
+    "address": "0x4bf4e3a59add035c479cde89d98103cb65dca941",
+    "amount": "11857.04",
+    "proof": [
+      "0x3465dae405cc2d74ac177fd45e8b49774b1fc4d556f69e0bc0be0afeff5eec6f",
+      "0x4dea5cabb52737ebd548cc05053495f93747a90a2dce868fbdb7cfec501fe081",
+      "0x659eaefa3a231a7e438081df619475a1e1e32fcb54052abe1a967006653f4643",
+      "0xea0258cdd16e875f2a596cc13e305371c0d77fbe5d9fd2ed17809ddd9aeb5f50"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 1,
+    "address": "0xb4ec3a8299aed31f327a3633854a6d6610434525",
+    "amount": "15118.67",
+    "proof": [
+      "0xb17ae93cc21bcf75aa4f15ee2c686f89e0a52ea206229746d76eed44ee17476a",
+      "0xb593954eca41bbe40d2857822a654489531f1bcedc6ffd45f24b7837b82c556d",
+      "0xf3715f439a6667fb7940dae69117f16a6a7bd9480f43f47c2481babc87290d52",
+      "0x083cbe79c3c0d4e4c38995919ee152c6b7550980f11733fee6c435995c7b1414"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 2,
+    "address": "0xccbab37cdd21a6c78bd84aa5d75e8a7b8dca6927",
+    "amount": "4444.44",
+    "proof": [
+      "0x44adb20332d27e896cf3cd27646855595558bddddd201041ca030472e21a47ab",
+      "0xd313d65594761bdebd35c655f3ec80798834144d6bba9db845e6fd8a7faf1379",
+      "0x659eaefa3a231a7e438081df619475a1e1e32fcb54052abe1a967006653f4643",
+      "0xea0258cdd16e875f2a596cc13e305371c0d77fbe5d9fd2ed17809ddd9aeb5f50"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 3,
+    "address": "0x26b9375e1639420dbc842442e1ab02f8ce2d29e3",
+    "amount": "30000.00",
+    "proof": [
+      "0x271d313c5746e424d8070e0590739e8cf08241b7f09fbece911fb46401e9d697",
+      "0xf686e76fb94ce608e0363731cbce035e13635cc17c0528aee64f4da94acbb602",
+      "0x16bd82b935d223033607c3aab0c911f948c5f0bfb2003530ef93cc85a26490ce",
+      "0xea0258cdd16e875f2a596cc13e305371c0d77fbe5d9fd2ed17809ddd9aeb5f50"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 4,
+    "address": "0x897b3929b6d77e3d2e0676258c12260f29885fd3",
+    "amount": "8888.89",
+    "proof": [
+      "0xda77c5aec9fba98c7acc47b0dbb3d6438d087ed63b6072cacfaec5d89076daec",
+      "0x56657c6e83c4c837d151c3a5ea343a12716fdaf50927560215981aef582277d6",
+      "0x05f4408e3445f219418e063f7ced7772e9272820da65e44afc676a9772fdf285",
+      "0x083cbe79c3c0d4e4c38995919ee152c6b7550980f11733fee6c435995c7b1414"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 5,
+    "address": "0x71ca1834b42cc6f8783fc0b461cf5a0f8b568a50",
+    "amount": "7777.78",
+    "proof": [
+      "0x08be2f520cd9a6204882822596aad1c269b421a45919fc66f6915a18f89feedd",
+      "0xe54f545f7a7f8fc15aaa45e316fd0690e899014acb4c5bf95b15791773afa4fa",
+      "0x16bd82b935d223033607c3aab0c911f948c5f0bfb2003530ef93cc85a26490ce",
+      "0xea0258cdd16e875f2a596cc13e305371c0d77fbe5d9fd2ed17809ddd9aeb5f50"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 6,
+    "address": "0x0e7720b77be5480d88111fd5805e72c1c5996be0",
+    "amount": "2222.22",
+    "proof": [
+      "0xe2737a079b58bdc12849468b25cd748dab4ae018ffc299177268434eda8380f6",
+      "0x56657c6e83c4c837d151c3a5ea343a12716fdaf50927560215981aef582277d6",
+      "0x05f4408e3445f219418e063f7ced7772e9272820da65e44afc676a9772fdf285",
+      "0x083cbe79c3c0d4e4c38995919ee152c6b7550980f11733fee6c435995c7b1414"
+    ],
+    "status": "Not claimed"
+  },
+  {
+    "index": 7,
+    "address": "0x5decabd1af9a55013c5d333828312ed83b35ebd6",
+    "amount": "3111.11",
+    "proof": [
+      "0x5e0bc960aa32e31221ccead1f825b82811e8d721936e596eb11f18ef18b32d41",
+      "0x4cae486aa2d1bfe9a0a2e149216681e27797d9ce879656ceef656e4cfe5a42e2",
+      "0xf3715f439a6667fb7940dae69117f16a6a7bd9480f43f47c2481babc87290d52",
+      "0x083cbe79c3c0d4e4c38995919ee152c6b7550980f11733fee6c435995c7b1414"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 8,
+    "address": "0xf22dc9996da8fd05f05ef0825d4805fb60f19147",
+    "amount": "1111.11",
+    "proof": [
+      "0x42c612e1befabce8744594f229d26a24d2acbf326f586029f6f34980724bdf03",
+      "0xd313d65594761bdebd35c655f3ec80798834144d6bba9db845e6fd8a7faf1379",
+      "0x659eaefa3a231a7e438081df619475a1e1e32fcb54052abe1a967006653f4643",
+      "0xea0258cdd16e875f2a596cc13e305371c0d77fbe5d9fd2ed17809ddd9aeb5f50"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 9,
+    "address": "0xc70b0b44e47e8604b4234f2d2d8e79540b0cf64b",
+    "amount": "6111.11",
+    "proof": [
+      "0x17c73b4d5d3a8843249473d82ed5fce88397a20c04e03654084bd0da4d45b12c",
+      "0xe54f545f7a7f8fc15aaa45e316fd0690e899014acb4c5bf95b15791773afa4fa",
+      "0x16bd82b935d223033607c3aab0c911f948c5f0bfb2003530ef93cc85a26490ce",
+      "0xea0258cdd16e875f2a596cc13e305371c0d77fbe5d9fd2ed17809ddd9aeb5f50"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 10,
+    "address": "0xe73c98667c82bb76e58c0d9b065b6a0c9ea2d088",
+    "amount": "4784.44",
+    "proof": [
+      "0xc6920a2f30605ba437ef83723e5f59642dd0f415454c15023501e80e9e092e2b",
+      "0x05d1e70264753a2b3bd9c3fb71bd8a4d34a618fcd02fb692192912091cd9cb0b",
+      "0x05f4408e3445f219418e063f7ced7772e9272820da65e44afc676a9772fdf285",
+      "0x083cbe79c3c0d4e4c38995919ee152c6b7550980f11733fee6c435995c7b1414"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 11,
+    "address": "0x5122b4d90185958faa110a3a02b647c755b977fd",
+    "amount": "444.44",
+    "proof": [
+      "0x8260e608612ec239e345e0f081d4c72ea0606dc5bc87ee1e6a68563657a40107",
+      "0xb593954eca41bbe40d2857822a654489531f1bcedc6ffd45f24b7837b82c556d",
+      "0xf3715f439a6667fb7940dae69117f16a6a7bd9480f43f47c2481babc87290d52",
+      "0x083cbe79c3c0d4e4c38995919ee152c6b7550980f11733fee6c435995c7b1414"
+    ],
+    "status": "Claimed"
+  },
+  {
+    "index": 12,
+    "address": "0x36ae04bdf0061ddd4c4366d6e6ea2293e7b419b5",
+    "amount": "333.33",
+    "proof": [
+      "0x23079ac86c160114c0dd9212ebdfb4344739ab2b9cf1a8e8ff2b4f0f869750c9",
+      "0xf686e76fb94ce608e0363731cbce035e13635cc17c0528aee64f4da94acbb602",
+      "0x16bd82b935d223033607c3aab0c911f948c5f0bfb2003530ef93cc85a26490ce",
+      "0xea0258cdd16e875f2a596cc13e305371c0d77fbe5d9fd2ed17809ddd9aeb5f50"
+    ],
+    "status": "Not claimed"
+  },
+  {
+    "index": 13,
+    "address": "0x20e3d4153a75484ee9400d68987483d15a8816d7",
+    "amount": "2777.78",
+    "proof": [
+      "0x77b2c945143d16dd0a19230f262448bd902d136f4b65a302648da410448ee301",
+      "0x4cae486aa2d1bfe9a0a2e149216681e27797d9ce879656ceef656e4cfe5a42e2",
+      "0xf3715f439a6667fb7940dae69117f16a6a7bd9480f43f47c2481babc87290d52",
+      "0x083cbe79c3c0d4e4c38995919ee152c6b7550980f11733fee6c435995c7b1414"
+    ],
+    "status": "Not claimed"
+  },
+  {
+    "index": 14,
+    "address": "0x041b383273771cda45a2a6bbdd4cdebf52125545",
+    "amount": "2000.00",
+    "proof": [
+      "0xb98a07a003c6ccd540c8f01a33c0eff53d38fe1993a73a56ea7ff8794c8039df",
+      "0x05d1e70264753a2b3bd9c3fb71bd8a4d34a618fcd02fb692192912091cd9cb0b",
+      "0x05f4408e3445f219418e063f7ced7772e9272820da65e44afc676a9772fdf285",
+      "0x083cbe79c3c0d4e4c38995919ee152c6b7550980f11733fee6c435995c7b1414"
+    ],
+    "status": "Not claimed"
+  }
+]

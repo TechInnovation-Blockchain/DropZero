@@ -99,29 +99,29 @@ export const pauseDrop = async (dropId, tokenAddress, walletAddress, merkleRoot,
   try {
     const contract = dropFactoryContract();
     transactionPending({}, { text: 'Pausing Drop' });
-    const res = await startpause(dropId, true, jwt);
-    if (res) {
-      await contract.methods
-        .pause(tokenAddress, merkleRoot)
-        .send({ from: walletAddress })
-        .on('transactionHash', txnHash => {
-          transactionPending({ transactionHash: txnHash }, { text: 'Pausing Drop' }, 'pause');
-        })
-        .then(receipt => {
-          transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Paused' });
-          callback();
-        })
-        .catch(e => {
-          if (e.code === 4001) {
-            transactionRejected({}, { text: 'Pausing Rejected' });
-          } else {
-            transactionFailed({}, { text: 'Pausing Failed' });
-          }
-          logError('pauseDrop', e);
-        });
-    } else {
-      transactionFailed({}, { text: 'Pausing Failed' });
-    }
+    //const res = await startpause(dropId, true, jwt);
+    // if (res) {
+    await contract.methods
+      .pause(tokenAddress, merkleRoot)
+      .send({ from: walletAddress })
+      .on('transactionHash', txnHash => {
+        transactionPending({ transactionHash: txnHash }, { text: 'Pausing Drop' }, 'pause');
+      })
+      .then(receipt => {
+        transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Paused' });
+        callback();
+      })
+      .catch(e => {
+        if (e.code === 4001) {
+          transactionRejected({}, { text: 'Pausing Rejected' });
+        } else {
+          transactionFailed({}, { text: 'Pausing Failed' });
+        }
+        logError('pauseDrop', e);
+      });
+    // } else {
+    //   transactionFailed({}, { text: 'Pausing Failed' });
+    // }
   } catch (e) {
     logError('pauseDrop', e);
     transactionFailed({}, { text: 'Pausing Failed' });
@@ -140,32 +140,29 @@ export const unpauseDrop = async (
   try {
     const contract = dropFactoryContract();
     transactionPending({}, { text: 'Unpausing Drop' });
-    const res = await startpause(dropId, false, jwt);
-    if (res) {
-      await contract.methods
-        .unpause(tokenAddress, merkleRoot)
-        .send({ from: walletAddress })
-        .on('transactionHash', txnHash => {
-          transactionPending({ transactionHash: txnHash }, { text: 'Unpausing Drop' });
-        })
-        .then(receipt => {
-          transactionSuccess(
-            { transactionHash: receipt.transactionHash },
-            { text: 'Drop Unpaused' }
-          );
-          callback();
-        })
-        .catch(e => {
-          if (e.code === 4001) {
-            transactionRejected({}, { text: 'Unpausing Rejected' });
-          } else {
-            transactionFailed({}, { text: 'Unpausing Failed' });
-          }
-          logError('unpauseDrop', e);
-        });
-    } else {
-      transactionFailed({}, { text: 'Pausing Failed' });
-    }
+    //const res = await startpause(dropId, false, jwt);
+    // if (res) {
+    await contract.methods
+      .unpause(tokenAddress, merkleRoot)
+      .send({ from: walletAddress })
+      .on('transactionHash', txnHash => {
+        transactionPending({ transactionHash: txnHash }, { text: 'Unpausing Drop' });
+      })
+      .then(receipt => {
+        transactionSuccess({ transactionHash: receipt.transactionHash }, { text: 'Drop Unpaused' });
+        callback();
+      })
+      .catch(e => {
+        if (e.code === 4001) {
+          transactionRejected({}, { text: 'Unpausing Rejected' });
+        } else {
+          transactionFailed({}, { text: 'Unpausing Failed' });
+        }
+        logError('unpauseDrop', e);
+      });
+    // } else {
+    //   transactionFailed({}, { text: 'Pausing Failed' });
+    // }
   } catch (e) {
     logError('unpauseDrop', e);
     transactionFailed({}, { text: 'Unpausing Failed' });
@@ -185,36 +182,32 @@ export const withdraw = async (
   try {
     const contract = dropFactoryContract();
     transactionPending({}, { text: 'Withdraw Pending' }, 'withdraw');
-    const res = await startWithdraw(dropperAddress, dropId, jwt);
-    if (res) {
-      await contract.methods
-        .withdraw(tokenAddress, merkleRoot)
-        .send({ from: walletAddress })
-        .on('transactionHash', txnHash => {
-          transactionPending(
-            { transactionHash: txnHash },
-            { text: 'Withdraw Pending' },
-            'withdraw'
-          );
-        })
-        .then(receipt => {
-          transactionSuccess(
-            { transactionHash: receipt.transactionHash },
-            { text: 'Withdraw Successful' }
-          );
-          callback();
-        })
-        .catch(e => {
-          if (e.code === 4001) {
-            transactionRejected({}, { text: 'Withdraw Rejected' });
-          } else {
-            transactionFailed({}, { text: 'Withdraw Failed' });
-          }
-          logError('withdraw', e);
-        });
-    } else {
-      transactionFailed({}, { text: 'Withdraw Failed' });
-    }
+    // const res = await startWithdraw(dropperAddress, dropId, jwt);
+    // if (res) {
+    await contract.methods
+      .withdraw(tokenAddress, merkleRoot)
+      .send({ from: walletAddress })
+      .on('transactionHash', txnHash => {
+        transactionPending({ transactionHash: txnHash }, { text: 'Withdraw Pending' }, 'withdraw');
+      })
+      .then(receipt => {
+        transactionSuccess(
+          { transactionHash: receipt.transactionHash },
+          { text: 'Withdraw Successful' }
+        );
+        callback();
+      })
+      .catch(e => {
+        if (e.code === 4001) {
+          transactionRejected({}, { text: 'Withdraw Rejected' });
+        } else {
+          transactionFailed({}, { text: 'Withdraw Failed' });
+        }
+        logError('withdraw', e);
+      });
+    // } else {
+    //   transactionFailed({}, { text: 'Withdraw Failed' });
+    // }
   } catch (e) {
     logError('withdraw', e);
     transactionFailed({}, { text: 'Withdraw Failed' });
@@ -229,32 +222,32 @@ export const multipleClaims = async (
   try {
     const contract = dropFactoryContract();
     transactionPending({}, { text: 'Claim Pending' }, 'claim');
-    const res = await withdrawMultipleClaimedToken(walletAddress, merkleRoots, jwt);
-    if (res) {
-      await contract.methods
-        .multipleClaimsFromDrop(tokenAddress, indexs, amounts, merkleRoots, merkleProofs)
-        .send({ from: walletAddress })
-        .on('transactionHash', txnHash => {
-          transactionPending({ transactionHash: txnHash }, { text: 'Claim Pending' }, 'claim');
-        })
-        .then(receipt => {
-          transactionSuccess(
-            { transactionHash: receipt.transactionHash },
-            { text: 'Claim Successful' }
-          );
-          callback();
-        })
-        .catch(e => {
-          if (e.code === 4001) {
-            transactionRejected({}, { text: 'Claim Rejected' });
-          } else {
-            transactionFailed({}, { text: 'Claim Failed' });
-          }
-          logError('multiple claim', e);
-        });
-    } else {
-      transactionFailed({}, { text: 'Claim Failed' });
-    }
+    // const res = await withdrawMultipleClaimedToken(walletAddress, merkleRoots, jwt);
+    // if (res) {
+    await contract.methods
+      .multipleClaimsFromDrop(tokenAddress, indexs, amounts, merkleRoots, merkleProofs)
+      .send({ from: walletAddress })
+      .on('transactionHash', txnHash => {
+        transactionPending({ transactionHash: txnHash }, { text: 'Claim Pending' }, 'claim');
+      })
+      .then(receipt => {
+        transactionSuccess(
+          { transactionHash: receipt.transactionHash },
+          { text: 'Claim Successful' }
+        );
+        callback();
+      })
+      .catch(e => {
+        if (e.code === 4001) {
+          transactionRejected({}, { text: 'Claim Rejected' });
+        } else {
+          transactionFailed({}, { text: 'Claim Failed' });
+        }
+        logError('multiple claim', e);
+      });
+    // } else {
+    //   transactionFailed({}, { text: 'Claim Failed' });
+    // }
   } catch (e) {
     logError('multiple claim', e);
     transactionFailed({}, { text: 'Claim Failed' });
@@ -269,32 +262,32 @@ export const singleClaim = async (
   try {
     const contract = dropFactoryContract();
     transactionPending({}, { text: 'Claim Pending' }, 'claim');
-    const res = await withdrawClaimedToken(id[0], jwt);
-    if (res) {
-      await contract.methods
-        .claimFromDrop(tokenAddress, indexs[0], amounts[0], merkleRoots[0], merkleProofs[0])
-        .send({ from: walletAddress })
-        .on('transactionHash', txnHash => {
-          transactionPending({ transactionHash: txnHash }, { text: 'Claim Pending' }, 'claim');
-        })
-        .then(receipt => {
-          transactionSuccess(
-            { transactionHash: receipt.transactionHash },
-            { text: 'Claim Successful' }
-          );
-          callback();
-        })
-        .catch(e => {
-          if (e.code === 4001) {
-            transactionRejected({}, { text: 'Claim Rejected' });
-          } else {
-            transactionFailed({}, { text: 'Claim Failed' });
-          }
-          logError('single claim', e);
-        });
-    } else {
-      transactionFailed({}, { text: 'Claim Failed' });
-    }
+    // const res = await withdrawClaimedToken(id[0], jwt);
+    // if (res) {
+    await contract.methods
+      .claimFromDrop(tokenAddress, indexs[0], amounts[0], merkleRoots[0], merkleProofs[0])
+      .send({ from: walletAddress })
+      .on('transactionHash', txnHash => {
+        transactionPending({ transactionHash: txnHash }, { text: 'Claim Pending' }, 'claim');
+      })
+      .then(receipt => {
+        transactionSuccess(
+          { transactionHash: receipt.transactionHash },
+          { text: 'Claim Successful' }
+        );
+        callback();
+      })
+      .catch(e => {
+        if (e.code === 4001) {
+          transactionRejected({}, { text: 'Claim Rejected' });
+        } else {
+          transactionFailed({}, { text: 'Claim Failed' });
+        }
+        logError('single claim', e);
+      });
+    // } else {
+    //   transactionFailed({}, { text: 'Claim Failed' });
+    // }
   } catch (e) {
     logError('single claim', e);
     transactionFailed({}, { text: 'Claim Failed' });
