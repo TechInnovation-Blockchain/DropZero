@@ -14,7 +14,7 @@ import { addDropData } from '../../contracts/functions/dropFactoryFunctions';
 import { truncFileName, trunc } from '../../utils/formattingFunctions';
 import { logMessage } from '../../utils/log';
 import { validateCSV, removeDuplicateAddress, toFixed } from '../../utils/validatingFunctions';
-import TempCSV from '../../assets/temp.csv';
+//import TempCSV from '../../assets/temp.csv';
 import BalanceTree from '../../utils/balanceTree';
 import { showModal } from '../../redux';
 
@@ -323,7 +323,12 @@ const DropCSV = () => {
           {dapp !== 'upload' && <PublishIcon />}
         </Button>
       </Box>
-      <Typography component='a' href={TempCSV} download='sample.csv' variant='body2'>
+      <Typography
+        component='a'
+        href='https://firebasestorage.googleapis.com/v0/b/drop-zero.appspot.com/o/sample.csv?alt=media&token=227d9ea4-a42e-4a24-abca-70b131e53875'
+        download='sample.csv'
+        variant='body2'
+      >
         Download sample CSV
       </Typography>
     </Box>
