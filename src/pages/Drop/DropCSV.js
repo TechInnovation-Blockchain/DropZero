@@ -8,13 +8,16 @@ import { utils } from 'ethers';
 
 import { Button, Dialog, ActionDialog, DisclaimerDialog } from '../../components';
 import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
-import { useDropInputs, useLoading, useDropDashboard, useJWT } from '../../hooks';
+import { useDropInputs, useLoading, useDropDashboard, useJWT, useSnackbar } from '../../hooks';
 import { getBalance, getDecimal } from '../../contracts/functions/erc20Functions';
 import { addDropData } from '../../contracts/functions/dropFactoryFunctions';
 import { truncFileName, trunc } from '../../utils/formattingFunctions';
 import { logMessage } from '../../utils/log';
-import { validateCSV } from '../../utils/validatingFunctions';
+import { validateCSV, removeDuplicateAddress, toFixed } from '../../utils/validatingFunctions';
 //import TempCSV from '../../assets/temp.csv';
+import BalanceTree from '../../utils/balanceTree';
+import { showModal } from '../../redux';
+
 
 const fileNameRegex = /^[a-zA-Z0-9]{1,15}.csv$/i;
 
@@ -37,6 +40,7 @@ const DropCSV = () => {
     loading: { dapp },
   } = useLoading();
   const { jwt } = useJWT();
+  const { showSnackbarF } = useSnackbar();
 
   const [formData, setFormData] = useState({
     file: null,
@@ -48,6 +52,8 @@ const DropCSV = () => {
     totalAddress: 0,
     balance: 0,
   });
+  const [content, setContent] = useState();
+  const [decimal, setDecimal] = useState();
 
   const {
     file,
@@ -72,12 +78,14 @@ const DropCSV = () => {
         });
         const fileReader = new FileReader();
         fileReader.onloadend = async e => {
-          const content = e.target.result;
-          logMessage('CSV Content', content);
-          const decimal = await getDecimal(token);
+          const _content = e.target.result;
+          setContent(_content);
+          logMessage('CSV Content', _content);
+          const _decimal = await getDecimal(token);
+          setDecimal(_decimal);
           const { validCSVError, _totalAmount, _totalAddress } = validateCSV(
-            content.split('\n'),
-            decimal
+            _content.split('\n'),
+            _decimal
           );
           if (validCSVError === '') {
             const balance = await getBalance(token, account);
@@ -88,7 +96,7 @@ const DropCSV = () => {
               loadingContent: '',
               totalAmount: _totalAmount,
               totalAddress: _totalAddress,
-              balance: Number(utils.formatUnits(balance.toString(), decimal).toString()),
+              balance: Number(utils.formatUnits(balance.toString(), _decimal).toString()),
             });
           } else {
             setFormData({
@@ -118,7 +126,7 @@ const DropCSV = () => {
 
   const uploadCSVOnServer = async () => {
     setFormData({ ...formData, loadingContent: 'Uploading CSV', openDis: false });
-    const decimal = await getDecimal(token);
+    //const decimal = await getDecimal(token);
     const data = {
       file,
       account,
@@ -131,6 +139,7 @@ const DropCSV = () => {
     };
     uploadCSVF(data, jwt, () => {
       setFormData({ ...formData, loadingContent: '', open: false, openDis: false });
+      //setFormData({ ...formData, loadingContent: 'Verifying merkle root' });
     });
   };
 
@@ -151,7 +160,7 @@ const DropCSV = () => {
   };
 
   const createDrop = async (merkleRoot, dropperId) => {
-    const decimal = await getDecimal(token);
+    //const decimal = await getDecimal(token);
     const regex = new RegExp('^-?\\d+(?:.\\d{0,' + decimal + '})?');
     const tokenAmount =
       totalAmount.toString().split('.').length > 1
@@ -182,11 +191,55 @@ const DropCSV = () => {
     );
   };
 
+  const calculateMerkleRoot = timestamp => {
+    let csvData = [];
+    const _content = content.split('\n');
+    for (let i = 1; i < _content.length; i++) {
+      if (_content[i] !== '') {
+        const _data = _content[i].split(',');
+        csvData.push({ address: _data[0].toLowerCase(), amount: toFixed(_data[1], decimal) });
+      }
+    }
+
+    csvData = removeDuplicateAddress(csvData, decimal);
+    csvData.push({
+      address: '0x0000000000000000000000000000000000000000',
+      amount: timestamp,
+    });
+
+    const balanceTree = new BalanceTree(csvData, decimal);
+    const merkleRoot = balanceTree.getHexRoot();
+    logMessage('merkleRoot', merkleRoot);
+    return merkleRoot;
+  };
+
+  const verifyMerkleRoot = (serverMerkleRoot, dropperId, timestamp) => {
+    setFormData({ ...formData, loadingContent: 'Verifying root hash' });
+    const merkleRoot = calculateMerkleRoot(timestamp);
+    logMessage('server merkleRoot', serverMerkleRoot);
+    if (serverMerkleRoot === merkleRoot) {
+      showSnackbarF({ message: 'Root hash verified', severity: 'success' });
+      createDrop(serverMerkleRoot, dropperId);
+    } else {
+      showModal({
+        variant: 'error',
+        open: true,
+        showCloseBtn: true,
+        btnText: 'Dismiss',
+        text: 'Root hash verification failed',
+      });
+      showSnackbarF({ message: 'Verification failed', severity: 'error' });
+    }
+    setFormData({ ...formData, loadingContent: '', open: false, openDis: false });
+  };
+
   useEffect(() => {
     const merkleRoot = csv?.merkle_root;
     const dropperId = csv?.dropper_id;
+    const date = csv?.date;
     if (merkleRoot) {
-      createDrop(merkleRoot, dropperId);
+      //createDrop(merkleRoot, dropperId);
+      verifyMerkleRoot(merkleRoot, dropperId, date);
     }
   }, [csv]);
 
@@ -224,8 +277,8 @@ const DropCSV = () => {
 
       <ActionDialog
         variant='loading'
-        open={loadingContent === 'Uploading CSV'}
-        text='Uploading CSV'
+        open={loadingContent === 'Uploading CSV' || loadingContent === 'Verifying root hash'}
+        text={loadingContent}
       />
 
       <Typography variant='body2' className={classes.para}>

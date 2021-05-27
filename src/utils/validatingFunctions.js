@@ -51,3 +51,33 @@ export const validateCSV = (data, decimal) => {
   }
   return { validCSVError, _totalAmount, _totalAddress: data.length - endNull };
 };
+
+export const removeDuplicateAddress = (file, decimal) => {
+  let duplicateIds = file
+    .map(e => e['address'])
+    .map((e, i, final) => final.indexOf(e) !== i && i)
+    .filter(obj => file[obj])
+    .map(e => file[e]);
+  let unique = file
+    .map(e => e['address'])
+    .map((e, i, final) => final.indexOf(e) === i && i)
+    .filter(obj => file[obj])
+    .map(e => file[e]);
+  for (var key in duplicateIds) {
+    unique.filter(item => {
+      if (item.address == duplicateIds[key].address) {
+        item.amount = (Number(item.amount) + Number(duplicateIds[key].amount)).toString();
+      }
+    });
+  }
+  unique = unique.map(({ address, amount }) => ({
+    address: address.toLowerCase(),
+    amount: toFixed(amount, decimal),
+  }));
+  return unique;
+};
+
+export const toFixed = (num, decimal) => {
+  const re = new RegExp('^-?\\d+(?:.\\d{0,' + decimal + '})?');
+  return num.toString().match(re)[0];
+};
