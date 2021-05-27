@@ -18,6 +18,7 @@ import { validateCSV, removeDuplicateAddress, toFixed } from '../../utils/valida
 import BalanceTree from '../../utils/balanceTree';
 import { showModal } from '../../redux';
 
+
 const fileNameRegex = /^[a-zA-Z0-9]{1,15}.csv$/i;
 
 const DropCSV = () => {
