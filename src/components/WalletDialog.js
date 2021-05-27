@@ -37,9 +37,10 @@ const WalletDialog = ({ open, setOpen, address, items = [], activate = () => {} 
     setOpen(false);
   }, [setOpen]);
 
-  const handleDisconnect = connectorType => {
+  const handleDisconnect = connector => {
     deactivate();
-    connectorType instanceof WalletConnectConnector && localStorage.removeItem('walletconnect');
+    localStorage.removeItem('jwt');
+    connector instanceof WalletConnectConnector && localStorage.removeItem('walletconnect');
   };
 
   return (
@@ -97,7 +98,10 @@ const WalletDialog = ({ open, setOpen, address, items = [], activate = () => {} 
                   <img src={logo} alt={name} srcSet='' width={20} style={{ marginRight: 5 }} />
                   {name}
                   {web3context?.connector instanceof connectorType ? (
-                    <Tooltip title='Disconnect' onClick={handleDisconnect}>
+                    <Tooltip
+                      title='Disconnect'
+                      onClick={() => handleDisconnect(web3context?.connector)}
+                    >
                       <LinkOffOutlined className={classes.disconnect} />
                     </Tooltip>
                   ) : null}

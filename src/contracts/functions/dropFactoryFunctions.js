@@ -5,12 +5,12 @@ import {
   transactionSuccess,
   transactionFailed,
   transactionRejected,
-  withdrawClaimedToken,
-  startpause,
-  startWithdraw,
-  withdrawMultipleClaimedToken,
+  // withdrawClaimedToken,
+  // startpause,
+  // startWithdraw,
+  // withdrawMultipleClaimedToken,
   rejectDrop,
-  saveTxnHash,
+  //saveTxnHash,
 } from '../../redux';
 
 //check drop exists or not
