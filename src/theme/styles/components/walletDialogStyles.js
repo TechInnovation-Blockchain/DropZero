@@ -81,6 +81,7 @@ export const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     color: theme.palette.text.secondary,
     filter: 'grayscale(100%)',
+    position: 'relative',
     '&:hover': {
       backgroundColor: theme.palette.background.hover,
       color: theme.palette.text.primary,
@@ -96,6 +97,7 @@ export const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     color: theme.palette.text.primary,
     backgroundColor: theme.palette.background.hover,
+    position: 'relative',
     '& p': {
       color: theme.palette.text.primary,
     },
@@ -116,6 +118,10 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
     fontSize: '14px',
     textTransform: 'uppercase',
+  },
+  disconnect: {
+    position: 'absolute',
+    right: '10px',
   },
   loadingIcon: {
     marginRight: 5,

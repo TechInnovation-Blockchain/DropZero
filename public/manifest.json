@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Dropzero",
+  "name": "Dropzero",
   "icons": [
     {
       "src": "logo.png",
@@ -10,5 +10,6 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "description": "A whitelabeled airdrop claims DApp that provide projects a frictionless way to distribute their tokens, and for token recipients to collect their various airdrops through one dApp."
 }
