@@ -117,7 +117,7 @@ const Disclaimer = ({ open, handleClose, heading, check, handleChange, btnOnClic
               <FormControlLabel
                 className={classes.checkbox}
                 control={<Checkbox checked={check} onChange={handleChange} color='primary' />}
-                label="Don't ask again"
+                label="Don't show again"
               />
             </Box>
           )}
