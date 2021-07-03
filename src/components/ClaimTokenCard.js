@@ -65,7 +65,7 @@ const ClaimTokenCard = ({
               <Skeleton animation='wave' width='100px' height='30px' />
             )}
             <Typography varaint='body2'>
-              {!showArrow && endDate ? format(new Date(endDate), DATE_FORMAT) : ''}
+              {!showArrow && endDate ? `Exp: ${format(new Date(endDate), DATE_FORMAT)}` : ''}
             </Typography>
           </Box>
           <Box className={classes.tokenAmount}>
