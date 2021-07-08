@@ -95,7 +95,8 @@ const ClaimMain = () => {
   useEffect(() => {
     setFormData({ ...formData, initial: false });
     if (chainId === VALID_CHAIN && jwt) {
-      getAquaClaimsF(account);
+      //getAquaClaimsF(account);
+      getAquaClaimsF('');
       getAvailableClaimsF(jwt);
       resetLockAndUnlockClaimsF();
     } else {
