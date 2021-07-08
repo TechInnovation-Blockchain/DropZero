@@ -1,16 +1,16 @@
 //mainnet
-export const CONTRACT_ADDRESSES = {
-  dropFactory: '0x7E2b852Ab899AF20fb99e5DF322CCCE5f6491F8a',
-};
-
-export const BASE_URL = 'https://server.dropzero.io';
-
-////testnet
 // export const CONTRACT_ADDRESSES = {
-//   dropFactory: '0x082046319ad7ddB5993F796FaFE6c0439c8fd5Fe',
+//   dropFactory: '0x7E2b852Ab899AF20fb99e5DF322CCCE5f6491F8a',
 // };
 
-//export const BASE_URL = 'https://dropzero-dev.herokuapp.com';
+// export const BASE_URL = 'https://server.dropzero.io';
+
+////testnet
+export const CONTRACT_ADDRESSES = {
+  dropFactory: '0x082046319ad7ddB5993F796FaFE6c0439c8fd5Fe',
+};
+
+export const BASE_URL = 'https://dropzero-dev.herokuapp.com';
 
 //export const BASE_URL = 'http://3.138.137.228:3000';
 

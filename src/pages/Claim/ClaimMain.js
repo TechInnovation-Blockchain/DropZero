@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 
 import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
 import { PageAnimation, ClaimTabs, ClaimTokenCard, AquaAccordian } from '../../components';
-import { useClaims, useJWT, useAquaClaims } from '../../hooks';
+import { useClaims, useJWT, useAquaClaims, useClaimsDashboard } from '../../hooks';
 import { VALID_CHAIN } from '../../config/constants';
 
 const ClaimMain = () => {
@@ -19,6 +19,7 @@ const ClaimMain = () => {
   } = useClaims();
   const { jwt } = useJWT();
   const { aquaClaims, getAquaClaimsF } = useAquaClaims();
+  const { claimsHistory } = useClaimsDashboard();
 
   const [formData, setFormData] = useState({
     page: 0,
@@ -42,12 +43,37 @@ const ClaimMain = () => {
     setFormData({ ...formData, page: 0, rowsPerPage: +event.target.value });
   };
 
+  //Temp Fix starts
   const calculateTotalClaim = claim => {
+    let uniqueClaims = [];
     let totalAmount = 0;
-    claim.forEach(({ amount }) => {
-      totalAmount += Number(amount);
+    claim.forEach(claim => {
+      if (!checkItemExist(uniqueClaims, claim.csvId.merkleRoot)) {
+        totalAmount += Number(claim.amount);
+        uniqueClaims.push(claim);
+      }
     });
     return totalAmount;
+  };
+
+  const filterAC = calims => {
+    let uniqueClaims = [];
+    calims.forEach(claim => {
+      if (!checkItemExist(uniqueClaims, claim.csvId.merkleRoot)) {
+        uniqueClaims.push(claim);
+      }
+    });
+    return uniqueClaims.length > 0;
+  };
+
+  const checkItemExist = (arr, itemMR) => {
+    const exists = arr.filter(arr => arr.csvId.merkleRoot === itemMR)[0];
+    if (!exists && claimsHistory) {
+      const historyExists = claimsHistory.filter(his => his.csvId.merkleRoot === itemMR)[0];
+      return historyExists ? true : false;
+    } else {
+      return exists;
+    }
   };
 
   const handleArrowClick = claims => {
@@ -56,13 +82,15 @@ const ClaimMain = () => {
     const lockedClaims = [];
     claims.forEach(claim => {
       if (new Date(claim.startDate).getTime() > Date.now()) {
-        lockedClaims.push(claim);
+        !checkItemExist(lockedClaims, claim.csvId.merkleRoot) && lockedClaims.push(claim);
       } else {
-        unlockedClaims.push(claim);
+        !checkItemExist(unlockedClaims, claim.csvId.merkleRoot) && unlockedClaims.push(claim);
       }
     });
     setLockAndUnlockClaimsF({ unlockedClaims, lockedClaims });
   };
+
+  //Temp Fix ends
 
   useEffect(() => {
     setFormData({ ...formData, initial: false });
@@ -94,9 +122,9 @@ const ClaimMain = () => {
 
   const totalClaimsCount = () => {
     if (aquaClaims && aquaClaims.hasOwnProperty('aqua')) {
-      return availableClaims.length + 1;
+      return availableClaims.filter(ac => filterAC(ac.data)).length + 1;
     } else {
-      return availableClaims.length;
+      return availableClaims.filter(ac => filterAC(ac.data)).length;
     }
   };
 
@@ -106,7 +134,8 @@ const ClaimMain = () => {
         <ClaimTabs goBack={() => setFormData({ ...formData, activeTab: false })} />
       ) : (
         <Box className={classes.mainContainer}>
-          {availableClaims.length > 0 || aquaClaims.hasOwnProperty('aqua') ? (
+          {availableClaims.filter(ac => filterAC(ac.data)).length > 0 ||
+          aquaClaims.hasOwnProperty('aqua') ? (
             <>
               <Typography variant='body1' className={classes.heading}>
                 Available Tokens
@@ -116,16 +145,19 @@ const ClaimMain = () => {
                   {page === 0 && aquaClaims.hasOwnProperty('aqua') && (
                     <AquaAccordian data={aquaClaims} />
                   )}
-                  {availableClaims.slice(claimCount()[0], claimCount()[1]).map(claim => (
-                    <ClaimTokenCard
-                      key={claim.address}
-                      showArrow
-                      token={claim}
-                      tokenAddress={claim.address}
-                      amount={calculateTotalClaim(claim.data)}
-                      onArrowClick={() => handleArrowClick(claim.data)}
-                    />
-                  ))}
+                  {availableClaims
+                    .filter(ac => filterAC(ac.data))
+                    .slice(claimCount()[0], claimCount()[1])
+                    .map(claim => (
+                      <ClaimTokenCard
+                        key={claim.address}
+                        showArrow
+                        token={claim}
+                        tokenAddress={claim.address}
+                        amount={calculateTotalClaim(claim.data)}
+                        onArrowClick={() => handleArrowClick(claim.data)}
+                      />
+                    ))}
                 </Box>
               </PageAnimation>
             </>
