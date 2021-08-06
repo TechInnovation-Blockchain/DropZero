@@ -139,7 +139,7 @@ export const withdrawMultipleClaimedToken = async (walletAddress, merkleRoot, jw
 export const getAquaClaims = walletAddress => {
   return async dispatch => {
     try {
-      const res = await axios.get(`https://server2.flashstake.io/aqua/${walletAddress}`);
+      const res = await axios.get(`https://server.aquafi.io/aqua/${walletAddress}`);
       logMessage('getAquaClaims', res);
       if (res?.data?.status === 'success') {
         dispatch({
