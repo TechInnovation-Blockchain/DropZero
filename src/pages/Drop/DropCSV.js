@@ -18,7 +18,6 @@ import { validateCSV, removeDuplicateAddress, toFixed } from '../../utils/valida
 import BalanceTree from '../../utils/balanceTree';
 import { showModal } from '../../redux';
 
-
 const fileNameRegex = /^[a-zA-Z0-9]{1,15}.csv$/i;
 
 const DropCSV = () => {
@@ -197,7 +196,10 @@ const DropCSV = () => {
     for (let i = 1; i < _content.length; i++) {
       if (_content[i] !== '') {
         const _data = _content[i].split(',');
-        csvData.push({ address: _data[0].toLowerCase(), amount: toFixed(_data[1], decimal) });
+        csvData.push({
+          address: _data[0].toLowerCase().trim(),
+          amount: toFixed(_data[1], decimal),
+        });
       }
     }
 
