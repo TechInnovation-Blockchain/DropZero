@@ -80,8 +80,13 @@ const AquaAccordion = ({ data }) => {
             <Typography variant='body2'>0.01</Typography>
           </Box>
           <Typography variant='body2' className={classes.lpPara}>
-            BECOME A LIQUIDITY PROVIDER ON XIO/ETH POOL TO EARN{' '}
-            {trunc(100 / Math.pow(2, new Date().getMonth()))}x MULTIPLIER
+            Earn a 4x multiplier by&nbsp;
+              <a href={"https://blockzerolabs.io/xlp"} target={"_blank"}>
+                <span style={{"color": "#7FFFB3"}}>
+                providing XIO liquidity
+                </span>
+              </a>
+            &nbsp;(paired with ETH, DAI or USDC) on Uniswap v2
           </Typography>
           <Typography variant='body2' className={`${classes.lpPara} ${classes.infoPara}`}>
             AquaFi is not claimable until launch
