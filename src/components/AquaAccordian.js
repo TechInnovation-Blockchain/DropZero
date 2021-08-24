@@ -71,14 +71,6 @@ const AquaAccordion = ({ data }) => {
               <Typography variant='body2'>{trunc(Web3.utils.fromWei(amount))}</Typography>
             </Tooltip>
           </Box>
-          <Box className={classes.accordianContent}>
-            <Typography variant='body2'>Avg. Multiplier</Typography>
-            <Typography variant='body2'>{multiplier}</Typography>
-          </Box>
-          <Box className={classes.accordianContent}>
-            <Typography variant='body2'>Base Rate</Typography>
-            <Typography variant='body2'>0.01</Typography>
-          </Box>
           <Typography variant='body2' className={classes.lpPara}>
             Earn a 4x multiplier by&nbsp;
               <a href={"https://blockzerolabs.io/xlp"} target={"_blank"}>
