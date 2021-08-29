@@ -3,8 +3,8 @@ import { Box, Typography, TablePagination, CircularProgress } from '@material-ui
 import { useWeb3React } from '@web3-react/core';
 
 import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
-import { PageAnimation, ClaimTabs, ClaimTokenCard, AquaAccordian } from '../../components';
-import { useClaims, useJWT, useAquaClaims } from '../../hooks';
+import { PageAnimation, ClaimTabs, ClaimTokenCard, AquaAccordian, FlashV3Accordian } from '../../components';
+import {useClaims, useJWT, useAquaClaims, useFlashV3Claims} from '../../hooks';
 import { VALID_CHAIN } from '../../config/constants';
 
 const ClaimMain = () => {
@@ -19,6 +19,7 @@ const ClaimMain = () => {
   } = useClaims();
   const { jwt } = useJWT();
   const { aquaClaims, getAquaClaimsF } = useAquaClaims();
+  const { flashV3Claims, getFlashV3ClaimsF } = useFlashV3Claims();
 
   const [formData, setFormData] = useState({
     page: 0,
@@ -67,6 +68,7 @@ const ClaimMain = () => {
   useEffect(() => {
     setFormData({ ...formData, initial: false });
     if (chainId === VALID_CHAIN && jwt) {
+      getFlashV3ClaimsF(account);
       getAquaClaimsF(account);
       getAvailableClaimsF(jwt);
       resetLockAndUnlockClaimsF();
@@ -100,7 +102,7 @@ const ClaimMain = () => {
     }
   };
 
-  return availableClaims && aquaClaims ? (
+  return availableClaims && aquaClaims && flashV3Claims ? (
     <PageAnimation in={true} reverse={1}>
       {activeTab ? (
         <ClaimTabs goBack={() => setFormData({ ...formData, activeTab: false })} />
@@ -114,7 +116,10 @@ const ClaimMain = () => {
               <PageAnimation in={page} key={page} reverse={initial ? initial : reverse}>
                 <Box className={classes.tokenContainer}>
                   {page === 0 && aquaClaims.hasOwnProperty('aqua') && (
-                    <AquaAccordian data={aquaClaims} />
+                      <AquaAccordian data={aquaClaims} />
+                  )}
+                  {page === 0 && flashV3Claims.hasOwnProperty('flashv3') &&(
+                      <FlashV3Accordian data={flashV3Claims} />
                   )}
                   {availableClaims.slice(claimCount()[0], claimCount()[1]).map(claim => (
                     <ClaimTokenCard

@@ -159,3 +159,26 @@ export const getAquaClaims = walletAddress => {
     }
   };
 };
+
+export const getFlashV3Claims = walletAddress => {
+  return async dispatch => {
+    try {
+      const res = await axios.get(`https://bz.to/api/GetFlashV3ByAddress.aspx?address=${walletAddress}`);
+      logMessage('getFlashV3Claims', res);
+      if (res?.data?.Success === true) {
+        dispatch({
+          type: claimTypes.GET_FLASHV3_CLAIMS,
+          payload: {
+            flashv3: true,
+            data: res.data.Data,
+          },
+        });
+      } else {
+        dispatch({ type: claimTypes.GET_FLASHV3_CLAIMS, payload: {} });
+      }
+    } catch (e) {
+      logError('getFlashV3Claims', e);
+      dispatch({ type: claimTypes.GET_FLASHV3_CLAIMS, payload: {} });
+    }
+  };
+};

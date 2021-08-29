@@ -9,6 +9,7 @@ import {
   resetClaims,
   resetClaimsHistory,
   getAquaClaims,
+  getFlashV3Claims,
 } from '../redux';
 import { useDispatchWrap } from './utilHooks';
 
@@ -45,4 +46,11 @@ export const useAquaClaims = () => {
   const getAquaClaimsF = useDispatchWrap(getAquaClaims);
 
   return { aquaClaims, getAquaClaimsF };
+};
+
+export const useFlashV3Claims = () => {
+  const { flashV3Claims } = useSelector(state => state.claim);
+  const getFlashV3ClaimsF = useDispatchWrap(getFlashV3Claims);
+
+  return { flashV3Claims, getFlashV3ClaimsF };
 };
