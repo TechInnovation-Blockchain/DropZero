@@ -1,11 +1,27 @@
-import { useState, useEffect } from 'react';
-import { Box, Typography, TablePagination, CircularProgress } from '@material-ui/core';
-import { useWeb3React } from '@web3-react/core';
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  TablePagination,
+  CircularProgress,
+} from "@material-ui/core";
+import { useWeb3React } from "@web3-react/core";
 
-import { useStyles } from '../../theme/styles/pages/claim/claimMainStyles';
-import { PageAnimation, ClaimTabs, ClaimTokenCard, AquaAccordian, FlashV3Accordian } from '../../components';
-import {useClaims, useJWT, useAquaClaims, useFlashV3Claims} from '../../hooks';
-import { VALID_CHAIN } from '../../config/constants';
+import { useStyles } from "../../theme/styles/pages/claim/claimMainStyles";
+import {
+  PageAnimation,
+  ClaimTabs,
+  ClaimTokenCard,
+  AquaAccordian,
+  FlashV3Accordian,
+} from "../../components";
+import {
+  useClaims,
+  useJWT,
+  useAquaClaims,
+  useFlashV3Claims,
+} from "../../hooks";
+import { VALID_CHAIN } from "../../config/constants";
 
 const ClaimMain = () => {
   const classes = useStyles();
@@ -39,11 +55,11 @@ const ClaimMain = () => {
     setFormData({ ...formData, page: newPage });
   };
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     setFormData({ ...formData, page: 0, rowsPerPage: +event.target.value });
   };
 
-  const calculateTotalClaim = claim => {
+  const calculateTotalClaim = (claim) => {
     let totalAmount = 0;
     claim.forEach(({ amount }) => {
       totalAmount += Number(amount);
@@ -51,11 +67,11 @@ const ClaimMain = () => {
     return totalAmount;
   };
 
-  const handleArrowClick = claims => {
+  const handleArrowClick = (claims) => {
     setFormData({ ...formData, activeTab: true });
     const unlockedClaims = [];
     const lockedClaims = [];
-    claims.forEach(claim => {
+    claims.forEach((claim) => {
       if (new Date(claim.startDate).getTime() > Date.now()) {
         lockedClaims.push(claim);
       } else {
@@ -80,7 +96,22 @@ const ClaimMain = () => {
   const claimCount = () => {
     let start;
     let end;
-    if (aquaClaims && aquaClaims.hasOwnProperty('aqua')) {
+    if (
+      aquaClaims &&
+      aquaClaims.hasOwnProperty("aqua") &&
+      flashV3Claims &&
+      flashV3Claims.hasOwnProperty("flashv3")
+    ) {
+      if (page === 0) {
+        start = 0;
+      } else {
+        start = page * rowsPerPage - 2;
+      }
+      end = page * rowsPerPage + rowsPerPage - 2;
+    } else if (
+      (aquaClaims && aquaClaims.hasOwnProperty("aqua")) ||
+      (flashV3Claims && flashV3Claims.hasOwnProperty("flashv3"))
+    ) {
       if (page === 0) {
         start = 0;
       } else {
@@ -95,7 +126,17 @@ const ClaimMain = () => {
   };
 
   const totalClaimsCount = () => {
-    if (aquaClaims && aquaClaims.hasOwnProperty('aqua')) {
+    if (
+      aquaClaims &&
+      aquaClaims.hasOwnProperty("aqua") &&
+      flashV3Claims &&
+      flashV3Claims.hasOwnProperty("flashv3")
+    ) {
+      return availableClaims.length + 2;
+    } else if (
+      (aquaClaims && aquaClaims.hasOwnProperty("aqua")) ||
+      (flashV3Claims && flashV3Claims.hasOwnProperty("flashv3"))
+    ) {
       return availableClaims.length + 1;
     } else {
       return availableClaims.length;
@@ -105,52 +146,60 @@ const ClaimMain = () => {
   return availableClaims && aquaClaims && flashV3Claims ? (
     <PageAnimation in={true} reverse={1}>
       {activeTab ? (
-        <ClaimTabs goBack={() => setFormData({ ...formData, activeTab: false })} />
+        <ClaimTabs
+          goBack={() => setFormData({ ...formData, activeTab: false })}
+        />
       ) : (
         <Box className={classes.mainContainer}>
-          {availableClaims.length > 0 || aquaClaims.hasOwnProperty('aqua') ? (
+          {availableClaims.length > 0 || aquaClaims.hasOwnProperty("aqua") ? (
             <>
-              <Typography variant='body1' className={classes.heading}>
+              <Typography variant="body1" className={classes.heading}>
                 Available Tokens
               </Typography>
-              <PageAnimation in={page} key={page} reverse={initial ? initial : reverse}>
+              <PageAnimation
+                in={page}
+                key={page}
+                reverse={initial ? initial : reverse}
+              >
                 <Box className={classes.tokenContainer}>
-                  {page === 0 && aquaClaims.hasOwnProperty('aqua') && (
-                      <AquaAccordian data={aquaClaims} />
+                  {page === 0 && aquaClaims.hasOwnProperty("aqua") && (
+                    <AquaAccordian data={aquaClaims} />
                   )}
-                  {page === 0 && flashV3Claims.hasOwnProperty('flashv3') &&(
-                      <FlashV3Accordian data={flashV3Claims} />
+                  {page === 0 && flashV3Claims.hasOwnProperty("flashv3") && (
+                    <FlashV3Accordian data={flashV3Claims} />
                   )}
-                  {availableClaims.slice(claimCount()[0], claimCount()[1]).map(claim => (
-                    <ClaimTokenCard
-                      key={claim.address}
-                      showArrow
-                      token={claim}
-                      tokenAddress={claim.address}
-                      amount={calculateTotalClaim(claim.data)}
-                      onArrowClick={() => handleArrowClick(claim.data)}
-                    />
-                  ))}
+                  {availableClaims
+                    .slice(claimCount()[0], claimCount()[1])
+                    .map((claim) => (
+                      <ClaimTokenCard
+                        key={claim.address}
+                        showArrow
+                        token={claim}
+                        tokenAddress={claim.address}
+                        amount={calculateTotalClaim(claim.data)}
+                        onArrowClick={() => handleArrowClick(claim.data)}
+                      />
+                    ))}
                 </Box>
               </PageAnimation>
             </>
           ) : (
-            <Typography className={classes.secondaryText} variant='body2'>
+            <Typography className={classes.secondaryText} variant="body2">
               No Tokens Available
             </Typography>
           )}
 
           {totalClaimsCount() > rowsPerPage && (
             <TablePagination
-              component='div'
-              style={{ display: 'flex', justifyContent: 'center' }}
+              component="div"
+              style={{ display: "flex", justifyContent: "center" }}
               // count={aquaClaims ? availableClaims.length + 1 : availableClaims.length}
               count={totalClaimsCount()}
               page={page}
               onChangePage={handleChangePage}
               rowsPerPage={rowsPerPage}
               onChangeRowsPerPage={handleChangeRowsPerPage}
-              labelRowsPerPage=''
+              labelRowsPerPage=""
               rowsPerPageOptions={[]}
             />
           )}
