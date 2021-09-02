@@ -62,6 +62,8 @@ const claimReducer = (state = initialState, action) => {
       return { ...state, availableClaims: newAvailableClaims, unlockedClaims: newUnlockedClaims };
     case claimTypes.GET_AQUA_CLAIMS:
       return { ...state, aquaClaims: payload };
+    case claimTypes.GET_FLASHV3_CLAIMS:
+      return { ...state, flashV3Claims: payload };
     default:
       return state;
   }

@@ -13,6 +13,7 @@ import Counter from './Counter';
 import ClaimTabs from './ClaimTabs';
 import ClaimTokenCard from './ClaimTokenCard';
 import AquaAccordian from './AquaAccordian';
+import FlashV3Accordian from "./FlashV3Accordian";
 
 export {
   Navbar,
@@ -30,4 +31,5 @@ export {
   ClaimTabs,
   ClaimTokenCard,
   AquaAccordian,
+  FlashV3Accordian,
 };
