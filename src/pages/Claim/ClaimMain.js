@@ -151,7 +151,7 @@ const ClaimMain = () => {
         />
       ) : (
         <Box className={classes.mainContainer}>
-          {availableClaims.length > 0 || aquaClaims.hasOwnProperty("aqua") ? (
+          {availableClaims.length > 0 || aquaClaims.hasOwnProperty("aqua") || flashV3Claims.hasOwnProperty("flashv3") ? (
             <>
               <Typography variant="body1" className={classes.heading}>
                 Available Tokens
