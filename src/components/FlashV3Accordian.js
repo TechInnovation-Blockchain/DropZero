@@ -109,6 +109,9 @@ const FlashV3Accordian = ({ data }) => {
                 </span>
             </a>
           </Typography>
+          <Typography variant='body2' className={`${classes.lpPara} ${classes.infoPara}`}>
+            Flash V3 is not claimable until launch
+          </Typography>
           <Button disabled={true} className={classes.accordionBtn}>
             <span>Claim</span>
           </Button>
