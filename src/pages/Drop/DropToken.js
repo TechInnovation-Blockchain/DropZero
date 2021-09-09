@@ -1,15 +1,24 @@
-import { Box, Typography, CircularProgress, Tooltip } from '@material-ui/core';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import web3 from 'web3';
-import { useWeb3React } from '@web3-react/core';
+import { Box, Typography, CircularProgress, Tooltip } from "@material-ui/core";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import web3 from "web3";
+import { useWeb3React } from "@web3-react/core";
 
-import { InputField, Button } from '../../components';
-import { useStyles } from '../../theme/styles/pages/drop/dropMainContentStyles';
-import { getName, getAllowance, approve } from '../../contracts/functions/erc20Functions';
-import { createDrop, isDropCreated } from '../../contracts/functions/dropFactoryFunctions';
-import { useDropInputs, useLoading } from '../../hooks';
-import { getTokenLogo, checkDropName } from '../../redux';
+import { InputField, Button } from "../../components";
+import { useStyles } from "../../theme/styles/pages/drop/dropMainContentStyles";
+import {
+  getName,
+  getAllowance,
+  approve,
+} from "../../contracts/functions/erc20Functions";
+import {
+  createDrop,
+  isDropCreated,
+} from "../../contracts/functions/dropFactoryFunctions";
+import { useDropInputs, useLoading } from "../../hooks";
+import { getTokenLogo, checkDropName } from "../../redux";
+import { useEffect } from "react";
+import { logMessage } from "../../utils/log";
 
 const tokenRegex = /^[a-zA-Z0-9]*$/;
 const dropNameRegex = /^[a-zA-Z0-9 ]*$/;
@@ -27,8 +36,10 @@ const DropToken = () => {
     loading,
     error,
     dropNameError,
+    updatingDrop,
     changeTabF,
     saveFieldsF,
+    clearFieldsF,
   } = useDropInputs();
   const { account } = useWeb3React();
   const {
@@ -38,23 +49,26 @@ const DropToken = () => {
   const handleTokenChange = ({ target }) => {
     const token = target?.value;
     if (tokenRegex.test(token)) {
-      saveFieldsF({ token, dropName: '', dropNameError: '' });
+      saveFieldsF({ token, dropName: "", dropNameError: "" });
       validateAddress(token);
     }
   };
 
   const handleDropNameChange = ({ target }) => {
     const _dropName = target?.value;
-    if (dropNameRegex.test(_dropName) && _dropName !== ' ') {
+    if (dropNameRegex.test(_dropName) && _dropName !== " ") {
       saveFieldsF({
         dropName: _dropName,
-        dropNameError: '',
+        dropNameError: "",
       });
-      if (_dropName.trim() !== '') {
-        saveFieldsF({ loading: 'dropName' });
+      if (_dropName.trim() !== "") {
+        saveFieldsF({ loading: "dropName" });
         setTimeout(async () => {
           const res = await checkDropName(_dropName.trim(), token);
-          saveFieldsF({ dropNameError: res ? '' : 'Drop already exists', loading: '' });
+          saveFieldsF({
+            dropNameError: res ? "" : "Drop already exists",
+            loading: "",
+          });
         }, 500);
       }
     }
@@ -62,7 +76,7 @@ const DropToken = () => {
 
   const handleClick = async () => {
     saveFieldsF({ token: web3.utils.toChecksumAddress(token) });
-    changeTabF('dates');
+    changeTabF("dates");
   };
 
   const handleDropCreate = async () => {
@@ -73,7 +87,11 @@ const DropToken = () => {
     await approve(token, account, () => saveFieldsF({ approved: 1 }));
   };
 
-  const validateAddress = token => {
+  const handleNew = () => {
+    clearFieldsF();
+  };
+
+  const validateAddress = (token) => {
     setTimeout(async () => {
       if (token) {
         saveFieldsF({
@@ -81,8 +99,8 @@ const DropToken = () => {
           approved: 0,
 
           validated: false,
-          loading: 'token',
-          error: '',
+          loading: "token",
+          error: "",
         });
 
         const _tokenName = await getName(token);
@@ -95,73 +113,107 @@ const DropToken = () => {
 
             validated: true,
             loading: false,
-            error: '',
+            error: "",
           });
         } else {
           saveFieldsF({
-            tokenName: 'Unknown',
+            tokenName: "Unknown",
             dropExists: false,
             approved: 0,
 
             validated: false,
-            error: 'Please enter a correct Token Address',
-            loading: '',
+            error: "Please enter a correct Token Address",
+            loading: "",
           });
         }
       } else {
-        saveFieldsF({ dropExists: false, approved: 0, validated: false, error: '' });
+        saveFieldsF({
+          dropExists: false,
+          approved: 0,
+          validated: false,
+          error: "",
+        });
       }
     }, 500);
   };
+
+  useEffect(() => {
+    logMessage(
+      "TOKEN_NEXT",
+      !validated ||
+        !dropExists ||
+        approved <= 0 ||
+        loading !== "" ||
+        dropNameError !== "" ||
+        dropName === ""
+    );
+    logMessage(
+      "TOKEN_NEXT",
+      validated,
+      dropExists,
+      approved,
+      "/",
+      loading,
+      "/",
+      dropNameError,
+      dropName
+    );
+  }, [validated, dropExists, approved, loading, dropNameError, dropName]);
 
   return (
     <Box className={classes.mainContainer}>
       {validated ? (
         <Box className={classes.tokenInfo}>
-          <img src={tokenLogo} alt='logo' width='30px' />
-          <Typography variant='body2'>{tokenName}</Typography>
+          <img src={tokenLogo} alt="logo" width="30px" />
+          <Typography variant="body2">{tokenName}</Typography>
         </Box>
       ) : (
-        <Typography variant='body2' className={classes.para}>
+        <Typography variant="body2" className={classes.para}>
           Enter the token address of the asset you would like to drop
         </Typography>
       )}
 
       <InputField
-        placeholder='Token Address'
-        name='token'
+        placeholder="Token Address"
+        name="token"
         value={token}
         onChange={handleTokenChange}
-        autoComplete='off'
+        autoComplete="off"
         inputProps={{ maxLength: 42 }}
-        className={token.length === 42 ? classes.smallerField : ''}
+        className={token.length === 42 ? classes.smallerField : ""}
+        disabled={updatingDrop}
       />
-      {loading === 'token' && (
+      {loading === "token" && (
         <Box className={classes.loading}>
-          <CircularProgress size={12} color='inherit' />
-          <Typography variant='body2'>Verifying</Typography>
+          <CircularProgress size={12} color="inherit" />
+          <Typography variant="body2">Verifying</Typography>
         </Box>
       )}
-      <Typography variant='body2' className={classes.error}>
+      <Typography variant="body2" className={classes.error}>
         {error}
       </Typography>
 
       <InputField
-        placeholder='Name This Drop'
-        name='dropName'
+        placeholder="Name This Drop"
+        name="dropName"
         value={dropName}
         onChange={handleDropNameChange}
-        autoComplete='off'
+        autoComplete="off"
         inputProps={{ maxLength: 15 }}
-        disabled={!validated}
+        // disabled={!validated}
+        disabled={!validated || updatingDrop}
       />
-      {loading === 'dropName' && (
-        <Box className={classes.loading} style={{ top: '67%' }}>
-          <CircularProgress size={12} color='inherit' />
-          <Typography variant='body2'>Verifying</Typography>
+      {loading === "dropName" && (
+        <Box className={classes.loading} style={{ top: "67%" }}>
+          <CircularProgress size={12} color="inherit" />
+          <Typography variant="body2">Verifying</Typography>
         </Box>
       )}
-      <Typography variant='body2' className={classes.error} style={{ top: '67%' }}>
+      <Typography
+        variant="body2"
+        className={classes.error}
+        style={{ top: "67%" }}
+      >
         {dropNameError}
       </Typography>
 
@@ -171,26 +223,38 @@ const DropToken = () => {
 
       <Box className={classes.btnContainer}>
         {dropExists && approved <= 0 ? (
-          <Button loading={dapp === 'drop'} disabled={approved > 0} onClick={handleApprove}>
+          <Button
+            loading={dapp === "drop"}
+            disabled={approved > 0}
+            onClick={handleApprove}
+          >
             <span>Approve</span>
           </Button>
         ) : (
-          <Button
-            loading={dapp === 'drop'}
-            disabled={!validated || dropExists}
-            onClick={handleDropCreate}
-          >
-            <span>Create</span>
+          !updatingDrop && (
+            <Button
+              loading={dapp === "drop"}
+              disabled={!validated || dropExists}
+              onClick={handleDropCreate}
+            >
+              <span>Create</span>
+            </Button>
+          )
+        )}
+        {updatingDrop && (
+          <Button onClick={handleNew}>
+            <span>New</span>
           </Button>
         )}
         <Button
+          // className={updatingDrop && classes.btn}
           disabled={
             !validated ||
             !dropExists ||
             approved <= 0 ||
-            loading !== '' ||
-            dropNameError !== '' ||
-            dropName === ''
+            loading !== "" ||
+            dropNameError !== "" ||
+            dropName === ""
           }
           onClick={handleClick}
         >

@@ -1,17 +1,17 @@
-import * as dropTypes from '../types/dropTypes';
+import * as dropTypes from "../types/dropTypes";
 
 const initialState = {
   fields: {
-    tokenName: '',
-    tokenLogo: '',
-    token: '',
-    dropName: '',
+    tokenName: "",
+    tokenLogo: "",
+    token: "",
+    dropName: "",
     dropExists: false,
     approved: 0,
     validated: false,
-    loading: '',
-    error: '',
-    dropNameError: '',
+    loading: "",
+    error: "",
+    dropNameError: "",
 
     startDate: null,
     endDate: null,
@@ -20,10 +20,12 @@ const initialState = {
     totalAmount: 0,
     totalAddress: 0,
     balance: 0,
-    csvError: '',
+    csvError: "",
+    updadingDrop: false,
+    csvId: "",
   },
-  currentAccount: '',
-  currentTab: 'token',
+  currentAccount: "",
+  currentTab: "token",
   csv: null,
   userDrops: null,
   dropsPausing: false,
@@ -39,7 +41,7 @@ const dropReducer = (state = initialState, action) => {
         ...state,
         fields: initialState.fields,
         csv: null,
-        currentTab: 'token',
+        currentTab: "token",
         currentAccount: payload ? payload : state.currentAccount,
       };
     case dropTypes.UPLOAD_CSV:
@@ -48,7 +50,11 @@ const dropReducer = (state = initialState, action) => {
       const pausedDrops = payload.filter(
         ({ pauseDrop, withDraw }) => pauseDrop === true && withDraw === false
       );
-      return { ...state, userDrops: payload, dropsPausing: pausedDrops.length > 0 };
+      return {
+        ...state,
+        userDrops: payload,
+        dropsPausing: pausedDrops.length > 0,
+      };
     case dropTypes.RESET_DROPS:
       return { ...state, userDrops: [], dropsPausing: false };
     case dropTypes.CLEAR_CSV:
@@ -66,7 +72,8 @@ const dropReducer = (state = initialState, action) => {
       );
       return {
         ...state,
-        dropsPausing: !payload.pause && _pausedDrops.length === 0 ? false : true,
+        dropsPausing:
+          !payload.pause && _pausedDrops.length === 0 ? false : true,
       };
     case dropTypes.CLEAR_DROPS:
       return { ...state, userDrops: null };

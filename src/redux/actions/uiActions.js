@@ -1,46 +1,46 @@
-import * as uiTypes from '../types/uiTypes';
-import { store } from '../store';
+import * as uiTypes from "../types/uiTypes";
+import { store } from "../store";
 
 export const toggleTheme = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ type: uiTypes.TOGGLE_THEME });
   };
 };
 
-export const setLoading = data => {
-  return dispatch =>
+export const setLoading = (data) => {
+  return (dispatch) =>
     dispatch({
       type: uiTypes.LOADING,
       payload: data,
     });
 };
 
-export const showSnackbar = data => {
-  return dispatch => {
+export const showSnackbar = (data) => {
+  return (dispatch) => {
     dispatch({ type: uiTypes.SHOW_SNACKBAR, payload: data });
   };
 };
 
 export const hideSnackbar = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ type: uiTypes.HIDE_SNACKBAR });
   };
 };
 
 export const initiallyRendered = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({ type: uiTypes.INITIALLY_RENDERED });
   };
 };
 
-export const showModal = data => {
+export const showModal = (data) => {
   store.dispatch({
     type: uiTypes.SHOW_MODAL,
     payload: data,
   });
 };
 
-export const showSnackbarInDeep = data => {
+export const showSnackbarInDeep = (data) => {
   store.dispatch({
     type: uiTypes.SHOW_SNACKBAR_INDEEP,
     payload: data,
@@ -50,12 +50,12 @@ export const showSnackbarInDeep = data => {
 export const transactionPending = (snackBar, modal, loading) => {
   store.dispatch({
     type: uiTypes.SHOW_SNACKBAR_INDEEP,
-    payload: { message: 'Transaction Pending', severity: 'info', ...snackBar },
+    payload: { message: "Transaction Pending", severity: "info", ...snackBar },
   });
 
   store.dispatch({
     type: uiTypes.SHOW_MODAL,
-    payload: { variant: 'loading', open: true, showCloseBtn: true, ...modal },
+    payload: { variant: "loading", open: true, showCloseBtn: true, ...modal },
   });
 
   store.dispatch({
@@ -67,12 +67,22 @@ export const transactionPending = (snackBar, modal, loading) => {
 export const transactionSuccess = (snackBar, modal) => {
   store.dispatch({
     type: uiTypes.SHOW_SNACKBAR_INDEEP,
-    payload: { message: 'Transaction Successful', severity: 'success', ...snackBar },
+    payload: {
+      message: "Transaction Successful",
+      severity: "success",
+      ...snackBar,
+    },
   });
 
   store.dispatch({
     type: uiTypes.SHOW_MODAL,
-    payload: { variant: 'success', open: true, showCloseBtn: true, btnText: 'Close', ...modal },
+    payload: {
+      variant: "success",
+      open: true,
+      showCloseBtn: true,
+      btnText: "Close",
+      ...modal,
+    },
   });
 
   store.dispatch({
@@ -84,12 +94,22 @@ export const transactionSuccess = (snackBar, modal) => {
 export const transactionRejected = (snackBar, modal) => {
   store.dispatch({
     type: uiTypes.SHOW_SNACKBAR_INDEEP,
-    payload: { message: 'Transaction Rejected', severity: 'error', ...snackBar },
+    payload: {
+      message: "Transaction Rejected",
+      severity: "error",
+      ...snackBar,
+    },
   });
 
   store.dispatch({
     type: uiTypes.SHOW_MODAL,
-    payload: { variant: 'blocked', open: true, showCloseBtn: true, btnText: 'Dismiss', ...modal },
+    payload: {
+      variant: "blocked",
+      open: true,
+      showCloseBtn: true,
+      btnText: "Dismiss",
+      ...modal,
+    },
   });
 
   store.dispatch({
@@ -101,16 +121,28 @@ export const transactionRejected = (snackBar, modal) => {
 export const transactionFailed = (snackBar, modal) => {
   store.dispatch({
     type: uiTypes.SHOW_SNACKBAR_INDEEP,
-    payload: { message: 'Transaction Failed', severity: 'error', ...snackBar },
+    payload: { message: "Transaction Failed", severity: "error", ...snackBar },
   });
 
   store.dispatch({
     type: uiTypes.SHOW_MODAL,
-    payload: { variant: 'error', open: true, showCloseBtn: true, btnText: 'Dismiss', ...modal },
+    payload: {
+      variant: "error",
+      open: true,
+      showCloseBtn: true,
+      btnText: "Dismiss",
+      ...modal,
+    },
   });
 
   store.dispatch({
     type: uiTypes.LOADING,
     payload: { dapp: false },
   });
+};
+
+export const toggleDropPage = (bool) => {
+  return (dispatch) => {
+    dispatch({ type: uiTypes.TOGGLE_DROP_PAGE, payload: bool });
+  };
 };
