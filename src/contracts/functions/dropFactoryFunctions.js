@@ -164,11 +164,12 @@ export const updateDropData = async (
     transactionPending({}, { text: "Drop Pending" }, "upload");
     const decimals = await getDecimal(tokenAddress);
     const data = {
-      tokenAmount: new BigNumber(
+      totalTokenAmount: new BigNumber(
         utils.parseUnits(newtokenAmount, decimals).toString()
       )
         .plus(new BigNumber(prevDropDetails[2]))
         .toString(),
+      // tokenAmount: totalTokenAmount,
       startDate: prevDropDetails[0],
       endDate: prevDropDetails[1],
       merkleRoot: newMerkleRoot,
@@ -178,7 +179,7 @@ export const updateDropData = async (
     onload();
     await contract.methods
       .addDropData(
-        data.tokenAmount,
+        data.totalTokenAmount,
         data.startDate,
         data.endDate,
         data.merkleRoot,

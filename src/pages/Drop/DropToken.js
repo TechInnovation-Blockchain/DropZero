@@ -243,7 +243,7 @@ const DropToken = () => {
         )}
         {updatingDrop && (
           <Button onClick={handleNew}>
-            <span>New</span>
+            <span>Cancel</span>
           </Button>
         )}
         <Button

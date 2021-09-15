@@ -6,6 +6,7 @@ import { useWeb3React } from "@web3-react/core";
 import WarningIcon from "@material-ui/icons/Error";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { utils } from "ethers";
+import SampleCSV from "./../../assets/temp.csv";
 
 import {
   Button,
@@ -426,7 +427,8 @@ const DropCSV = () => {
       </Box>
       <Typography
         component="a"
-        href="https://firebasestorage.googleapis.com/v0/b/drop-zero.appspot.com/o/sample.csv?alt=media&token=227d9ea4-a42e-4a24-abca-70b131e53875"
+        // href="https://firebasestorage.googleapis.com/v0/b/drop-zero.appspot.com/o/sample.csv?alt=media&token=227d9ea4-a42e-4a24-abca-70b131e53875"
+        href={SampleCSV}
         download="sample.csv"
         variant="body2"
       >
