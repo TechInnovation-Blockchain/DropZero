@@ -427,7 +427,7 @@ const DropCSV = () => {
       </Box>
       <Typography
         component="a"
-        href="https://firebasestorage.googleapis.com/v0/b/drop-zero.appspot.com/o/sample.csv?alt=media&token=227d9ea4-a42e-4a24-abca-70b131e53875"
+        href="https://firebasestorage.googleapis.com/v0/b/drop-zero.appspot.com/o/sample.csv?alt=media&token=b7bfdce1-bdaf-4d58-bad7-1d49213047ea"
         // href={SampleCSV}
         download="sample.csv"
         variant="body2"
