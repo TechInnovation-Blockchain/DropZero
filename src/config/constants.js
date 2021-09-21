@@ -8,12 +8,12 @@ export const CONTRACT_ADDRESSES = {
       : "0x897902e29F111Ff3ae1f1aaAD81785F681c2c578",
 };
 
-// export const BASE_URL =
-//   VALID_CHAIN === 1
-//     ? "https://server.dropzero.io"
-//     : "https://server-testnet.dropzero.io";
+export const BASE_URL =
+  VALID_CHAIN === 1
+    ? "https://server.dropzero.io"
+    : "https://server-testnet.dropzero.io";
 
-export const BASE_URL = "http://127.0.0.1:3001";
+// export const BASE_URL = "http://127.0.0.1:3001";
 
 export const NoLogo =
   "https://gateway.pinata.cloud/ipfs/QmNX2QerTxTm1RThD7Dc9X5uS9VFnQxmMotaMFhK5GYbBk";
