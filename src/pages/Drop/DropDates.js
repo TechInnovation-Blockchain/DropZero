@@ -75,7 +75,7 @@ const DropDates = () => {
       </Typography>
 
       <KeyboardDatePicker
-        className={`${classes.datePicker} ${updatingDrop && classes.hide}`}
+        className={`${classes.datePicker}`}
         placeholder="Start Date"
         value={startDate}
         format={DATE_FORMAT}
@@ -86,12 +86,11 @@ const DropDates = () => {
         // minDate={updatingDrop && startDate ? startDate : undefined}
         maxDate={endDate ? setStartMaxDate(endDate) : undefined}
         onKeyDown={(e) => handleKeyDown(e, "startDate")}
-        disabled={updatingDrop}
         //rifmFormatter={str => str}
       />
 
       <KeyboardDatePicker
-        className={`${classes.datePicker} ${updatingDrop && classes.hide}`}
+        className={`${classes.datePicker}`}
         placeholder="End Date"
         value={endDate}
         format={DATE_FORMAT}
@@ -101,7 +100,6 @@ const DropDates = () => {
         autoComplete="off"
         minDate={startDate ? setEndMinDate(startDate) : setEndMinDate()}
         onKeyDown={(e) => handleKeyDown(e, "endDate")}
-        disabled={updatingDrop}
       />
 
       <Box className={classes.btnContainer}>

@@ -357,7 +357,7 @@ const DropCSV = () => {
         text={loadingContent}
       />
 
-      {updatingDrop && (
+      {/* {updatingDrop && (
         <Typography
           variant="body2"
           className={classes.para}
@@ -369,7 +369,7 @@ const DropCSV = () => {
         >
           <WarningIcon /> After updating don't forget to pause the previous drop
         </Typography>
-      )}
+      )} */}
 
       <Typography variant="body2" className={classes.para}>
         Who would you like to drop these tokens to?

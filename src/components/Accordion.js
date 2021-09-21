@@ -141,8 +141,8 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
       saveFieldsF({
         token: tokenAddress,
         dropName: dropName,
-        startDate: createdAt,
-        endDate: endDate,
+        startDate: null,
+        endDate: null,
 
         tokenName: _tokenName,
         tokenLogo: await getTokenLogo(
@@ -354,14 +354,13 @@ const Accordion = ({ data, expanded, setExpanded, claim }) => {
               )}
 
               <Box className={classes.updateBtnWrapper}>
-                {!expired &&
-                  (loadingDrop ? (
-                    <CircularProgress size={20} />
-                  ) : (
-                    <MuiButton onClick={handleUpdateDrop}>
-                      <span style={{ color: "#65c988" }}>Update CSV</span>
-                    </MuiButton>
-                  ))}
+                {loadingDrop ? (
+                  <CircularProgress size={20} />
+                ) : (
+                  <MuiButton onClick={handleUpdateDrop}>
+                    <span style={{ color: "#65c988" }}>Update CSV</span>
+                  </MuiButton>
+                )}
               </Box>
 
               {/* <Box className={classes.updateBtnWrapper}>

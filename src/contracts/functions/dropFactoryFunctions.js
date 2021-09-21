@@ -166,30 +166,26 @@ export const updateDropData = async (
     const data = {
       totalTokenAmount: new BigNumber(
         utils.parseUnits(newtokenAmount, decimals).toString()
-      )
-        .plus(new BigNumber(prevDropDetails[2]))
-        .toString(),
-      // tokenAmount: totalTokenAmount,
+      ),
       startDate: prevDropDetails[0],
       endDate: prevDropDetails[1],
-      merkleRoot: newMerkleRoot,
-      tokenAddress,
     };
     logMessage("NEW DROP DETAILS", data);
     onload();
     await contract.methods
-      .addDropData(
+      .updateDropData(
         data.totalTokenAmount,
         data.startDate,
         data.endDate,
-        data.merkleRoot,
-        data.tokenAddress
+        prevMerkleRoot,
+        newMerkleRoot,
+        tokenAddress
       )
       .send({ from: walletAddress })
       .on("transactionHash", (txnHash) => {
         transactionPending(
           { transactionHash: txnHash },
-          { text: "Drop Pending" },
+          { text: "Update Pending" },
           "upload"
         );
         //saveTxnHash(merkleRoot, txnHash, jwt);
@@ -231,17 +227,17 @@ export const updateDropData = async (
       })
       .catch((e) => {
         if (e.code === 4001) {
-          transactionRejected({}, { text: "Drop Rejected" });
+          transactionRejected({}, { text: "Update Rejected" });
           rejectDrop(dropperId, newMerkleRoot, jwt);
         } else {
-          transactionFailed({}, { text: "Drop Failed" });
+          transactionFailed({}, { text: "Update Failed" });
           rejectDrop(dropperId, newMerkleRoot, jwt);
         }
         logError("createDrop", e);
       });
   } catch (e) {
     logError("addDropData", e);
-    transactionFailed({}, { text: "Drop Failed" });
+    transactionFailed({}, { text: "Update Failed" });
     rejectDrop(dropperId, newMerkleRoot);
   }
 };
