@@ -285,6 +285,15 @@ const DropCSV = () => {
   };
 
   useEffect(() => {
+    const data = {
+      startDate: startDate
+        ? Math.round(new Date(startDate).getTime() / 1000)
+        : Math.round(Date.now() / 10000),
+      endDate: endDate
+        ? Math.round(new Date(endDate).getTime() / 1000)
+        : 4294967295,
+    };
+    console.log("CSV_DROP_DETAILS", csv);
     const merkleRoot = csv?.merkle_root;
     const dropperId = csv?.dropper_id;
     const date = csv?.date;
@@ -299,6 +308,8 @@ const DropCSV = () => {
         csv?.amount,
         account,
         csv?.dropper_id,
+        data.startDate,
+        data.endDate,
         jwt,
         () => {
           setFormData({ ...formData, loadingContent: "", open: false });

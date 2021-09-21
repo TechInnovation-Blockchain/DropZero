@@ -131,6 +131,8 @@ export const updateDropData = async (
   newtokenAmount,
   walletAddress,
   dropperId,
+  startDate,
+  endDate,
   jwt,
   onload,
   callback
@@ -140,37 +142,38 @@ export const updateDropData = async (
     let prevDropDetails = await contract.methods
       .getDropDetails(tokenAddress, prevMerkleRoot)
       .call();
-    logMessage(
-      "UPDATE DROP PARAM",
-      tokenAddress,
-      prevMerkleRoot,
-      newMerkleRoot,
-      newtokenAmount,
-      walletAddress,
-      dropperId,
-      jwt
-      // onload,
-      // callback
-    );
-    logMessage(
-      "PREVIOUS DROP DETAILS",
-      // prevDropDetails
-      prevDropDetails[0],
-      prevDropDetails[1],
-      prevDropDetails[2],
-      prevDropDetails[3],
-      prevDropDetails[4]
-    );
-    transactionPending({}, { text: "Drop Pending" }, "upload");
+    // logMessage(
+    //   "UPDATE DROP PARAM",
+    //   tokenAddress,
+    //   prevMerkleRoot,
+    //   newMerkleRoot,
+    //   newtokenAmount,
+    //   walletAddress,
+    //   dropperId,
+    //   jwt
+    // );
+    // logMessage(
+    //   "PREVIOUS_DROP_DETAILS",
+    //   // prevDropDetails
+    //   prevDropDetails[0],
+    //   prevDropDetails[1],
+    //   prevDropDetails[2],
+    //   prevDropDetails[3],
+    //   prevDropDetails[4]
+    // );
     const decimals = await getDecimal(tokenAddress);
+    transactionPending({}, { text: "Drop Pending" }, "upload");
     const data = {
       totalTokenAmount: new BigNumber(
         utils.parseUnits(newtokenAmount, decimals).toString()
-      ),
-      startDate: prevDropDetails[0],
-      endDate: prevDropDetails[1],
+      )
+        .minus(new BigNumber(prevDropDetails[2]))
+        .absoluteValue()
+        .toString(),
+      startDate: startDate,
+      endDate: endDate,
     };
-    logMessage("NEW DROP DETAILS", data);
+    logMessage("NEW_DROP_DETAILS", data);
     onload();
     await contract.methods
       .updateDropData(
