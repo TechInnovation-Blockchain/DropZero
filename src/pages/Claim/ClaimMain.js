@@ -12,13 +12,11 @@ import {
   PageAnimation,
   ClaimTabs,
   ClaimTokenCard,
-  AquaAccordian,
   FlashV3Accordian,
 } from "../../components";
 import {
   useClaims,
   useJWT,
-  useAquaClaims,
   useFlashV3Claims,
 } from "../../hooks";
 import { VALID_CHAIN } from "../../config/constants";
@@ -34,7 +32,6 @@ const ClaimMain = () => {
     resetClaimsF,
   } = useClaims();
   const { jwt } = useJWT();
-  const { aquaClaims, getAquaClaimsF } = useAquaClaims();
   const { flashV3Claims, getFlashV3ClaimsF } = useFlashV3Claims();
 
   const [formData, setFormData] = useState({
@@ -85,7 +82,6 @@ const ClaimMain = () => {
     setFormData({ ...formData, initial: false });
     if (chainId === VALID_CHAIN && jwt) {
       getFlashV3ClaimsF(account);
-      getAquaClaimsF(account);
       getAvailableClaimsF(jwt);
       resetLockAndUnlockClaimsF();
     } else {
@@ -97,8 +93,6 @@ const ClaimMain = () => {
     let start;
     let end;
     if (
-      aquaClaims &&
-      aquaClaims.hasOwnProperty("aqua") &&
       flashV3Claims &&
       flashV3Claims.hasOwnProperty("flashv3")
     ) {
@@ -109,7 +103,6 @@ const ClaimMain = () => {
       }
       end = page * rowsPerPage + rowsPerPage - 2;
     } else if (
-      (aquaClaims && aquaClaims.hasOwnProperty("aqua")) ||
       (flashV3Claims && flashV3Claims.hasOwnProperty("flashv3"))
     ) {
       if (page === 0) {
@@ -127,14 +120,11 @@ const ClaimMain = () => {
 
   const totalClaimsCount = () => {
     if (
-      aquaClaims &&
-      aquaClaims.hasOwnProperty("aqua") &&
       flashV3Claims &&
       flashV3Claims.hasOwnProperty("flashv3")
     ) {
       return availableClaims.length + 2;
     } else if (
-      (aquaClaims && aquaClaims.hasOwnProperty("aqua")) ||
       (flashV3Claims && flashV3Claims.hasOwnProperty("flashv3"))
     ) {
       return availableClaims.length + 1;
@@ -143,7 +133,7 @@ const ClaimMain = () => {
     }
   };
 
-  return availableClaims && aquaClaims && flashV3Claims ? (
+  return availableClaims && flashV3Claims ? (
     <PageAnimation in={true} reverse={1}>
       {activeTab ? (
         <ClaimTabs
@@ -151,7 +141,7 @@ const ClaimMain = () => {
         />
       ) : (
         <Box className={classes.mainContainer}>
-          {availableClaims.length > 0 || aquaClaims.hasOwnProperty("aqua") || flashV3Claims.hasOwnProperty("flashv3") ? (
+          {availableClaims.length > 0 || flashV3Claims.hasOwnProperty("flashv3") ? (
             <>
               <Typography variant="body1" className={classes.heading}>
                 Available Tokens
@@ -162,9 +152,6 @@ const ClaimMain = () => {
                 reverse={initial ? initial : reverse}
               >
                 <Box className={classes.tokenContainer}>
-                  {page === 0 && aquaClaims.hasOwnProperty("aqua") && (
-                    <AquaAccordian data={aquaClaims} />
-                  )}
                   {page === 0 && flashV3Claims.hasOwnProperty("flashv3") && (
                     <FlashV3Accordian data={flashV3Claims} />
                   )}
@@ -193,7 +180,6 @@ const ClaimMain = () => {
             <TablePagination
               component="div"
               style={{ display: "flex", justifyContent: "center" }}
-              // count={aquaClaims ? availableClaims.length + 1 : availableClaims.length}
               count={totalClaimsCount()}
               page={page}
               onChangePage={handleChangePage}
