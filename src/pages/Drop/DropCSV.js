@@ -438,9 +438,8 @@ const DropCSV = () => {
       </Box>
       <Typography
         component="a"
-        href="https://firebasestorage.googleapis.com/v0/b/drop-zero.appspot.com/o/sample.csv?alt=media&token=b7bfdce1-bdaf-4d58-bad7-1d49213047ea"
-        // href={SampleCSV}
-        download="sample.csv"
+        href="https://raw.githubusercontent.com/BlockzeroLabs/dropzero-drop-csvs/master/dist/csvrecord/sample-1641.csv"
+        download="sample-1641.csv"
         variant="body2"
       >
         Download sample CSV
