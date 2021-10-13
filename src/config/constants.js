@@ -13,7 +13,17 @@ export const CONTRACT_ADDRESSES = {
 //     ? "https://server.dropzero.io"
 //     : "https://server-testnet.dropzero.io";
 
-export const BASE_URL = "http://127.0.0.1:3001";
+// export const BASE_URL = "http://127.0.0.1:3001";
+
+export const RPC_URL =
+  VALID_CHAIN === 1
+    ? process.env.REACT_APP_RPC_URL_MAINNET
+    : process.env.REACT_APP_RPC_URL_TESTNET;
+
+export const BASE_URL =
+  VALID_CHAIN === 1
+    ? process.env.REACT_APP_SERVER_MAINNET
+    : process.env.REACT_APP_SERVER_TESTNET;
 
 export const NoLogo =
   "https://gateway.pinata.cloud/ipfs/QmNX2QerTxTm1RThD7Dc9X5uS9VFnQxmMotaMFhK5GYbBk";
