@@ -142,7 +142,7 @@ const ConnectWallet = () => {
   return (
     <Fragment>
       <Box className={classes.connectWrapper}>
-        <a href="https://app.dropzero.io/claim" target="_blank">
+        <a href="https://v1.dropzero.io/claim" target="_blank">
           <Typography variant="body2" className={classes.legacyLink}>
             Visit legacy app
             <LaunchIcon style={{ paddingLeft: "5px" }} />

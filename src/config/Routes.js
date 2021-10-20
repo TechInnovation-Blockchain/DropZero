@@ -32,7 +32,7 @@ const Routes = () => {
         linkBtnText="Visit"
         renderContent={
           <Typography variant="body2">
-            Any tokens dropped before 1 Oct 2021 can only be claimed through
+            Any tokens dropped before 20 Oct 2021 can only be claimed through
             legacy app
           </Typography>
         }
