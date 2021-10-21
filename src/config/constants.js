@@ -4,7 +4,7 @@ export const VALID_CHAIN =
 export const CONTRACT_ADDRESSES = {
   dropFactory:
     VALID_CHAIN === 1
-      ? "0xf44ABE742686F6c1feDEdc1B9F4Bc0231562742B"
+      ? "0x17cCEDDdC945B35f8067736D5a52CC68cb5a8E0f"
       : "0x897902e29F111Ff3ae1f1aaAD81785F681c2c578",
 };
 
