@@ -28,7 +28,7 @@ const Routes = () => {
       <Dialog
         open={openDialog}
         handleClose={() => setOpenDialog(false)}
-        btnLink="https://app.dropzero.io/claim"
+        btnLink="https://v1.dropzero.io/claim"
         linkBtnText="Visit"
         renderContent={
           <Typography variant="body2">
