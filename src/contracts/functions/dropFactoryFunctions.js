@@ -163,21 +163,23 @@ export const updateDropData = async (
     // );
     const decimals = await getDecimal(tokenAddress);
     transactionPending({}, { text: "Drop Pending" }, "upload");
+
+    // 2021/11/20: Umar fix
+    const newTokenAmount = new BigNumber(utils.parseUnits(newtokenAmount, decimals).toString())
+    const oldTokenAmount = new BigNumber(prevDropDetails[2])
+    const updatedAmount = newTokenAmount.minus(oldTokenAmount).toFixed();
+
     const data = {
-      totalTokenAmount: new BigNumber(
-        utils.parseUnits(newtokenAmount, decimals).toString()
-      )
-        .minus(new BigNumber(prevDropDetails[2]))
-        .absoluteValue()
-        .toString(),
+      totalTokenAmount: updatedAmount,
       startDate: startDate,
       endDate: endDate,
     };
     logMessage("NEW_DROP_DETAILS", data);
     onload();
+    console.log(data.totalTokenAmount.toString(), data.startDate, data.endDate, prevMerkleRoot, newMerkleRoot, tokenAddress);
     await contract.methods
       .updateDropData(
-        data.totalTokenAmount,
+        data.totalTokenAmount.toString(),
         data.startDate,
         data.endDate,
         prevMerkleRoot,
