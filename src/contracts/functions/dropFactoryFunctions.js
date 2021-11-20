@@ -115,7 +115,7 @@ export const addDropData = async (
   } catch (e) {
     logError("addDropData", e);
     transactionFailed({}, { text: "Drop Failed" });
-    rejectDrop(dropperId, merkleRoot);
+    rejectDrop(dropperId, merkleRoot, jwt);
   }
 };
 
@@ -241,7 +241,7 @@ export const updateDropData = async (
   } catch (e) {
     logError("addDropData", e);
     transactionFailed({}, { text: "Update Failed" });
-    rejectDrop(dropperId, newMerkleRoot);
+    rejectDrop(dropperId, newMerkleRoot, jwt);
   }
 };
 
