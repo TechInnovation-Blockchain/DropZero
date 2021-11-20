@@ -176,7 +176,6 @@ export const updateDropData = async (
     };
     logMessage("NEW_DROP_DETAILS", data);
     onload();
-    console.log(data.totalTokenAmount.toString(), data.startDate, data.endDate, prevMerkleRoot, newMerkleRoot, tokenAddress);
     await contract.methods
       .updateDropData(
         data.totalTokenAmount.toString(),
