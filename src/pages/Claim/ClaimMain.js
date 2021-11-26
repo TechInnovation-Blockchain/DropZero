@@ -20,6 +20,7 @@ import {
   useFlashV3Claims,
 } from "../../hooks";
 import { VALID_CHAIN } from "../../config/constants";
+import KINDAccordian from "../../components/KINDAccordian";
 
 const ClaimMain = () => {
   const classes = useStyles();
@@ -153,7 +154,10 @@ const ClaimMain = () => {
               >
                 <Box className={classes.tokenContainer}>
                   {page === 0 && flashV3Claims.hasOwnProperty("flashv3") && (
-                    <FlashV3Accordian data={flashV3Claims} />
+                      <FlashV3Accordian data={flashV3Claims} />
+                  )}
+                  {page === 0 && (
+                      <KINDAccordian />
                   )}
                   {availableClaims
                     .slice(claimCount()[0], claimCount()[1])
