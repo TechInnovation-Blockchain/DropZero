@@ -25,7 +25,7 @@ const FlashV3Accordian = ({ data }) => {
   const [expanded, setExpanded] = useState(false);
 
   const snapshotWeiAmount = (1000 * data.data.FlashV3Tokens_V1plusV2Snapshot_Int) + ""
-  const eligiblityWeiAmount = (1000 * data.data.FlashV3Tokens_ProjectedOct31_Int) + ""
+  const eligiblityWeiAmount = (1000 * data.data.FlashV3Tokens_Earned_Total) + ""
   const totalWeiAmount = (1000 * data.data.FlashV3Tokens_GrandTotal) + ""
 
   const web3context = useWeb3React();
